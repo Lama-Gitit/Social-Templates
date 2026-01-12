@@ -17,7 +17,7 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
     const [loading, setLoading] = useState(false);
     const [history, setHistory] = useState<string[]>([]);
     const [usage, setUsage] = useState({
-        lastTime: 0,
+        lastTimes: [] as number[],
         dailyCount: 0,
         today: new Date().toDateString()
     });
@@ -25,19 +25,32 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
     useEffect(() => {
         const saved = localStorage.getItem('generator_usage');
         if (saved) {
-            const parsed = JSON.parse(saved);
-            const today = new Date().toDateString();
-            if (parsed.today === today) {
-                setUsage(parsed);
-            } else {
-                setUsage({ lastTime: 0, dailyCount: 0, today });
+            try {
+                const parsed = JSON.parse(saved);
+                const today = new Date().toDateString();
+                if (parsed.today === today) {
+                    // Migration: Convert old lastTime to lastTimes array if needed
+                    const lastTimes = Array.isArray(parsed.lastTimes)
+                        ? parsed.lastTimes
+                        : (parsed.lastTime ? [parsed.lastTime] : []);
+                    setUsage({
+                        lastTimes,
+                        dailyCount: parsed.dailyCount || 0,
+                        today: parsed.today
+                    });
+                } else {
+                    setUsage({ lastTimes: [], dailyCount: 0, today });
+                }
+            } catch (e) {
+                console.error("Failed to parse usage data", e);
             }
         }
     }, []);
 
     const updateUsage = () => {
+        const now = Date.now();
         const newUsage = {
-            lastTime: Date.now(),
+            lastTimes: [...usage.lastTimes.slice(-1), now],
             dailyCount: usage.dailyCount + 1,
             today: usage.today
         };
@@ -60,15 +73,18 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
 
         // Rate Limits
         const now = Date.now();
-        const minutePassed = (now - usage.lastTime) > 60000;
 
+        // 5 Per Day
         if (usage.dailyCount >= 5) {
             setToast({ show: true, msg: "Daily limit reached (5/day). Try again tomorrow!" });
             return;
         }
 
-        if (!minutePassed && usage.lastTime !== 0) {
-            setToast({ show: true, msg: "Slow down! Wait a minute before generating again." });
+        // 2 Per Minute
+        const minuteAgo = now - 60000;
+        const recentGens = usage.lastTimes.filter(t => t > minuteAgo);
+        if (recentGens.length >= 2) {
+            setToast({ show: true, msg: "Slow down! Max 2 generations per minute." });
             return;
         }
 
@@ -180,7 +196,7 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
                             <div className="flex items-center gap-2">
                                 <p className="text-sm text-slate-400">AI-Powered Unique Layouts</p>
                                 <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-slate-400 uppercase tracking-tight">
-                                    {5 - usage.dailyCount} FREE LEFT TODAY
+                                    {Math.max(0, 5 - usage.dailyCount)} FREE LEFT TODAY
                                 </span>
                             </div>
                         </div>

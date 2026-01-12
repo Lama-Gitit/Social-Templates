@@ -58,7 +58,7 @@ export function Sidebar({ className, activePlatformId, onSelectPlatform, onOpenR
                     >
                         <platform.icon
                             className={cn("w-5 h-5 mr-3 group-hover:scale-110 transition-transform")}
-                            style={{ color: activePlatformId === platform.id ? platform.color : undefined }}
+                            style={{ color: platform.color }}
                         />
                         {platform.name}
                     </button>

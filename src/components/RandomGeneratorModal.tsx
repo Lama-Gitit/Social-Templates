@@ -84,9 +84,9 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
             console.error("AI Generation failed, using static fallback", err);
             // Fallback to static generator
             const results = [
-                { svg: generateCreativeSVG(w, h, selectedPlatform.color, 0, selectedPlatform.name), label: 'Diagonal Split (Offline)' },
-                { svg: generateCreativeSVG(w, h, selectedPlatform.color, 1, selectedPlatform.name), label: 'Modern Grid (Offline)' },
-                { svg: generateCreativeSVG(w, h, selectedPlatform.color, 2, selectedPlatform.name), label: 'Editorial Frame (Offline)' },
+                { svg: generateCreativeSVG(w, h, selectedPlatform.brandColor, 0, selectedPlatform.name), label: 'Diagonal Split (Offline)' },
+                { svg: generateCreativeSVG(w, h, selectedPlatform.brandColor, 1, selectedPlatform.name), label: 'Modern Grid (Offline)' },
+                { svg: generateCreativeSVG(w, h, selectedPlatform.brandColor, 2, selectedPlatform.name), label: 'Editorial Frame (Offline)' },
             ];
             setGeneratedResults(results);
             setStep(3);

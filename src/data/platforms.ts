@@ -27,6 +27,7 @@ export type PlatformData = {
     name: string;
     icon: React.ElementType;
     color: string;
+    brandColor: string;
     bg: string;
     intro: string;
     tips: string[];
@@ -39,7 +40,8 @@ export const PLATFORMS: PlatformData[] = [
         id: 'x',
         name: 'X (Twitter)',
         icon: Twitter,
-        color: '#000000',
+        color: '#FFFFFF',
+        brandColor: '#000000',
         bg: 'bg-slate-100',
         intro: "Real-time conversation. X covers are unique because the profile picture overlaps the bottom-left area heavily on mobile.",
         tips: [
@@ -61,6 +63,7 @@ export const PLATFORMS: PlatformData[] = [
         name: 'Instagram',
         icon: Instagram,
         color: '#E1306C',
+        brandColor: '#E1306C',
         bg: 'bg-pink-50',
         intro: "The visual king. Reels and Stories have significant UI overlays at the top (header) and bottom (comments/timeline).",
         tips: [
@@ -80,7 +83,8 @@ export const PLATFORMS: PlatformData[] = [
         id: 'threads',
         name: 'Threads',
         icon: Hash,
-        color: '#000000',
+        color: '#FFFFFF',
+        brandColor: '#000000',
         bg: 'bg-gray-100',
         intro: "Text-first but visually immersive. Threads supports full 9:16 visuals natively without cropping.",
         tips: [
@@ -99,6 +103,7 @@ export const PLATFORMS: PlatformData[] = [
         name: 'Facebook',
         icon: Facebook,
         color: '#1877F2',
+        brandColor: '#1877F2',
         bg: 'bg-blue-50',
         intro: "The universal directory. Covers here are tricky because they display differently on desktop vs. mobile.",
         tips: [
@@ -120,7 +125,8 @@ export const PLATFORMS: PlatformData[] = [
         id: 'linkedin',
         name: 'LinkedIn',
         icon: Linkedin,
-        color: '#0A66C2', // Adjusted for dark mode visibility (original was #0077B5)
+        color: '#0A66C2',
+        brandColor: '#0A66C2',
         bg: 'bg-blue-50',
         intro: "The professional network. Covers are much narrower (4:1) than other platforms.",
         tips: [
@@ -142,6 +148,7 @@ export const PLATFORMS: PlatformData[] = [
         name: 'Bluesky',
         icon: Share2,
         color: '#0085FF',
+        brandColor: '#0085FF',
         bg: 'bg-sky-50',
         intro: "The decentralized contender. Very similar to X, but vertical posts can be slightly taller (4:5).",
         tips: [
@@ -161,6 +168,7 @@ export const PLATFORMS: PlatformData[] = [
         name: 'TikTok',
         icon: Video,
         color: '#ff0050',
+        brandColor: '#ff0050',
         bg: 'bg-pink-50',
         intro: "Video native. The UI overlays (caption, music, buttons) cover the bottom ~20% and right side.",
         tips: [
@@ -179,6 +187,7 @@ export const PLATFORMS: PlatformData[] = [
         name: 'YouTube',
         icon: Youtube,
         color: '#FF0000',
+        brandColor: '#FF0000',
         bg: 'bg-red-50',
         intro: "The video search engine. Channel banners are displayed on TVs (huge) but cropped heavily for Mobile.",
         tips: [
@@ -197,6 +206,7 @@ export const PLATFORMS: PlatformData[] = [
         name: 'Pinterest',
         icon: Camera,
         color: '#BD081C',
+        brandColor: '#BD081C',
         bg: 'bg-red-50',
         intro: "Vertical is the standard. 2:3 ratio is unique to Pinterest.",
         tips: [
@@ -214,6 +224,7 @@ export const PLATFORMS: PlatformData[] = [
         name: 'Snapchat',
         icon: Smartphone,
         color: '#FFFC00',
+        brandColor: '#FFFC00',
         bg: 'bg-yellow-50',
         intro: "Full screen vertical. Leave massive buffers for header and footer UI.",
         tips: [
@@ -227,10 +238,9 @@ export const PLATFORMS: PlatformData[] = [
 ];
 
 // --- Helper: Generate Advanced "Blueprint" SVG ---
-export const generateSVG = (template: Template, color: string) => {
+export const generateSVG = (template: Template, brandColor: string) => {
     const { width, height, category, label } = template;
-
-    // Note: For dark mode support, we adjust standard colors to be visible on slate-900 or slate-950
+    const color = brandColor; // Fallback logic if needed, but we'll use brandColor
     // Background used in preview is slate-950/50, but if user copies, it should likely be transparent or white-ish background for use in design tools.
     // Actually, usually these SVGs act as guides, so a light bg is safer, OR we stick to the user's implementation which had #F9FAFB.
     // Given this is for copying into design tools, preserving the user's light bg (F9FAFB) is probably safest for visibility in typical tools,
@@ -294,7 +304,7 @@ export const generateSVG = (template: Template, color: string) => {
 };
 
 // --- Fallback Helper: Generate Creative Layout SVG ---
-export const generateCreativeSVG = (width: number, height: number, color: string, styleIndex: number, platformName: string) => {
+export const generateCreativeSVG = (width: number, height: number, brandColor: string, styleIndex: number, platformName: string) => {
     // Styles: 0 = Diagonal Split, 1 = Modern Grid, 2 = Editorial Frame
 
     let content = `<rect width="${width}" height="${height}" fill="#F9FAFB"/>`;
@@ -302,11 +312,11 @@ export const generateCreativeSVG = (width: number, height: number, color: string
     if (styleIndex === 0) {
         // Style 1: Diagonal Split (Bold)
         content += `
-      <path d="M0 0 L${width} ${height} L0 ${height} Z" fill="${color}" fill-opacity="0.1"/>
-      <line x1="0" y1="0" x2="${width}" y2="${height}" stroke="${color}" stroke-width="3"/>
-      <text x="${width * 0.25}" y="${height * 0.75}" font-family="Arial" font-weight="bold" font-size="${width / 15}" fill="${color}" text-anchor="middle">IMAGE 1</text>
-      <text x="${width * 0.75}" y="${height * 0.25}" font-family="Arial" font-weight="bold" font-size="${width / 15}" fill="${color}" text-anchor="middle">IMAGE 2</text>
-      <rect x="${width * 0.1}" y="${height * 0.1}" width="${width * 0.3}" height="${height * 0.05}" fill="${color}"/>
+      <path d="M0 0 L${width} ${height} L0 ${height} Z" fill="${brandColor}" fill-opacity="0.1"/>
+      <line x1="0" y1="0" x2="${width}" y2="${height}" stroke="${brandColor}" stroke-width="3"/>
+      <text x="${width * 0.25}" y="${height * 0.75}" font-family="Arial" font-weight="bold" font-size="${width / 15}" fill="${brandColor}" text-anchor="middle">IMAGE 1</text>
+      <text x="${width * 0.75}" y="${height * 0.25}" font-family="Arial" font-weight="bold" font-size="${width / 15}" fill="${brandColor}" text-anchor="middle">IMAGE 2</text>
+      <rect x="${width * 0.1}" y="${height * 0.1}" width="${width * 0.3}" height="${height * 0.05}" fill="${brandColor}"/>
       <text x="${width * 0.25}" y="${height * 0.135}" font-family="Arial" font-size="${width / 30}" fill="white" text-anchor="middle">${platformName.toUpperCase()}</text>
     `;
     } else if (styleIndex === 1) {
@@ -315,26 +325,26 @@ export const generateCreativeSVG = (width: number, height: number, color: string
         const splitX = width * 0.5;
 
         content += `
-      <rect x="0" y="0" width="${width}" height="${splitY}" fill="${color}" fill-opacity="0.05"/>
-      <line x1="0" y1="${splitY}" x2="${width}" y2="${splitY}" stroke="${color}" stroke-width="3"/>
-      <line x1="${splitX}" y1="${splitY}" x2="${splitX}" y2="${height}" stroke="${color}" stroke-width="3"/>
+      <rect x="0" y="0" width="${width}" height="${splitY}" fill="${brandColor}" fill-opacity="0.05"/>
+      <line x1="0" y1="${splitY}" x2="${width}" y2="${splitY}" stroke="${brandColor}" stroke-width="3"/>
+      <line x1="${splitX}" y1="${splitY}" x2="${splitX}" y2="${height}" stroke="${brandColor}" stroke-width="3"/>
       
-      <text x="${width / 2}" y="${splitY / 2}" font-family="Arial" font-weight="bold" font-size="${width / 12}" fill="${color}" text-anchor="middle" opacity="0.3">FEATURE IMAGE</text>
+      <text x="${width / 2}" y="${splitY / 2}" font-family="Arial" font-weight="bold" font-size="${width / 12}" fill="${brandColor}" text-anchor="middle" opacity="0.3">FEATURE IMAGE</text>
       
-      <text x="${splitX / 2}" y="${splitY + (height - splitY) / 2}" font-family="Arial" font-size="${width / 20}" fill="${color}" text-anchor="middle">DETAIL 1</text>
-      <text x="${splitX + splitX / 2}" y="${splitY + (height - splitY) / 2}" font-family="Arial" font-size="${width / 20}" fill="${color}" text-anchor="middle">DETAIL 2</text>
+      <text x="${splitX / 2}" y="${splitY + (height - splitY) / 2}" font-family="Arial" font-size="${width / 20}" fill="${brandColor}" text-anchor="middle">DETAIL 1</text>
+      <text x="${splitX + splitX / 2}" y="${splitY + (height - splitY) / 2}" font-family="Arial" font-size="${width / 20}" fill="${brandColor}" text-anchor="middle">DETAIL 2</text>
     `;
     } else {
         // Style 3: Editorial Frame (Clean)
         const margin = width * 0.08;
         content += `
-      <rect x="${margin}" y="${margin}" width="${width - margin * 2}" height="${height - margin * 2}" stroke="${color}" stroke-width="2" fill="none"/>
-      <rect x="${margin}" y="${height - margin * 4}" width="${width - margin * 2}" height="${margin * 3}" fill="white" stroke="${color}" stroke-width="1"/>
+      <rect x="${margin}" y="${margin}" width="${width - margin * 2}" height="${height - margin * 2}" stroke="${brandColor}" stroke-width="2" fill="none"/>
+      <rect x="${margin}" y="${height - margin * 4}" width="${width - margin * 2}" height="${margin * 3}" fill="white" stroke="${brandColor}" stroke-width="1"/>
       
-      <text x="${width / 2}" y="${height / 2 - margin}" font-family="Arial" font-weight="bold" font-size="${width / 10}" fill="${color}" text-anchor="middle" opacity="0.1">PHOTO AREA</text>
+      <text x="${width / 2}" y="${height / 2 - margin}" font-family="Arial" font-weight="bold" font-size="${width / 10}" fill="${brandColor}" text-anchor="middle" opacity="0.1">PHOTO AREA</text>
       
-      <line x1="${margin * 2}" y1="${height - margin * 3}" x2="${width - margin * 2}" y2="${height - margin * 3}" stroke="${color}" stroke-width="4" stroke-linecap="round"/>
-      <line x1="${margin * 2}" y1="${height - margin * 2}" x2="${width * 0.6}" y2="${height - margin * 2}" stroke="${color}" stroke-width="2" stroke-linecap="round"/>
+      <line x1="${margin * 2}" y1="${height - margin * 3}" x2="${width - margin * 2}" y2="${height - margin * 3}" stroke="${brandColor}" stroke-width="4" stroke-linecap="round"/>
+      <line x1="${margin * 2}" y1="${height - margin * 2}" x2="${width * 0.6}" y2="${height - margin * 2}" stroke="${brandColor}" stroke-width="2" stroke-linecap="round"/>
     `;
     }
 

@@ -15,6 +15,35 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
     const [generatedResults, setGeneratedResults] = useState<{ svg: string, label: string }[]>([]);
     const [toast, setToast] = useState<{ show: boolean, msg: string }>({ show: false, msg: '' });
     const [loading, setLoading] = useState(false);
+    const [history, setHistory] = useState<string[]>([]);
+    const [usage, setUsage] = useState({
+        lastTime: 0,
+        dailyCount: 0,
+        today: new Date().toDateString()
+    });
+
+    useEffect(() => {
+        const saved = localStorage.getItem('generator_usage');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            const today = new Date().toDateString();
+            if (parsed.today === today) {
+                setUsage(parsed);
+            } else {
+                setUsage({ lastTime: 0, dailyCount: 0, today });
+            }
+        }
+    }, []);
+
+    const updateUsage = () => {
+        const newUsage = {
+            lastTime: Date.now(),
+            dailyCount: usage.dailyCount + 1,
+            today: usage.today
+        };
+        setUsage(newUsage);
+        localStorage.setItem('generator_usage', JSON.stringify(newUsage));
+    };
 
     useEffect(() => {
         if (isOpen) {
@@ -28,6 +57,20 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
 
     const handleGenerate = async () => {
         if (!selectedPlatform || !selectedType) return;
+
+        // Rate Limits
+        const now = Date.now();
+        const minutePassed = (now - usage.lastTime) > 60000;
+
+        if (usage.dailyCount >= 5) {
+            setToast({ show: true, msg: "Daily limit reached (5/day). Try again tomorrow!" });
+            return;
+        }
+
+        if (!minutePassed && usage.lastTime !== 0) {
+            setToast({ show: true, msg: "Slow down! Wait a minute before generating again." });
+            return;
+        }
 
         // Determine Dimensions
         let w = 1080;
@@ -63,7 +106,10 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
       - Use the provided width (${w}) and height (${h}) for all coordinates.
       - Ensure text is visible and elements are within bounds.
       - Use opacity for background fills (e.g. fill-opacity="0.1").
-      - Response must be raw JSON, no markdown formatting.`;
+      - Response must be raw JSON, no markdown formatting.
+      
+      PREVIOUS STYLES (DO NOT REPEAT): ${history.length > 0 ? history.join(", ") : "None yet"}.
+      Make these 3 layouts fundamentally different from the previous ones.`;
 
             // Call the real API
             const data = await generateLayoutJSON(prompt);
@@ -75,6 +121,8 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
                 }));
                 // Note: Changed background fill to slate-900 (#0f172a) for dark mode consistency
                 setGeneratedResults(results);
+                setHistory(prev => [...prev.slice(-10), ...results.map((r: { label: string }) => r.label)]); // Keep last 10 style references
+                updateUsage();
                 setStep(3);
             } else {
                 throw new Error("Invalid API response structure");
@@ -129,7 +177,12 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
                         </div>
                         <div>
                             <h3 className="text-xl font-bold text-white">Random Template Generator</h3>
-                            <p className="text-sm text-slate-400">AI-Powered Unique Layouts</p>
+                            <div className="flex items-center gap-2">
+                                <p className="text-sm text-slate-400">AI-Powered Unique Layouts</p>
+                                <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-slate-400 uppercase tracking-tight">
+                                    {5 - usage.dailyCount} FREE LEFT TODAY
+                                </span>
+                            </div>
                         </div>
                     </div>
                     <button onClick={onClose} className="p-2 text-slate-400 hover:bg-slate-800 hover:text-white rounded-full transition-colors"><X size={24} /></button>

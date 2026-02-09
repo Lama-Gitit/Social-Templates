@@ -37,11 +37,51 @@ export type PlatformData = {
 // --- Data: 2025 Social Media Standards ---
 export const PLATFORMS: PlatformData[] = [
     {
+        id: 'youtube',
+        name: 'YouTube',
+        icon: Youtube,
+        color: '#DE9B9B',
+        brandColor: '#DE9B9B',
+        bg: 'bg-red-50',
+        intro: "The video search engine. Channel banners are displayed on TVs (huge) but cropped heavily for Mobile.",
+        tips: [
+            "Place logo/text in the 'Safe Zone' (center 1546x423).",
+            "Thumbnails are critical."
+        ],
+        templates: [
+            { label: 'Channel Banner', width: 2560, height: 1440, desc: '16:9 • TV size', category: 'cover' },
+            { label: 'Video Thumbnail', width: 1280, height: 720, desc: '16:9 • CTR Driver', category: 'cover' },
+            { label: 'Profile Picture', width: 800, height: 800, desc: '1:1 • Channel icon', category: 'profile' },
+            { label: 'Shorts', width: 1080, height: 1920, desc: '9:16 • Vertical', category: 'story' },
+        ]
+    },
+    {
+        id: 'instagram',
+        name: 'Instagram',
+        icon: Instagram,
+        color: '#DE9AA4',
+        brandColor: '#DE9AA4',
+        bg: 'bg-pink-50',
+        intro: "The visual king. Reels and Stories have significant UI overlays at the top (header) and bottom (comments/timeline).",
+        tips: [
+            "Keep text centered in Reels to avoid buttons.",
+            "Profile pictures are circular.",
+            "Square posts are still safe, but 4:5 takes more screen."
+        ],
+        templates: [
+            { label: 'Profile Picture', width: 320, height: 320, desc: '1:1 • Circular mask', category: 'profile' },
+            { label: 'Square Post', width: 1080, height: 1080, desc: '1:1 • Classic format', category: 'post' },
+            { label: 'Vertical Feed', width: 1080, height: 1350, desc: '4:5 • Maximize feed', category: 'post' },
+            { label: 'Landscape Feed', width: 1080, height: 566, desc: '1.91:1 • Cinematic', category: 'post' },
+            { label: 'Stories & Reels', width: 1080, height: 1920, desc: '9:16 • Watch UI zones', category: 'story' },
+        ]
+    },
+    {
         id: 'x',
         name: 'X (Twitter)',
         icon: Twitter,
         color: '#FFFFFF',
-        brandColor: '#000000',
+        brandColor: '#FFFFFF',
         bg: 'bg-slate-100',
         intro: "Real-time conversation. X covers are unique because the profile picture overlaps the bottom-left area heavily on mobile.",
         tips: [
@@ -59,51 +99,11 @@ export const PLATFORMS: PlatformData[] = [
         ]
     },
     {
-        id: 'instagram',
-        name: 'Instagram',
-        icon: Instagram,
-        color: '#E1306C',
-        brandColor: '#E1306C',
-        bg: 'bg-pink-50',
-        intro: "The visual king. Reels and Stories have significant UI overlays at the top (header) and bottom (comments/timeline).",
-        tips: [
-            "Keep text centered in Reels to avoid buttons.",
-            "Profile pictures are circular.",
-            "Square posts are still safe, but 4:5 takes more screen."
-        ],
-        templates: [
-            { label: 'Profile Picture', width: 320, height: 320, desc: '1:1 • Circular mask', category: 'profile' },
-            { label: 'Square Post', width: 1080, height: 1080, desc: '1:1 • Classic format', category: 'post' },
-            { label: 'Vertical Feed', width: 1080, height: 1350, desc: '4:5 • Maximize feed', category: 'post' },
-            { label: 'Landscape Feed', width: 1080, height: 566, desc: '1.91:1 • Cinematic', category: 'post' },
-            { label: 'Stories & Reels', width: 1080, height: 1920, desc: '9:16 • Watch UI zones', category: 'story' },
-        ]
-    },
-    {
-        id: 'threads',
-        name: 'Threads',
-        icon: Hash,
-        color: '#FFFFFF',
-        brandColor: '#000000',
-        bg: 'bg-gray-100',
-        intro: "Text-first but visually immersive. Threads supports full 9:16 visuals natively without cropping.",
-        tips: [
-            "Images can be full screen (9:16).",
-            "Carousels are swipeable.",
-            "Profile picture syncs with Instagram."
-        ],
-        templates: [
-            { label: 'Profile Picture', width: 320, height: 320, desc: '1:1 • Circular crop', category: 'profile' },
-            { label: 'Post & Video', width: 1080, height: 1920, desc: '9:16 • Mobile optimized', category: 'post' },
-            { label: 'Carousel Slide', width: 1080, height: 1920, desc: '9:16 • Consistent height', category: 'post' },
-        ]
-    },
-    {
         id: 'facebook',
         name: 'Facebook',
         icon: Facebook,
-        color: '#1877F2',
-        brandColor: '#1877F2',
+        color: '#9BB6DE',
+        brandColor: '#9BB6DE',
         bg: 'bg-blue-50',
         intro: "The universal directory. Covers here are tricky because they display differently on desktop vs. mobile.",
         tips: [
@@ -122,11 +122,30 @@ export const PLATFORMS: PlatformData[] = [
         ]
     },
     {
+        id: 'threads',
+        name: 'Threads',
+        icon: Hash,
+        color: '#FFFFFF',
+        brandColor: '#FFFFFF',
+        bg: 'bg-gray-100',
+        intro: "Text-first but visually immersive. Threads supports full 9:16 visuals natively without cropping.",
+        tips: [
+            "Images can be full screen (9:16).",
+            "Carousels are swipeable.",
+            "Profile picture syncs with Instagram."
+        ],
+        templates: [
+            { label: 'Profile Picture', width: 320, height: 320, desc: '1:1 • Circular crop', category: 'profile' },
+            { label: 'Post & Video', width: 1080, height: 1920, desc: '9:16 • Mobile optimized', category: 'post' },
+            { label: 'Carousel Slide', width: 1080, height: 1920, desc: '9:16 • Consistent height', category: 'post' },
+        ]
+    },
+    {
         id: 'linkedin',
         name: 'LinkedIn',
         icon: Linkedin,
-        color: '#0A66C2',
-        brandColor: '#0A66C2',
+        color: '#9AB8DE',
+        brandColor: '#9AB8DE',
         bg: 'bg-blue-50',
         intro: "The professional network. Covers are much narrower (4:1) than other platforms.",
         tips: [
@@ -147,8 +166,8 @@ export const PLATFORMS: PlatformData[] = [
         id: 'bluesky',
         name: 'Bluesky',
         icon: Share2,
-        color: '#0085FF',
-        brandColor: '#0085FF',
+        color: '#9BD0DE',
+        brandColor: '#9BD0DE',
         bg: 'bg-sky-50',
         intro: "The decentralized contender. Very similar to X, but vertical posts can be slightly taller (4:5).",
         tips: [
@@ -167,8 +186,8 @@ export const PLATFORMS: PlatformData[] = [
         id: 'tiktok',
         name: 'TikTok',
         icon: Video,
-        color: '#ff0050',
-        brandColor: '#ff0050',
+        color: '#DE9BBA',
+        brandColor: '#DE9BBA',
         bg: 'bg-pink-50',
         intro: "Video native. The UI overlays (caption, music, buttons) cover the bottom ~20% and right side.",
         tips: [
@@ -183,30 +202,11 @@ export const PLATFORMS: PlatformData[] = [
         ]
     },
     {
-        id: 'youtube',
-        name: 'YouTube',
-        icon: Youtube,
-        color: '#FF0000',
-        brandColor: '#FF0000',
-        bg: 'bg-red-50',
-        intro: "The video search engine. Channel banners are displayed on TVs (huge) but cropped heavily for Mobile.",
-        tips: [
-            "Place logo/text in the 'Safe Zone' (center 1546x423).",
-            "Thumbnails are critical."
-        ],
-        templates: [
-            { label: 'Channel Banner', width: 2560, height: 1440, desc: '16:9 • TV size', category: 'cover' },
-            { label: 'Video Thumbnail', width: 1280, height: 720, desc: '16:9 • CTR Driver', category: 'cover' },
-            { label: 'Profile Picture', width: 800, height: 800, desc: '1:1 • Channel icon', category: 'profile' },
-            { label: 'Shorts', width: 1080, height: 1920, desc: '9:16 • Vertical', category: 'story' },
-        ]
-    },
-    {
         id: 'pinterest',
         name: 'Pinterest',
         icon: Camera,
-        color: '#BD081C',
-        brandColor: '#BD081C',
+        color: '#C49B9E',
+        brandColor: '#C49B9E',
         bg: 'bg-red-50',
         intro: "Vertical is the standard. 2:3 ratio is unique to Pinterest.",
         tips: [
@@ -223,8 +223,8 @@ export const PLATFORMS: PlatformData[] = [
         id: 'snapchat',
         name: 'Snapchat',
         icon: Smartphone,
-        color: '#FFFC00',
-        brandColor: '#FFFC00',
+        color: '#DEDE9B',
+        brandColor: '#DEDE9B',
         bg: 'bg-yellow-50',
         intro: "Full screen vertical. Leave massive buffers for header and footer UI.",
         tips: [
@@ -240,84 +240,86 @@ export const PLATFORMS: PlatformData[] = [
 // --- Helper: Generate Advanced "Blueprint" SVG ---
 export const generateSVG = (template: Template, brandColor: string) => {
     const { width, height, category, label } = template;
-    const color = brandColor; // Fallback logic if needed, but we'll use brandColor
-    // Background used in preview is slate-950/50, but if user copies, it should likely be transparent or white-ish background for use in design tools.
-    // Actually, usually these SVGs act as guides, so a light bg is safer, OR we stick to the user's implementation which had #F9FAFB.
-    // Given this is for copying into design tools, preserving the user's light bg (F9FAFB) is probably safest for visibility in typical tools,
-    // but for the in-app preview we might want to override.
-    // Let's stick to the user's logic for the "Copied" SVG, but we might tweak opacity for better looking preview if needed.
+    const color = brandColor;
+    const labelColor = '#1A1A1C'; // Dark Charcoal for better contrast on Light Gray bg
+    const secondaryLabelColor = '#555555';
 
-    // 1. Background & Border (Blueprint style)
     let content = `
-    <rect width="${width}" height="${height}" fill="#F9FAFB"/>
-    <rect width="${width}" height="${height}" fill="${color}" fill-opacity="0.05"/>
-    <rect width="${width}" height="${height}" stroke="${color}" stroke-width="4" fill="none"/>
+    <g id="Background">
+        <rect width="${width}" height="${height}" fill="#F9FAFB"/>
+        <rect width="${width}" height="${height}" fill="${color}" fill-opacity="0.05"/>
+        <rect width="${width}" height="${height}" stroke="${color}" stroke-width="4" fill="none"/>
+    </g>
+    <g id="Guides">
+        <line x1="${width / 2}" y1="${height * 0.45}" x2="${width / 2}" y2="${height * 0.55}" stroke="${color}" stroke-width="2" opacity="0.3"/>
+        <line x1="${width * 0.45}" y1="${height / 2}" x2="${width * 0.55}" y2="${height / 2}" stroke="${color}" stroke-width="2" opacity="0.3"/>
+    </g>
   `;
 
-    // 2. Safe Zones / Overlays based on Category
     if (category === 'profile') {
-        // Circle Guide
         const cx = width / 2;
         const cy = height / 2;
         const r = Math.min(width, height) / 2;
         content += `
-      <circle cx="${cx}" cy="${cy}" r="${r - 2}" stroke="${color}" stroke-width="2" stroke-dasharray="8 8" fill="none"/>
-      <text x="${cx}" y="${cy}" font-family="Arial" font-weight="bold" font-size="${width / 10}" fill="${color}" text-anchor="middle" dominant-baseline="middle" opacity="0.2">CROP</text>
-    `;
+    <g id="SafeZones">
+        <circle cx="${cx}" cy="${cy}" r="${r - 2}" stroke="${color}" stroke-width="2" stroke-dasharray="8 8" fill="none"/>
+        <text x="${cx}" y="${cy}" font-family="Arial, sans-serif" font-weight="bold" font-size="${width / 10}" fill="${color}" text-anchor="middle" dominant-baseline="middle" opacity="0.2">CROP</text>
+    </g>`;
     } else if (category === 'cover') {
-        // Profile Picture Obstruction Area (Bottom Left usually, simplistic assumption from user code)
         const profSize = height * 0.6;
         content += `
-      <circle cx="${height * 0.2 + profSize / 2}" cy="${height - profSize / 3}" r="${profSize / 2}" fill="white" stroke="${color}" stroke-width="2" stroke-dasharray="4 4" opacity="0.7"/>
-      <text x="${height * 0.2 + profSize / 2}" y="${height - profSize / 3}" font-family="Arial" font-size="${profSize / 5}" fill="${color}" text-anchor="middle" dominant-baseline="middle" opacity="0.6">Profile Pic</text>
-    `;
+    <g id="SafeZones">
+        <circle cx="${height * 0.2 + profSize / 2}" cy="${height - profSize / 3}" r="${profSize / 2}" fill="white" stroke="${color}" stroke-width="2" stroke-dasharray="4 4" opacity="0.7"/>
+        <text x="${height * 0.2 + profSize / 2}" y="${height - profSize / 3}" font-family="Arial, sans-serif" font-size="${profSize / 5}" fill="${color}" text-anchor="middle" dominant-baseline="middle" opacity="0.6">Profile Pic</text>
+    </g>`;
     } else if (category === 'story') {
-        // Safe Zones (Top & Bottom bars)
         const safeZoneH = 250;
-        // Top Bar
         content += `
-      <rect x="0" y="0" width="${width}" height="${safeZoneH}" fill="${color}" fill-opacity="0.1"/>
-      <line x1="0" y1="${safeZoneH}" x2="${width}" y2="${safeZoneH}" stroke="${color}" stroke-width="2" stroke-dasharray="10 5"/>
-      <text x="${width / 2}" y="${safeZoneH / 2}" font-family="Arial" font-size="40" fill="${color}" text-anchor="middle" opacity="0.5">RESTRICTED UI ZONE</text>
-    `;
-        // Bottom Bar
-        content += `
-      <rect x="0" y="${height - safeZoneH}" width="${width}" height="${safeZoneH}" fill="${color}" fill-opacity="0.1"/>
-      <line x1="0" y="${height - safeZoneH}" x2="${width}" y2="${height - safeZoneH}" stroke="${color}" stroke-width="2" stroke-dasharray="10 5"/>
-      <text x="${width / 2}" y="${height - safeZoneH / 2}" font-family="Arial" font-size="40" fill="${color}" text-anchor="middle" opacity="0.5">RESTRICTED UI ZONE</text>
-    `;
+    <g id="SafeZones">
+        <!-- Top Bar -->
+        <rect x="0" y="0" width="${width}" height="${safeZoneH}" fill="${color}" fill-opacity="0.1"/>
+        <line x1="0" y1="${safeZoneH}" x2="${width}" y2="${safeZoneH}" stroke="${color}" stroke-width="2" stroke-dasharray="10 5"/>
+        <text x="${width / 2}" y="${safeZoneH / 2}" font-family="Arial, sans-serif" font-size="40" fill="${color}" text-anchor="middle" dominant-baseline="middle" opacity="0.5">RESTRICTED UI ZONE</text>
+        <!-- Bottom Bar -->
+        <rect x="0" y="${height - safeZoneH}" width="${width}" height="${safeZoneH}" fill="${color}" fill-opacity="0.1"/>
+        <line x1="0" y1="${height - safeZoneH}" x2="${width}" y2="${height - safeZoneH}" stroke="${color}" stroke-width="2" stroke-dasharray="10 5"/>
+        <text x="${width / 2}" y="${height - (safeZoneH / 2)}" font-family="Arial, sans-serif" font-size="40" fill="${color}" text-anchor="middle" dominant-baseline="middle" opacity="0.5">RESTRICTED UI ZONE</text>
+    </g>`;
     }
 
-    // 3. Center Crosshairs (Blueprint feel)
     content += `
-    <line x1="${width / 2}" y1="${height * 0.45}" x2="${width / 2}" y2="${height * 0.55}" stroke="${color}" stroke-width="2" opacity="0.3"/>
-    <line x1="${width * 0.45}" y1="${height / 2}" x2="${width * 0.55}" y2="${height / 2}" stroke="${color}" stroke-width="2" opacity="0.3"/>
+    <g id="Labels">
+        <text x="50%" y="50%" font-family="Arial, sans-serif" font-weight="bold" font-size="${Math.max(24, width / 20)}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle" dy="-20">${label}</text>
+        <text x="50%" y="50%" font-family="Arial, sans-serif" font-size="${Math.max(16, width / 30)}" fill="${secondaryLabelColor}" text-anchor="middle" dominant-baseline="middle" dy="20">${width} x ${height} px</text>
+    </g>
   `;
 
-    // 4. Labels
-    content += `
-    <text x="50%" y="50%" font-family="Arial, sans-serif" font-weight="bold" font-size="${Math.max(24, width / 20)}" fill="${color}" text-anchor="middle" dominant-baseline="middle" dy="-20">${label}</text>
-    <text x="50%" y="50%" font-family="Arial, sans-serif" font-size="${Math.max(16, width / 30)}" fill="#555" text-anchor="middle" dominant-baseline="middle" dy="20">${width} x ${height} px</text>
-  `;
-
-    return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">${content}</svg>`;
+    return `<svg id="social-template-${label.toLowerCase().replace(/\s+/g, '-')}" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">${content}</svg>`;
 };
 
 // --- Fallback Helper: Generate Creative Layout SVG ---
 export const generateCreativeSVG = (width: number, height: number, brandColor: string, styleIndex: number, platformName: string) => {
     // Styles: 0 = Diagonal Split, 1 = Modern Grid, 2 = Editorial Frame
+    const labelColor = brandColor;
 
-    let content = `<rect width="${width}" height="${height}" fill="#F9FAFB"/>`;
+    let content = `
+    <g id="Background">
+        <rect width="${width}" height="${height}" fill="#F9FAFB"/>
+    </g>`;
 
     if (styleIndex === 0) {
         // Style 1: Diagonal Split (Bold)
         content += `
-      <path d="M0 0 L${width} ${height} L0 ${height} Z" fill="${brandColor}" fill-opacity="0.1"/>
-      <line x1="0" y1="0" x2="${width}" y2="${height}" stroke="${brandColor}" stroke-width="3"/>
-      <text x="${width * 0.25}" y="${height * 0.75}" font-family="Arial" font-weight="bold" font-size="${width / 15}" fill="${brandColor}" text-anchor="middle">IMAGE 1</text>
-      <text x="${width * 0.75}" y="${height * 0.25}" font-family="Arial" font-weight="bold" font-size="${width / 15}" fill="${brandColor}" text-anchor="middle">IMAGE 2</text>
-      <rect x="${width * 0.1}" y="${height * 0.1}" width="${width * 0.3}" height="${height * 0.05}" fill="${brandColor}"/>
-      <text x="${width * 0.25}" y="${height * 0.135}" font-family="Arial" font-size="${width / 30}" fill="white" text-anchor="middle">${platformName.toUpperCase()}</text>
+      <g id="DesignElements">
+        <path d="M0 0 L${width} ${height} L0 ${height} Z" fill="${brandColor}" fill-opacity="0.1"/>
+        <line x1="0" y1="0" x2="${width}" y2="${height}" stroke="${brandColor}" stroke-width="3"/>
+      </g>
+      <g id="Labels">
+        <text x="${width * 0.25}" y="${height * 0.75}" font-family="Arial, sans-serif" font-weight="bold" font-size="${width / 15}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle">IMAGE 1</text>
+        <text x="${width * 0.75}" y="${height * 0.25}" font-family="Arial, sans-serif" font-weight="bold" font-size="${width / 15}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle">IMAGE 2</text>
+        <rect x="${width * 0.1}" y="${height * 0.1}" width="${width * 0.3}" height="${height * 0.05}" fill="${brandColor}"/>
+        <text x="${width * 0.25}" y="${height * 0.125}" font-family="Arial, sans-serif" font-weight="bold" font-size="${width / 30}" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle">${platformName.toUpperCase()}</text>
+      </g>
     `;
     } else if (styleIndex === 1) {
         // Style 2: Modern Grid (Asymmetrical)
@@ -325,28 +327,32 @@ export const generateCreativeSVG = (width: number, height: number, brandColor: s
         const splitX = width * 0.5;
 
         content += `
-      <rect x="0" y="0" width="${width}" height="${splitY}" fill="${brandColor}" fill-opacity="0.05"/>
-      <line x1="0" y1="${splitY}" x2="${width}" y2="${splitY}" stroke="${brandColor}" stroke-width="3"/>
-      <line x1="${splitX}" y1="${splitY}" x2="${splitX}" y2="${height}" stroke="${brandColor}" stroke-width="3"/>
-      
-      <text x="${width / 2}" y="${splitY / 2}" font-family="Arial" font-weight="bold" font-size="${width / 12}" fill="${brandColor}" text-anchor="middle" opacity="0.3">FEATURE IMAGE</text>
-      
-      <text x="${splitX / 2}" y="${splitY + (height - splitY) / 2}" font-family="Arial" font-size="${width / 20}" fill="${brandColor}" text-anchor="middle">DETAIL 1</text>
-      <text x="${splitX + splitX / 2}" y="${splitY + (height - splitY) / 2}" font-family="Arial" font-size="${width / 20}" fill="${brandColor}" text-anchor="middle">DETAIL 2</text>
+      <g id="DesignElements">
+        <rect x="0" y="0" width="${width}" height="${splitY}" fill="${brandColor}" fill-opacity="0.05"/>
+        <line x1="0" y1="${splitY}" x2="${width}" y2="${splitY}" stroke="${brandColor}" stroke-width="3"/>
+        <line x1="${splitX}" y1="${splitY}" x2="${splitX}" y2="${height}" stroke="${brandColor}" stroke-width="3"/>
+      </g>
+      <g id="Labels">
+        <text x="${width / 2}" y="${splitY / 2}" font-family="Arial, sans-serif" font-weight="bold" font-size="${width / 12}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle" opacity="0.3">FEATURE IMAGE</text>
+        <text x="${splitX / 2}" y="${splitY + (height - splitY) / 2}" font-family="Arial, sans-serif" font-weight="bold" font-size="${width / 20}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle">DETAIL 1</text>
+        <text x="${splitX + splitX / 2}" y="${splitY + (height - splitY) / 2}" font-family="Arial, sans-serif" font-weight="bold" font-size="${width / 20}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle">DETAIL 2</text>
+      </g>
     `;
     } else {
         // Style 3: Editorial Frame (Clean)
         const margin = width * 0.08;
         content += `
-      <rect x="${margin}" y="${margin}" width="${width - margin * 2}" height="${height - margin * 2}" stroke="${brandColor}" stroke-width="2" fill="none"/>
-      <rect x="${margin}" y="${height - margin * 4}" width="${width - margin * 2}" height="${margin * 3}" fill="white" stroke="${brandColor}" stroke-width="1"/>
-      
-      <text x="${width / 2}" y="${height / 2 - margin}" font-family="Arial" font-weight="bold" font-size="${width / 10}" fill="${brandColor}" text-anchor="middle" opacity="0.1">PHOTO AREA</text>
-      
-      <line x1="${margin * 2}" y1="${height - margin * 3}" x2="${width - margin * 2}" y2="${height - margin * 3}" stroke="${brandColor}" stroke-width="4" stroke-linecap="round"/>
-      <line x1="${margin * 2}" y1="${height - margin * 2}" x2="${width * 0.6}" y2="${height - margin * 2}" stroke="${brandColor}" stroke-width="2" stroke-linecap="round"/>
+      <g id="DesignElements">
+        <rect x="${margin}" y="${margin}" width="${width - margin * 2}" height="${height - margin * 2}" stroke="${brandColor}" stroke-width="2" fill="none"/>
+        <rect x="${margin}" y="${height - margin * 4}" width="${width - margin * 2}" height="${margin * 3}" fill="white" stroke="${brandColor}" stroke-width="1"/>
+      </g>
+      <g id="Labels">
+        <text x="${width / 2}" y="${height / 2 - margin}" font-family="Arial, sans-serif" font-weight="bold" font-size="${width / 10}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle" opacity="0.1">PHOTO AREA</text>
+        <line x1="${margin * 2}" y1="${height - margin * 3}" x2="${width - margin * 2}" y2="${height - margin * 3}" stroke="${brandColor}" stroke-width="4" stroke-linecap="round"/>
+        <line x1="${margin * 2}" y1="${height - margin * 2}" x2="${width * 0.6}" y2="${height - margin * 2}" stroke="${brandColor}" stroke-width="2" stroke-linecap="round"/>
+      </g>
     `;
     }
 
-    return `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">${content}</svg>`;
+    return `<svg id="creative-${platformName.toLowerCase()}-${styleIndex}" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">${content}</svg>`;
 };

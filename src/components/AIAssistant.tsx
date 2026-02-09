@@ -37,88 +37,90 @@ export function AIAssistant({ isOpen, onClose, platformName, platformColor }: AI
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/90 backdrop-blur-md animate-in fade-in duration-300">
+            <div className="bg-background border border-border/40 shadow-[0_0_100px_rgba(0,0,0,0.8)] w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-300 rounded-sm">
 
                 {/* Modal Header */}
-                <div className="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-900">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400">
-                            <Bot size={24} />
+                <div className="p-8 border-b border-border/20 flex justify-between items-center bg-card/30">
+                    <div className="flex items-center gap-6">
+                        <div className="p-3 bg-primary/10 border border-primary/20 rounded-sm text-primary">
+                            <Bot size={28} />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-white">AI Content Assistant</h3>
-                            <p className="text-sm text-slate-400">Generating for <span className="font-semibold" style={{ color: platformColor }}>{platformName}</span></p>
+                            <h3 className="text-2xl font-black text-white uppercase tracking-tighter leading-none mb-2">AI Content Assistant</h3>
+                            <p className="text-[9px] font-black uppercase tracking-[0.3em] opacity-40">SVG Templates for Social Content · <span className="text-primary font-black">{platformName}</span></p>
                         </div>
                     </div>
                     <button
                         onClick={onClose}
-                        className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-full transition-colors"
+                        className="p-2 text-white/40 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300"
                     >
                         <X size={24} />
                     </button>
                 </div>
 
                 {/* Modal Body */}
-                <div className="p-6 overflow-y-auto flex-grow space-y-6">
+                <div className="p-8 overflow-y-auto flex-grow space-y-8">
                     {!response && !isLoading && (
-                        <div className="text-center py-12 px-4">
-                            <div className="w-16 h-16 bg-slate-800 text-purple-400 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <Wand2 size={32} />
+                        <div className="text-center py-16 px-4">
+                            <div className="w-20 h-20 bg-card border border-border/40 text-primary/40 rounded-sm flex items-center justify-center mx-auto mb-6 relative group">
+                                <Wand2 size={36} className="group-hover:scale-110 transition-transform duration-500" />
+                                <div className="absolute inset-0 bg-primary/5 blur-xl group-hover:bg-primary/10 transition-colors" />
                             </div>
-                            <h4 className="text-lg font-semibold text-slate-200 mb-2">Brainstorming made easy</h4>
-                            <p className="text-slate-500 max-w-md mx-auto">
-                                Enter a topic, brand, or idea below. We'll generate captions and visual concepts perfectly tailored for {platformName}.
+                            <h4 className="text-lg font-black text-white uppercase tracking-tight mb-3">Neural Environment Synthesis</h4>
+                            <p className="text-[10px] text-white/40 max-w-md mx-auto uppercase tracking-widest leading-relaxed">
+                                Deploy a targeted brainstorming sequence. Generated data is optimized for {platformName} architecture standards.
                             </p>
                         </div>
                     )}
 
                     {/* Input Area */}
-                    <div className="space-y-3">
-                        <label className="block text-sm font-medium text-slate-400">What are you posting about?</label>
-                        <div className="flex gap-2">
+                    <div className="space-y-4">
+                        <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Target Objective</label>
+                        <div className="flex gap-3">
                             <input
                                 type="text"
                                 value={topic}
                                 onChange={(e) => setTopic(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
-                                placeholder="e.g., Summer Sale, New Coffee Blend, Motivational Monday..."
-                                className="flex-grow px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-200 placeholder-slate-600 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition-all"
+                                placeholder="E.G. SUMMER SALE, BRAND LAUNCH, PRODUCT DEMO..."
+                                className="flex-grow px-5 py-5 bg-card/50 border border-border/20 rounded-sm text-[10px] font-black tracking-[0.3em] text-foreground placeholder-white/5 focus:outline-none focus:border-primary/40 focus:bg-card/80 transition-all uppercase"
                             />
                             <button
                                 onClick={handleGenerate}
                                 disabled={isLoading || !topic.trim()}
-                                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all flex items-center gap-2 min-w-[120px] justify-center shadow-lg shadow-purple-500/20"
+                                className="px-8 py-5 bg-primary text-white font-black uppercase tracking-[0.4em] text-[10px] rounded-sm transition-all duration-300 flex items-center gap-3 min-w-[160px] justify-center shadow-[0_0_30px_hsla(var(--primary),0.3)] hover:shadow-[0_0_50px_hsla(var(--primary),0.5)] active:scale-95 disabled:opacity-30 disabled:shadow-none"
                             >
-                                {isLoading ? <Loader2 size={20} className="animate-spin" /> : <><Send size={18} /> Generate</>}
+                                {isLoading ? <Loader2 size={18} className="animate-spin" /> : <><Send size={16} /> Deploy</>}
                             </button>
                         </div>
                     </div>
 
                     {/* Error State */}
                     {error && (
-                        <div className="bg-red-500/10 text-red-400 p-4 rounded-xl text-sm flex items-center gap-3 border border-red-500/20">
-                            <div className="w-2 h-2 bg-red-500 rounded-full" />
+                        <div className="bg-primary/5 text-primary p-5 rounded-sm text-[10px] font-black uppercase tracking-widest flex items-center gap-4 border border-primary/20 animate-in fade-in slide-in-from-top-2">
+                            <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
                             {error}
                         </div>
                     )}
 
                     {/* Results Area */}
                     {response && (
-                        <div className="bg-slate-950 rounded-xl p-6 border border-slate-800 animate-fade-in-up">
-                            <div className="flex items-center justify-between mb-4">
-                                <h4 className="text-sm font-bold text-slate-500 uppercase tracking-wider">Gemini Suggestions</h4>
+                        <div className="bg-card/30 rounded-sm p-8 border border-border/20 animate-in fade-in slide-in-from-bottom-4 duration-700 relative overflow-hidden">
+                            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+                            <div className="flex items-center justify-between mb-6">
+                                <h4 className="text-[9px] font-black text-white/30 uppercase tracking-[0.5em]">Synthetic Output / Gemini-1.5-Pro</h4>
                                 <div className="flex gap-2">
                                     <button
                                         onClick={handleGenerate}
-                                        className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+                                        className="p-2 text-white/40 hover:text-white hover:bg-white/5 rounded-sm transition-colors"
                                         title="Regenerate"
                                     >
-                                        <RefreshCw size={16} />
+                                        <RefreshCw size={14} />
                                     </button>
                                 </div>
                             </div>
-                            <div className="prose prose-invert prose-sm max-w-none text-slate-300 whitespace-pre-wrap leading-relaxed">
+                            <div className="prose prose-invert prose-sm max-w-none text-white/80 text-[11px] font-medium whitespace-pre-wrap leading-relaxed selection:bg-primary selection:text-white">
                                 {response}
                             </div>
                         </div>
@@ -127,14 +129,14 @@ export function AIAssistant({ isOpen, onClose, platformName, platformColor }: AI
 
                 {/* Modal Footer */}
                 {response && (
-                    <div className="p-4 border-t border-slate-800 bg-slate-900 flex justify-end">
+                    <div className="p-6 border-t border-border/10 bg-card/20 flex justify-end">
                         <button
                             onClick={() => {
                                 navigator.clipboard.writeText(response);
                             }}
-                            className="text-sm text-purple-400 font-medium hover:text-purple-300 flex items-center gap-2 px-4 py-2 hover:bg-slate-800 rounded-lg transition-colors"
+                            className="text-[9px] text-primary font-black uppercase tracking-[0.4em] flex items-center gap-3 px-6 py-3 hover:bg-primary/10 border border-primary/20 rounded-sm transition-all duration-300"
                         >
-                            <Copy size={16} /> Copy All Text
+                            <Copy size={14} /> Copy Text
                         </button>
                     </div>
                 )}

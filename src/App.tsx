@@ -207,7 +207,6 @@ function App() {
           isOpen={isAIOpen}
           onClose={() => setIsAIOpen(false)}
           platformName={activePlatform?.name || ''}
-          platformColor={activePlatform?.color || '#a855f7'}
         />
 
         <RandomGeneratorModal

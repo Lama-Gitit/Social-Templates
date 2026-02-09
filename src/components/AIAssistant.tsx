@@ -6,10 +6,9 @@ interface AIAssistantProps {
     isOpen: boolean;
     onClose: () => void;
     platformName: string;
-    platformColor: string;
 }
 
-export function AIAssistant({ isOpen, onClose, platformName, platformColor }: AIAssistantProps) {
+export function AIAssistant({ isOpen, onClose, platformName }: AIAssistantProps) {
     const [topic, setTopic] = useState('');
     const [response, setResponse] = useState('');
     const [isLoading, setIsLoading] = useState(false);

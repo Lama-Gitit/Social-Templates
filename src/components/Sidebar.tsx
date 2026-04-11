@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { LayoutGrid, Shuffle } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { PLATFORMS } from '../data/platforms';
@@ -5,12 +6,11 @@ import { PLATFORMS } from '../data/platforms';
 interface SidebarProps {
     className?: string;
     activePlatformId: string | null;
-    onSelectPlatform: (id: string | null) => void;
     onOpenRandomGenerator: () => void;
     aiEnabled: boolean;
 }
 
-export function Sidebar({ className, activePlatformId, onSelectPlatform, onOpenRandomGenerator, aiEnabled }: SidebarProps) {
+export function Sidebar({ className, activePlatformId, onOpenRandomGenerator, aiEnabled }: SidebarProps) {
     return (
         <div className={cn("flex flex-col h-full bg-background text-foreground w-64 p-4 border-r border-border/40", className)}>
             <div className="mb-12 p-3">
@@ -21,8 +21,8 @@ export function Sidebar({ className, activePlatformId, onSelectPlatform, onOpenR
             </div>
 
             <nav className="flex-1 space-y-1 overflow-y-auto">
-                <button
-                    onClick={() => onSelectPlatform(null)}
+                <Link
+                    to="/"
                     className={cn(
                         "flex items-center w-full p-2.5 rounded transition-all duration-200 group text-[10px] font-black uppercase tracking-widest",
                         activePlatformId === null
@@ -32,7 +32,7 @@ export function Sidebar({ className, activePlatformId, onSelectPlatform, onOpenR
                 >
                     <LayoutGrid className="w-4 h-4 mr-3" />
                     Studio
-                </button>
+                </Link>
 
                 <div className="pt-8 pb-2 px-3">
                     <p className="text-[9px] font-black text-muted-foreground/30 uppercase tracking-[0.2em]">Tools</p>
@@ -57,9 +57,9 @@ export function Sidebar({ className, activePlatformId, onSelectPlatform, onOpenR
                 </div>
 
                 {PLATFORMS.map((platform) => (
-                    <button
+                    <Link
                         key={platform.id}
-                        onClick={() => onSelectPlatform(platform.id)}
+                        to={`/${platform.slug}`}
                         className={cn(
                             "flex items-center w-full p-3 rounded-sm transition-all duration-300 group text-[9px] font-black uppercase tracking-[0.2em] mb-1",
                             activePlatformId === platform.id
@@ -74,7 +74,7 @@ export function Sidebar({ className, activePlatformId, onSelectPlatform, onOpenR
                             )}
                         />
                         {platform.name}
-                    </button>
+                    </Link>
                 ))}
             </nav>
 

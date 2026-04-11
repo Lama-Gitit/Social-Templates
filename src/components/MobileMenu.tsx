@@ -1,24 +1,19 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Menu, X, LayoutGrid, Shuffle } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { PLATFORMS } from '../data/platforms';
 
 interface MobileMenuProps {
     activePlatformId: string | null;
-    onSelectPlatform: (id: string | null) => void;
     onOpenRandomGenerator: () => void;
     aiEnabled: boolean;
 }
 
-export function MobileMenu({ activePlatformId, onSelectPlatform, onOpenRandomGenerator, aiEnabled }: MobileMenuProps) {
+export function MobileMenu({ activePlatformId, onOpenRandomGenerator, aiEnabled }: MobileMenuProps) {
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleMenu = () => setIsOpen(!isOpen);
-
-    const handleSelect = (id: string | null) => {
-        onSelectPlatform(id);
-        setIsOpen(false);
-    };
 
     const handleGenerator = () => {
         onOpenRandomGenerator();
@@ -51,9 +46,10 @@ export function MobileMenu({ activePlatformId, onSelectPlatform, onOpenRandomGen
                     <p className="text-sm font-black text-white uppercase tracking-[0.4em] mb-8 border-b border-white/5 pb-4">Platforms</p>
                     <div className="grid grid-cols-2 gap-2">
                         {PLATFORMS.map((platform) => (
-                            <button
+                            <Link
                                 key={platform.id}
-                                onClick={() => handleSelect(platform.id)}
+                                to={`/${platform.slug}`}
+                                onClick={() => setIsOpen(false)}
                                 className={cn(
                                     "flex flex-col items-center justify-center p-6 rounded-sm transition-all duration-300 gap-4 border",
                                     activePlatformId === platform.id
@@ -68,21 +64,22 @@ export function MobileMenu({ activePlatformId, onSelectPlatform, onOpenRandomGen
                                     )}
                                 />
                                 <span className="text-[9px] font-black uppercase tracking-[0.1em]">{platform.name}</span>
-                            </button>
+                            </Link>
                         ))}
                     </div>
                 </nav>
 
-                {/* Footer Navigation (Studio, Platform, AI Generator at bottom as requested) */}
+                {/* Footer Navigation */}
                 <div className="absolute bottom-0 left-0 right-0 p-8 pb-10 bg-gradient-to-t from-background via-background/95 to-transparent pointer-events-none">
                     <div className="flex items-center gap-4 pointer-events-auto">
-                        <button
-                            onClick={() => handleSelect(null)}
+                        <Link
+                            to="/"
+                            onClick={() => setIsOpen(false)}
                             className="flex-1 bg-white/5 border border-white/5 py-4 rounded-sm flex flex-col items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-all active:scale-95"
                         >
                             <LayoutGrid size={16} />
                             Studio
-                        </button>
+                        </Link>
 
                         {/* Gap for the floating toggle button */}
                         <div className="w-20" />

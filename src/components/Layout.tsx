@@ -5,18 +5,16 @@ import { MobileMenu } from './MobileMenu';
 interface LayoutProps {
     children: React.ReactNode;
     activePlatformId: string | null;
-    onSelectPlatform: (id: string | null) => void;
     onOpenRandomGenerator: () => void;
     aiEnabled: boolean;
 }
 
-export function Layout({ children, activePlatformId, onSelectPlatform, onOpenRandomGenerator, aiEnabled }: LayoutProps) {
+export function Layout({ children, activePlatformId, onOpenRandomGenerator, aiEnabled }: LayoutProps) {
     return (
         <div className="flex h-screen w-full bg-background overflow-hidden selection:bg-primary/30 selection:text-white">
             <Sidebar
                 className="hidden md:flex"
                 activePlatformId={activePlatformId}
-                onSelectPlatform={onSelectPlatform}
                 onOpenRandomGenerator={onOpenRandomGenerator}
                 aiEnabled={aiEnabled}
             />
@@ -28,7 +26,6 @@ export function Layout({ children, activePlatformId, onSelectPlatform, onOpenRan
 
             <MobileMenu
                 activePlatformId={activePlatformId}
-                onSelectPlatform={onSelectPlatform}
                 onOpenRandomGenerator={onOpenRandomGenerator}
                 aiEnabled={aiEnabled}
             />

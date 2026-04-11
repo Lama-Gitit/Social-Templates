@@ -49,6 +49,8 @@ const MOST_USED = [
   { platformId: 'snapchat', label: 'Snapchat Story', width: 1080, height: 1920 },
 ];
 
+const aiEnabled = new URLSearchParams(window.location.search).has('ai');
+
 function App() {
   const [activePlatformId, setActivePlatformId] = useState<string | null>(null);
   const [isAIOpen, setIsAIOpen] = useState(false);
@@ -72,6 +74,7 @@ function App() {
         activePlatformId={activePlatformId}
         onSelectPlatform={setActivePlatformId}
         onOpenRandomGenerator={() => setIsRandomGeneratorOpen(true)}
+        aiEnabled={aiEnabled}
       >
         <div className="flex flex-col gap-12">
           {activePlatform ? (
@@ -118,6 +121,15 @@ function App() {
                   />
                 ))}
               </div>
+
+              {activePlatform.geoCopy && (
+                <section className="mt-16 pt-12 border-t border-border/20">
+                  <h3 className="text-[10px] font-black mb-4 uppercase tracking-[0.3em] text-white/30">{activePlatform.name} Image Sizes & Dimensions</h3>
+                  <p className="text-white/40 text-sm leading-relaxed max-w-3xl">
+                    {activePlatform.geoCopy}
+                  </p>
+                </section>
+              )}
             </div>
           ) : (
             <div className="animate-in fade-in duration-1000">
@@ -134,6 +146,9 @@ function App() {
                     Pick a platform, choose a format, and copy the perfect SVG frame into your design tool.
                   </p>
                 </div>
+                <p className="max-w-2xl mt-6 md:mt-10 text-white/30 text-sm md:text-base leading-relaxed">
+                  A free library of copy-ready SVG frames for 10+ social media platforms, covering 45+ format sizes.from Instagram Stories (1080×1920) to YouTube Thumbnails (1280×720). Grab the exact dimensions you need and paste directly into Figma, Sketch, or any design tool.
+                </p>
               </header>
 
               {/* Essential Formats Section */}
@@ -200,6 +215,108 @@ function App() {
                   <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">No matching environments</p>
                 </div>
               )}
+
+              {/* Social Media Size Guide */}
+              <section className="mb-24">
+                <header className="mb-12 pb-6 border-b border-border/20">
+                  <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-2">Social Media Size Guide</h2>
+                  <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em]">Every dimension you need.all in one place</p>
+                </header>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="border-b border-border/20">
+                        <th className="pb-4 pr-6 text-[9px] font-black text-white/40 uppercase tracking-[0.3em]">Platform</th>
+                        <th className="pb-4 pr-6 text-[9px] font-black text-white/40 uppercase tracking-[0.3em]">Format</th>
+                        <th className="pb-4 pr-6 text-[9px] font-black text-white/40 uppercase tracking-[0.3em]">Dimensions</th>
+                        <th className="pb-4 text-[9px] font-black text-white/40 uppercase tracking-[0.3em]">Ratio</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-[10px] font-bold text-white/70">
+                      {[
+                        ['Instagram', 'Story / Reel', '1080 × 1920', '9:16'],
+                        ['Instagram', 'Feed Post', '1080 × 1350', '4:5'],
+                        ['Instagram', 'Square Post', '1080 × 1080', '1:1'],
+                        ['YouTube', 'Thumbnail', '1280 × 720', '16:9'],
+                        ['YouTube', 'Channel Banner', '2560 × 1440', '16:9'],
+                        ['TikTok', 'Video', '1080 × 1920', '9:16'],
+                        ['LinkedIn', 'Profile Banner', '1584 × 396', '4:1'],
+                        ['LinkedIn', 'Post', '1080 × 1350', '4:5'],
+                        ['Facebook', 'Cover Photo', '1640 × 856', '~2:1'],
+                        ['Facebook', 'Shared Image', '1200 × 630', '~2:1'],
+                        ['X (Twitter)', 'Post', '1080 × 1350', '4:5'],
+                        ['X (Twitter)', 'Header', '1500 × 500', '3:1'],
+                        ['Pinterest', 'Pin', '1000 × 1500', '2:3'],
+                        ['Snapchat', 'Story / Ad', '1080 × 1920', '9:16'],
+                        ['Threads', 'Post', '1080 × 1920', '9:16'],
+                        ['Bluesky', 'Post', '1080 × 1080', '1:1'],
+                      ].map(([platform, format, dimensions, ratio], i) => (
+                        <tr key={i} className="border-b border-border/10 hover:bg-white/[0.02] transition-colors">
+                          <td className="py-3 pr-6 uppercase tracking-wider text-white/50">{platform}</td>
+                          <td className="py-3 pr-6 uppercase tracking-wider">{format}</td>
+                          <td className="py-3 pr-6 uppercase tracking-widest text-primary/70 font-black">{dimensions}</td>
+                          <td className="py-3 uppercase tracking-wider text-white/40">{ratio}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <p className="mt-8 text-white/20 text-xs leading-relaxed max-w-2xl">
+                  All dimensions are in pixels. These are the recommended sizes for optimal quality across each platform. Sizes may vary as platforms update their specifications.
+                </p>
+              </section>
+
+              {/* FAQ Section */}
+              <section className="mb-24">
+                <header className="mb-12 pb-6 border-b border-border/20">
+                  <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-2">Frequently Asked Questions</h2>
+                  <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em]">Common questions about social media sizes & templates</p>
+                </header>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {[
+                    {
+                      q: 'What size is an Instagram Story?',
+                      a: 'Instagram Stories are 1080 × 1920 pixels with a 9:16 aspect ratio. This same vertical format is used for Instagram Reels and other full-screen mobile content.',
+                    },
+                    {
+                      q: 'What size is a YouTube Thumbnail?',
+                      a: 'YouTube Thumbnails are 1280 × 720 pixels (16:9 aspect ratio). This is the recommended size for clear, high-quality thumbnails that display well on all devices.from mobile to TV.',
+                    },
+                    {
+                      q: 'What size is a LinkedIn Banner?',
+                      a: 'LinkedIn personal profile banners are 1584 × 396 pixels. LinkedIn company page covers are 1128 × 191 pixels. For LinkedIn feed posts, 1080 × 1350 pixels (4:5 ratio) gets the most screen real estate.',
+                    },
+                    {
+                      q: 'What size is a TikTok video?',
+                      a: 'TikTok videos are 1080 × 1920 pixels with a 9:16 aspect ratio. This full-screen vertical format is the standard for all TikTok content including videos, ads, and stories.',
+                    },
+                    {
+                      q: 'What size is a Facebook Cover Photo?',
+                      a: 'Facebook Cover Photos are 1640 × 856 pixels on desktop. Shared images in the feed perform best at 1200 × 630 pixels. Facebook Stories use the same 1080 × 1920 format as Instagram.',
+                    },
+                    {
+                      q: 'What are the standard social media image sizes?',
+                      a: 'The most common sizes are: Instagram Post 1080×1350, Instagram Story 1080×1920, YouTube Thumbnail 1280×720, Facebook Cover 1640×856, LinkedIn Banner 1584×396, TikTok Video 1080×1920, Pinterest Pin 1000×1500, and X/Twitter Post 1080×1350.',
+                    },
+                    {
+                      q: 'What is Social Templates?',
+                      a: 'Social Templates is a free library of copy-ready SVG frames for 10+ social media platforms, covering 45+ format sizes. Pick a platform, choose a format, and instantly copy the perfect SVG frame into Figma, Sketch, or any design tool. It also includes an AI-powered template generator.',
+                    },
+                  ].map(({ q, a }, i) => (
+                    <details key={i} className="group border border-border/20 rounded-sm bg-card/20 hover:bg-card/30 transition-colors">
+                      <summary className="cursor-pointer px-6 py-5 text-[11px] font-black text-white uppercase tracking-wider list-none flex justify-between items-center">
+                        {q}
+                        <span className="text-white/20 group-open:rotate-45 transition-transform text-lg font-bold">+</span>
+                      </summary>
+                      <p className="px-6 pb-5 text-sm text-white/50 leading-relaxed">
+                        {a}
+                      </p>
+                    </details>
+                  ))}
+                </div>
+              </section>
             </div>
           )}
         </div>

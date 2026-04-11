@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Shuffle, X, ArrowLeft, Loader2, Sparkles, Check, Copy } from 'lucide-react';
-import { generateLayoutJSON } from '../lib/gemini';
+import { generateLayoutJSON } from '../lib/anthropic';
+import { sanitizeSVG } from '../lib/utils';
 import { PLATFORMS, generateCreativeSVG, type PlatformData } from '../data/platforms';
 
 interface RandomGeneratorModalProps {
@@ -22,6 +23,15 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
         dailyCount: 0,
         today: new Date().toDateString()
     });
+
+    const sanitizedResults = useMemo(
+        () => generatedResults.map(r => ({ ...r, safeSvg: sanitizeSVG(r.svg) })),
+        [generatedResults]
+    );
+    const sanitizedHistory = useMemo(
+        () => history.map(r => ({ ...r, safeSvg: sanitizeSVG(r.svg) })),
+        [history]
+    );
 
     useEffect(() => {
         // Load Usage
@@ -171,7 +181,8 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
 
         } catch (err) {
             console.error("AI Generation failed, using static fallback", err);
-            // Fallback to static generator
+            setToast({ show: true, msg: "AI generation failed. Showing offline templates instead." });
+            setTimeout(() => setToast({ show: false, msg: '' }), 4000);
             const results = [
                 { svg: generateCreativeSVG(w, h, selectedPlatform.brandColor, 0, selectedPlatform.name), label: 'Diagonal Split (Offline)' },
                 { svg: generateCreativeSVG(w, h, selectedPlatform.brandColor, 1, selectedPlatform.name), label: 'Modern Grid (Offline)' },
@@ -184,24 +195,14 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
         }
     };
 
-    const copyToClipboard = (svg: string, label: string) => {
-        const textArea = document.createElement("textarea");
-        textArea.value = svg;
-        textArea.style.position = "fixed";
-        textArea.style.left = "-9999px";
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
+    const copyToClipboard = async (svg: string, label: string) => {
         try {
-            const successful = document.execCommand('copy');
-            if (successful) {
-                setToast({ show: true, msg: `Copied ${label}!` });
-                setTimeout(() => setToast({ show: false, msg: '' }), 2000);
-            }
+            await navigator.clipboard.writeText(svg);
+            setToast({ show: true, msg: `Copied ${label}!` });
+            setTimeout(() => setToast({ show: false, msg: '' }), 2000);
         } catch (err) {
-            console.error('Copy failed', err);
+            console.error('Failed to copy SVG', err);
         }
-        document.body.removeChild(textArea);
     };
 
     if (!isOpen) return null;
@@ -226,7 +227,7 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
                                 </div>
                             </div>
                         </div>
-                        <button onClick={onClose} className="p-2 text-white/40 hover:bg-white/5 hover:text-white rounded-full transition-all duration-300"><X size={24} /></button>
+                        <button onClick={onClose} aria-label="Close generator" className="p-2 text-white/40 hover:bg-white/5 hover:text-white rounded-full transition-all duration-300 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"><X size={24} /></button>
                     </div>
 
                     {/* Tabs */}
@@ -268,7 +269,7 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                    {history.map((res) => (
+                                    {sanitizedHistory.map((res) => (
                                         <div key={res.id} className="bg-card/30 p-5 rounded-sm border border-border/20 hover:border-primary/40 transition-all duration-500 group">
                                             <div className="flex justify-between items-start mb-4">
                                                 <div>
@@ -285,7 +286,7 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
                                                 />
                                                 <div
                                                     className="w-full max-h-full flex justify-center scale-90 transition-transform duration-700 group-hover:scale-105"
-                                                    dangerouslySetInnerHTML={{ __html: res.svg.replace('<svg', '<svg style="max-width:100%; height:auto;"') }}
+                                                    dangerouslySetInnerHTML={{ __html: res.safeSvg.replace('<svg', '<svg style="max-width:100%; height:auto;"') }}
                                                 />
                                             </div>
                                             <button
@@ -413,7 +414,7 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
                                     </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                        {generatedResults.map((res, i) => (
+                                        {sanitizedResults.map((res, i) => (
                                             <div key={i} className="bg-card/30 p-6 rounded-sm border border-border/20 hover:border-primary/40 transition-all duration-700 group">
                                                 <h4 className="font-black text-white text-[11px] uppercase tracking-[0.3em] mb-4 group-hover:text-primary transition-colors">{res.label}</h4>
                                                 <div className="bg-background border border-border/40 rounded-sm mb-6 overflow-hidden flex items-center justify-center p-8 relative transition-all duration-700 group-hover:border-primary/20 shadow-inner">
@@ -425,7 +426,7 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
                                                     />
                                                     <div
                                                         className="w-full max-h-[250px] flex justify-center scale-95 transition-transform duration-700 group-hover:scale-110"
-                                                        dangerouslySetInnerHTML={{ __html: res.svg.replace('<svg', '<svg style="max-width:100%; height:auto;"') }}
+                                                        dangerouslySetInnerHTML={{ __html: res.safeSvg.replace('<svg', '<svg style="max-width:100%; height:auto;"') }}
                                                     />
                                                 </div>
                                                 <button

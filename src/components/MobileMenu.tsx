@@ -7,9 +7,10 @@ interface MobileMenuProps {
     activePlatformId: string | null;
     onSelectPlatform: (id: string | null) => void;
     onOpenRandomGenerator: () => void;
+    aiEnabled: boolean;
 }
 
-export function MobileMenu({ activePlatformId, onSelectPlatform, onOpenRandomGenerator }: MobileMenuProps) {
+export function MobileMenu({ activePlatformId, onSelectPlatform, onOpenRandomGenerator, aiEnabled }: MobileMenuProps) {
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleMenu = () => setIsOpen(!isOpen);
@@ -29,6 +30,7 @@ export function MobileMenu({ activePlatformId, onSelectPlatform, onOpenRandomGen
             {/* Floating Hamburger Button */}
             <button
                 onClick={toggleMenu}
+                aria-label={isOpen ? 'Close menu' : 'Open menu'}
                 className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-foreground text-background px-6 py-4 rounded-full shadow-2xl md:hidden active:scale-95 transition-transform"
             >
                 {isOpen ? <X size={20} /> : <Menu size={20} />}
@@ -86,11 +88,16 @@ export function MobileMenu({ activePlatformId, onSelectPlatform, onOpenRandomGen
                         <div className="w-20" />
 
                         <button
-                            onClick={handleGenerator}
-                            className="flex-1 bg-white/5 border border-white/5 py-4 rounded-sm flex flex-col items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-all active:scale-95"
+                            onClick={aiEnabled ? handleGenerator : undefined}
+                            className={cn(
+                                "flex-1 bg-white/5 border border-white/5 py-4 rounded-sm flex flex-col items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all",
+                                aiEnabled
+                                    ? "text-white/40 hover:text-white active:scale-95 cursor-pointer"
+                                    : "text-white/20 cursor-default"
+                            )}
                         >
                             <Shuffle size={16} />
-                            AI Generator
+                            {aiEnabled ? 'AI Generator' : 'AI / Soon'}
                         </button>
                     </div>
                 </div>

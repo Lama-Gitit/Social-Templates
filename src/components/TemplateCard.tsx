@@ -1,5 +1,5 @@
 import { Copy, Check } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { cn } from '../lib/utils';
 import { generateSVG, type Template } from '../data/platforms';
 
@@ -10,16 +10,18 @@ interface TemplateCardProps {
 
 export function TemplateCard({ template, platformColor }: TemplateCardProps) {
     const [copied, setCopied] = useState(false);
+    const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
     const aspectRatio = template.width / template.height;
 
     const handleCopy = async () => {
         const svgCode = generateSVG(template, platformColor);
         try {
             await navigator.clipboard.writeText(svgCode);
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
             setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
+            timeoutRef.current = setTimeout(() => setCopied(false), 2000);
         } catch (err) {
-            console.error('Failed to copy API', err);
+            console.error('Failed to copy SVG', err);
         }
     };
 

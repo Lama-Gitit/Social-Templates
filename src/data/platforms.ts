@@ -32,6 +32,7 @@ export type PlatformData = {
     intro: string;
     tips: string[];
     templates: Template[];
+    geoCopy: string;
 };
 
 // --- Data: 2025 Social Media Standards ---
@@ -53,7 +54,8 @@ export const PLATFORMS: PlatformData[] = [
             { label: 'Video Thumbnail', width: 1280, height: 720, desc: '16:9 • CTR Driver', category: 'cover' },
             { label: 'Profile Picture', width: 800, height: 800, desc: '1:1 • Channel icon', category: 'profile' },
             { label: 'Shorts', width: 1080, height: 1920, desc: '9:16 • Vertical', category: 'story' },
-        ]
+        ],
+        geoCopy: "YouTube requires four key image sizes: Channel Banners at 2560x1440 pixels (safe area 1546x423 in the center), Video Thumbnails at 1280x720 pixels (16:9), Profile Pictures at 800x800 pixels, and Shorts at 1080x1920 pixels (9:16). Thumbnails are the single most important visual on YouTube because they directly affect click-through rates. Always place logos and text within the banner safe zone since YouTube crops banners differently on TV, desktop, and mobile."
     },
     {
         id: 'instagram',
@@ -74,7 +76,8 @@ export const PLATFORMS: PlatformData[] = [
             { label: 'Vertical Feed', width: 1080, height: 1350, desc: '4:5 • Maximize feed', category: 'post' },
             { label: 'Landscape Feed', width: 1080, height: 566, desc: '1.91:1 • Cinematic', category: 'post' },
             { label: 'Stories & Reels', width: 1080, height: 1920, desc: '9:16 • Watch UI zones', category: 'story' },
-        ]
+        ],
+        geoCopy: "Instagram supports five main image formats: Profile Pictures at 320x320 pixels (displayed as a circle), Square Posts at 1080x1080 pixels (1:1), Vertical Feed Posts at 1080x1350 pixels (4:5), Landscape Posts at 1080x566 pixels (1.91:1), and Stories/Reels at 1080x1920 pixels (9:16). The 4:5 vertical format takes up the most screen real estate in the feed and typically generates the highest engagement. For Stories and Reels, keep important text centered since the top 15% and bottom 20% of the screen are covered by Instagram's UI elements."
     },
     {
         id: 'x',
@@ -96,7 +99,8 @@ export const PLATFORMS: PlatformData[] = [
             { label: 'Post (Vertical)', width: 1080, height: 1350, desc: '4:5 • Mobile optimized', category: 'post' },
             { label: 'Post (Square)', width: 1200, height: 1200, desc: '1:1 • Balanced view', category: 'post' },
             { label: 'Card Image', width: 800, height: 418, desc: '1.91:1 • Link preview', category: 'ad' },
-        ]
+        ],
+        geoCopy: "X (formerly Twitter) uses six image formats: Header Images at 1500x500 pixels (3:1), Profile Pictures at 400x400 pixels (circular crop), Landscape Posts at 1200x675 pixels (16:9), Vertical Posts at 1080x1350 pixels (4:5), Square Posts at 1200x1200 pixels (1:1), and Link Card Images at 800x418 pixels (1.91:1). On mobile, the profile picture overlaps the bottom-left corner of the header image, so avoid placing important content in that area. Vertical 4:5 posts take up the most feed space and tend to outperform other formats."
     },
     {
         id: 'facebook',
@@ -119,7 +123,8 @@ export const PLATFORMS: PlatformData[] = [
             { label: 'Group Cover', width: 1640, height: 856, desc: '1.91:1 • Community', category: 'cover' },
             { label: 'Vertical Post', width: 1080, height: 1350, desc: '4:5 • Feed standard', category: 'post' },
             { label: 'Stories', width: 1080, height: 1920, desc: '9:16 • Full screen', category: 'story' },
-        ]
+        ],
+        geoCopy: "Facebook uses seven image formats across its features: Profile Pictures at 196x196 pixels minimum (displayed as a circle), Desktop Covers at 851x315 pixels, Mobile Covers at 640x360 pixels, Event Covers at 1920x1005 pixels, Group Covers at 1640x856 pixels, Vertical Posts at 1080x1350 pixels (4:5), and Stories at 1080x1920 pixels (9:16). Facebook cover photos display differently on desktop and mobile. Desktop crops the top and bottom while mobile crops the sides, so always keep critical text and logos in the center of your cover image."
     },
     {
         id: 'threads',
@@ -138,7 +143,8 @@ export const PLATFORMS: PlatformData[] = [
             { label: 'Profile Picture', width: 320, height: 320, desc: '1:1 • Circular crop', category: 'profile' },
             { label: 'Post & Video', width: 1080, height: 1920, desc: '9:16 • Mobile optimized', category: 'post' },
             { label: 'Carousel Slide', width: 1080, height: 1920, desc: '9:16 • Consistent height', category: 'post' },
-        ]
+        ],
+        geoCopy: "Threads supports three image formats: Profile Pictures at 320x320 pixels (synced with your Instagram profile), Posts and Videos at 1080x1920 pixels (9:16), and Carousel Slides at 1080x1920 pixels (9:16). Unlike many platforms, Threads displays full 9:16 vertical images without cropping, making it one of the most visually immersive text-first platforms. Carousel posts are swipeable and should use a consistent height across all slides."
     },
     {
         id: 'linkedin',
@@ -160,7 +166,8 @@ export const PLATFORMS: PlatformData[] = [
             { label: 'Link Post / Ad', width: 1200, height: 627, desc: '1.91:1 • Link preview', category: 'post' },
             { label: 'Article Cover', width: 1920, height: 1080, desc: '16:9 • Article Header', category: 'cover' },
             { label: 'Portrait Post', width: 1080, height: 1350, desc: '4:5 • Feed push', category: 'post' },
-        ]
+        ],
+        geoCopy: "LinkedIn uses six image formats: Profile Pictures at 400x400 pixels (headshot), Personal Cover Banners at 1584x396 pixels (4:1), Company Page Covers at 1128x191 pixels (5.9:1), Link Post/Ad Images at 1200x627 pixels (1.91:1), Article Cover Images at 1920x1080 pixels (16:9), and Portrait Posts at 1080x1350 pixels (4:5). LinkedIn covers are much narrower than other platforms with a 4:1 aspect ratio. The profile picture overlaps the left side of personal covers, so keep that area clear of important text."
     },
     {
         id: 'bluesky',
@@ -180,7 +187,8 @@ export const PLATFORMS: PlatformData[] = [
             { label: 'Post (Vertical)', width: 1200, height: 1500, desc: '4:5 • Wider vertical', category: 'post' },
             { label: 'Post (Landscape)', width: 1200, height: 675, desc: '16:9 • Wide', category: 'post' },
             { label: 'Post (Square)', width: 1200, height: 1200, desc: '1:1 • Balanced', category: 'post' },
-        ]
+        ],
+        geoCopy: "Bluesky uses five image formats: Header Images at 1500x500 pixels (3:1), Profile Pictures at 400x400 pixels, Vertical Posts at 1200x1500 pixels (4:5), Landscape Posts at 1200x675 pixels (16:9), and Square Posts at 1200x1200 pixels (1:1). Bluesky's layout is similar to X (Twitter) but supports slightly taller vertical posts at 4:5 ratio. The platform favors clean, simple visuals and headers behave similarly to X's layout."
     },
     {
         id: 'tiktok',
@@ -199,7 +207,8 @@ export const PLATFORMS: PlatformData[] = [
             { label: 'Video / Story', width: 1080, height: 1920, desc: '9:16 • Watch UI', category: 'story' },
             { label: 'Profile Picture', width: 200, height: 200, desc: '1:1 • Minimum size', category: 'profile' },
             { label: 'Carousel Slide', width: 1080, height: 1920, desc: '9:16 • Photo mode', category: 'post' },
-        ]
+        ],
+        geoCopy: "TikTok uses three image formats: Videos and Stories at 1080x1920 pixels (9:16), Profile Pictures at 200x200 pixels minimum, and Carousel Slides at 1080x1920 pixels (9:16). TikTok is a video-native platform where the UI covers approximately 20% of the bottom of the screen (captions, music info) and the right side (like, share, comment buttons). Keep all important visual content in the center of the frame to avoid being hidden by interface elements."
     },
     {
         id: 'pinterest',
@@ -217,7 +226,8 @@ export const PLATFORMS: PlatformData[] = [
             { label: 'Standard Pin', width: 1000, height: 1500, desc: '2:3 • Gold standard', category: 'post' },
             { label: 'Square Pin', width: 1000, height: 1000, desc: '1:1 • Acceptable', category: 'post' },
             { label: 'Board Cover', width: 600, height: 600, desc: '1:1 • Collection', category: 'cover' },
-        ]
+        ],
+        geoCopy: "Pinterest uses three image formats: Standard Pins at 1000x1500 pixels (2:3), Square Pins at 1000x1000 pixels (1:1), and Board Covers at 600x600 pixels (1:1). The 2:3 vertical ratio is unique to Pinterest and is the gold standard for the platform. Tall images naturally dominate Pinterest's masonry grid layout, and pins with text overlays tend to perform better because they communicate the pin's value at a glance while scrolling."
     },
     {
         id: 'snapchat',
@@ -233,7 +243,8 @@ export const PLATFORMS: PlatformData[] = [
         templates: [
             { label: 'Snap / Story / Ad', width: 1080, height: 1920, desc: '9:16 • Full screen', category: 'story' },
             { label: 'Geofilter', width: 1080, height: 2340, desc: '9:19.5 • Tall device', category: 'ad' },
-        ]
+        ],
+        geoCopy: "Snapchat uses two main image formats: Snaps, Stories, and Ads at 1080x1920 pixels (9:16) and Geofilters at 1080x2340 pixels (9:19.5 for taller devices). Snapchat is entirely full-screen vertical. The top 150 pixels and bottom 150 pixels are typically covered by Snapchat's header and footer UI, so always leave generous buffers and keep critical content in the middle 75% of the screen."
     }
 ];
 

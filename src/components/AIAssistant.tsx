@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Send, X, Bot, Copy, Loader2, RefreshCw, Wand2 } from 'lucide-react';
-import { generateSocialContent } from '../lib/gemini';
+import { generateSocialContent } from '../lib/anthropic';
 
 interface AIAssistantProps {
     isOpen: boolean;
@@ -52,7 +52,8 @@ export function AIAssistant({ isOpen, onClose, platformName }: AIAssistantProps)
                     </div>
                     <button
                         onClick={onClose}
-                        className="p-2 text-white/40 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300"
+                        aria-label="Close AI assistant"
+                        className="p-2 text-white/40 hover:text-white hover:bg-white/5 rounded-full transition-all duration-300 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
                     >
                         <X size={24} />
                     </button>
@@ -108,7 +109,7 @@ export function AIAssistant({ isOpen, onClose, platformName }: AIAssistantProps)
                         <div className="bg-card/30 rounded-sm p-8 border border-border/20 animate-in fade-in slide-in-from-bottom-4 duration-700 relative overflow-hidden">
                             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
                             <div className="flex items-center justify-between mb-6">
-                                <h4 className="text-[9px] font-black text-white/30 uppercase tracking-[0.5em]">Synthetic Output / Gemini-1.5-Pro</h4>
+                                <h4 className="text-[9px] font-black text-white/30 uppercase tracking-[0.5em]">Synthetic Output / AI</h4>
                                 <div className="flex gap-2">
                                     <button
                                         onClick={handleGenerate}

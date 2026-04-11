@@ -7,15 +7,16 @@ interface SidebarProps {
     activePlatformId: string | null;
     onSelectPlatform: (id: string | null) => void;
     onOpenRandomGenerator: () => void;
+    aiEnabled: boolean;
 }
 
-export function Sidebar({ className, activePlatformId, onSelectPlatform, onOpenRandomGenerator }: SidebarProps) {
+export function Sidebar({ className, activePlatformId, onSelectPlatform, onOpenRandomGenerator, aiEnabled }: SidebarProps) {
     return (
         <div className={cn("flex flex-col h-full bg-background text-foreground w-64 p-4 border-r border-border/40", className)}>
             <div className="mb-12 p-3">
-                <h1 className="text-xl font-black tracking-tighter text-foreground uppercase leading-none">
+                <div className="text-xl font-black tracking-tighter text-foreground uppercase leading-none" aria-hidden="true">
                     SOCIAL<br />FRAMES
-                </h1>
+                </div>
                 <p className="text-[9px] text-muted-foreground uppercase tracking-[0.3em] font-black mt-3">SVG Templates for Social Content</p>
             </div>
 
@@ -38,11 +39,17 @@ export function Sidebar({ className, activePlatformId, onSelectPlatform, onOpenR
                 </div>
 
                 <button
-                    onClick={onOpenRandomGenerator}
-                    className="flex items-center w-full p-2.5 rounded transition-all duration-200 group text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground hover:bg-white/5"
+                    onClick={aiEnabled ? onOpenRandomGenerator : undefined}
+                    className={cn(
+                        "flex items-center w-full p-2.5 rounded transition-all duration-200 group text-[10px] font-black uppercase tracking-widest",
+                        aiEnabled
+                            ? "text-muted-foreground hover:text-foreground hover:bg-white/5 cursor-pointer"
+                            : "text-muted-foreground/30 cursor-default"
+                    )}
                 >
                     <Shuffle className="w-4 h-4 mr-3" />
                     AI Generator
+                    {!aiEnabled && <span className="ml-auto text-[7px] tracking-[0.2em] text-primary/50 border border-primary/20 px-1.5 py-0.5 rounded-sm">SOON</span>}
                 </button>
 
                 <div className="pt-8 pb-2 px-3">

@@ -63,7 +63,7 @@ function PlatformPage() {
   const themeHSL = platform ? hexToHSL(platform.brandColor || platform.color) : '5 74% 47%';
 
   usePageMeta({
-    title: platform?.metaTitle || 'Social Templates',
+    title: platform?.metaTitle || 'Social Frames',
     description: platform?.metaDescription || '',
     canonicalPath: platform ? `/${platform.slug}` : '/',
   });
@@ -73,7 +73,13 @@ function PlatformPage() {
   }
 
   return (
-    <div style={{ '--primary': themeHSL } as React.CSSProperties}>
+    <div
+      style={{
+        '--primary': themeHSL,
+        '--color-primary': `hsl(${themeHSL})`,
+        '--color-ring': `hsl(${themeHSL})`,
+      } as React.CSSProperties}
+    >
       <Layout
         activePlatformId={platform.id}
         onOpenRandomGenerator={() => setIsRandomGeneratorOpen(true)}
@@ -190,7 +196,7 @@ function HomePage() {
   const themeHSL = '5 74% 47%';
 
   usePageMeta({
-    title: 'Social Templates | Free SVG Templates for Every Social Media Platform',
+    title: 'Social Frames | Free SVG Templates for Every Social Media Platform',
     description: 'Free library of copy-ready SVG templates for 10+ social media platforms. Instantly grab perfectly sized frames for Instagram Stories, YouTube Thumbnails, LinkedIn Banners, TikTok, and 45+ more formats.',
     canonicalPath: '/',
   });
@@ -200,7 +206,13 @@ function HomePage() {
   );
 
   return (
-    <div style={{ '--primary': themeHSL } as React.CSSProperties}>
+    <div
+      style={{
+        '--primary': themeHSL,
+        '--color-primary': `hsl(${themeHSL})`,
+        '--color-ring': `hsl(${themeHSL})`,
+      } as React.CSSProperties}
+    >
       <Layout
         activePlatformId={null}
         onOpenRandomGenerator={() => setIsRandomGeneratorOpen(true)}
@@ -210,7 +222,7 @@ function HomePage() {
           <div className="animate-in fade-in duration-1000">
             <header className="mb-8 md:mb-32">
               <div className="mb-4 md:mb-8 opacity-40">
-                <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.6em]">Social Templates Library</p>
+                <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.6em]">Social Frames Library</p>
               </div>
               <h1 className="text-[48px] sm:text-[64px] md:text-[90px] lg:text-[120px] font-black text-foreground mb-4 md:mb-8 tracking-tighter uppercase leading-[0.9] md:leading-[0.8] block overflow-visible">
                 Copy&#x2011;ready<br />Social SVG<br /><span className="text-primary"> Templates</span>
@@ -350,7 +362,7 @@ function HomePage() {
                   { q: 'What size is a TikTok video?', a: 'TikTok videos are 1080 x 1920 pixels with a 9:16 aspect ratio. This full-screen vertical format is the standard for all TikTok content including videos, ads, and stories.', link: '/tiktok-templates' },
                   { q: 'What size is a Facebook Cover Photo?', a: 'Facebook Cover Photos are 1640 x 856 pixels on desktop. Shared images in the feed perform best at 1200 x 630 pixels. Facebook Stories use the same 1080 x 1920 format as Instagram.', link: '/facebook-templates' },
                   { q: 'What are the standard social media image sizes?', a: 'The most common sizes are: Instagram Post 1080x1350, Instagram Story 1080x1920, YouTube Thumbnail 1280x720, Facebook Cover 1640x856, LinkedIn Banner 1584x396, TikTok Video 1080x1920, Pinterest Pin 1000x1500, and X/Twitter Post 1080x1350.' },
-                  { q: 'What is Social Templates?', a: 'Social Templates is a free library of copy-ready SVG frames for 10+ social media platforms, covering 45+ format sizes. Pick a platform, choose a format, and instantly copy the perfect SVG frame into Figma, Sketch, or any design tool. It also includes an AI-powered template generator.' },
+                  { q: 'What is Social Frames?', a: 'Social Frames is a free library of copy-ready SVG frames for 10+ social media platforms, covering 45+ format sizes. Pick a platform, choose a format, and instantly copy the perfect SVG frame into Figma, Sketch, or any design tool. It also includes an AI-powered template generator.' },
                 ].map(({ q, a, link }, i) => (
                   <details key={i} className="group border border-border/20 rounded-sm bg-card/20 hover:bg-card/30 transition-colors">
                     <summary className="cursor-pointer px-6 py-5 text-[11px] font-black text-white uppercase tracking-wider list-none flex justify-between items-center">

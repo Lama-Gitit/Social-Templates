@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { LayoutGrid, Shuffle } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { PLATFORMS } from '../data/platforms';
+import { SocialFramesLogo } from './SocialFramesLogo';
 
 interface SidebarProps {
     className?: string;
@@ -14,9 +15,7 @@ export function Sidebar({ className, activePlatformId, onOpenRandomGenerator, ai
     return (
         <div className={cn("flex flex-col h-full bg-background text-foreground w-64 p-4 border-r border-border/40", className)}>
             <div className="mb-12 p-3">
-                <div className="text-xl font-black tracking-tighter text-foreground uppercase leading-none" aria-hidden="true">
-                    SOCIAL<br />FRAMES
-                </div>
+                <SocialFramesLogo />
                 <p className="text-[9px] text-muted-foreground uppercase tracking-[0.3em] font-black mt-3">SVG Templates for Social Content</p>
             </div>
 
@@ -35,25 +34,7 @@ export function Sidebar({ className, activePlatformId, onOpenRandomGenerator, ai
                 </Link>
 
                 <div className="pt-8 pb-2 px-3">
-                    <p className="text-[9px] font-black text-muted-foreground/30 uppercase tracking-[0.2em]">Tools</p>
-                </div>
-
-                <button
-                    onClick={aiEnabled ? onOpenRandomGenerator : undefined}
-                    className={cn(
-                        "flex items-center w-full p-2.5 rounded transition-all duration-200 group text-[10px] font-black uppercase tracking-widest",
-                        aiEnabled
-                            ? "text-muted-foreground hover:text-foreground hover:bg-white/5 cursor-pointer"
-                            : "text-muted-foreground/30 cursor-default"
-                    )}
-                >
-                    <Shuffle className="w-4 h-4 mr-3" />
-                    AI Generator
-                    {!aiEnabled && <span className="ml-auto text-[7px] tracking-[0.2em] text-primary/50 border border-primary/20 px-1.5 py-0.5 rounded-sm">SOON</span>}
-                </button>
-
-                <div className="pt-8 pb-2 px-3">
-                    <p className="text-[9px] font-black text-muted-foreground/30 uppercase tracking-[0.2em]">Platform</p>
+                    <p className="text-[9px] font-black text-muted-foreground/30 uppercase tracking-[0.2em]">Platforms</p>
                 </div>
 
                 {PLATFORMS.map((platform) => (
@@ -76,17 +57,26 @@ export function Sidebar({ className, activePlatformId, onOpenRandomGenerator, ai
                         {platform.name}
                     </Link>
                 ))}
+
+                <div className="pt-8 pb-2 px-3">
+                    <p className="text-[9px] font-black text-muted-foreground/30 uppercase tracking-[0.2em]">Tools</p>
+                </div>
+
+                <button
+                    onClick={aiEnabled ? onOpenRandomGenerator : undefined}
+                    className={cn(
+                        "flex items-center w-full p-2.5 rounded transition-all duration-200 group text-[10px] font-black uppercase tracking-widest",
+                        aiEnabled
+                            ? "text-muted-foreground hover:text-foreground hover:bg-white/5 cursor-pointer"
+                            : "text-muted-foreground/30 cursor-default"
+                    )}
+                >
+                    <Shuffle className="w-4 h-4 mr-3" />
+                    AI Generator
+                    {!aiEnabled && <span className="ml-auto text-[7px] tracking-[0.2em] text-primary/50 border border-primary/20 px-1.5 py-0.5 rounded-sm">SOON</span>}
+                </button>
             </nav>
 
-            <div className="p-4 bg-card rounded border border-border mt-auto">
-                <div className="flex justify-between items-center mb-2">
-                    <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">Premium System</p>
-                    <div className="w-1 h-1 rounded-full bg-foreground/20" />
-                </div>
-                <div className="w-full bg-background h-1 rounded-full overflow-hidden border border-border/10">
-                    <div className="bg-foreground/40 h-full w-3/4" />
-                </div>
-            </div>
         </div>
     );
 }

@@ -6,6 +6,7 @@ import { AIAssistant } from './components/AIAssistant';
 import { RandomGeneratorModal } from './components/RandomGeneratorModal';
 import { PLATFORMS } from './data/platforms';
 import { usePageMeta } from './hooks/usePageMeta';
+import { setAIToken } from './lib/anthropic';
 import { Search } from 'lucide-react';
 
 function hexToHSL(hex: string): string {
@@ -51,7 +52,14 @@ const MOST_USED = [
   { platformId: 'snapchat', label: 'Snapchat Story', width: 1080, height: 1920 },
 ];
 
-const aiEnabled = new URLSearchParams(window.location.search).has('ai');
+const aiParams = new URLSearchParams(window.location.search);
+const aiToken = aiParams.get('ai') || '';
+const aiEnabled = aiToken.length > 0;
+
+// Register the token so all API calls include it
+if (aiToken) {
+  setAIToken(aiToken);
+}
 
 // --- Platform Page ---
 function PlatformPage() {
@@ -246,13 +254,13 @@ function HomePage() {
                 </div>
 
                 <div className="relative w-full md:w-96 group">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60 group-focus-within:text-primary transition-colors" />
                   <input
                     type="text"
                     placeholder="SEARCH FORMATS..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-card/30 border border-border/20 rounded-sm py-5 pl-12 pr-4 text-[9px] font-black tracking-[0.4em] text-foreground placeholder-white/10 focus:outline-none focus:border-primary/40 focus:bg-card/50 transition-all uppercase"
+                    className="w-full bg-card/60 border border-white/20 rounded-sm py-5 pl-12 pr-4 text-[10px] font-black tracking-[0.4em] text-white placeholder-white/40 focus:outline-none focus:border-primary/60 focus:bg-card/80 transition-all uppercase"
                   />
                 </div>
               </div>

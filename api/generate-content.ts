@@ -1,11 +1,15 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { generateText } from "./_provider";
+import { checkAuth } from "./_auth";
 import { checkRateLimit } from "./_rate-limit";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method not allowed" });
     }
+
+    const unauthorized = checkAuth(req, res);
+    if (unauthorized) return unauthorized;
 
     const limited = checkRateLimit(req, res);
     if (limited) return limited;

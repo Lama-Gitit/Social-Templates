@@ -57,11 +57,15 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
             }
         }
 
-        // Load History
+        // Load History (re-sanitize SVGs from localStorage to prevent stored XSS)
         const savedHistory = localStorage.getItem('generator_history');
         if (savedHistory) {
             try {
-                setHistory(JSON.parse(savedHistory));
+                const parsed = JSON.parse(savedHistory);
+                const cleaned = Array.isArray(parsed)
+                    ? parsed.map((item: { id: string; label: string; svg: string; platform: string; date: string }) => ({ ...item, svg: sanitizeSVG(item.svg) }))
+                    : [];
+                setHistory(cleaned);
             } catch (e) {
                 console.error("Failed to parse history data", e);
             }

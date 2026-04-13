@@ -1,7 +1,21 @@
+let _aiToken = '';
+
+export function setAIToken(token: string) {
+    _aiToken = token;
+}
+
 async function apiFetch(url: string, body: object) {
+    const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+    };
+
+    if (_aiToken) {
+        headers["Authorization"] = `Bearer ${_aiToken}`;
+    }
+
     const res = await fetch(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify(body),
     });
 

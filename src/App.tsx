@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, useParams, Link, Navigate } from 'react-r
 import { Layout } from './components/Layout';
 import { TemplateCard } from './components/TemplateCard';
 import { AIAssistant } from './components/AIAssistant';
-import { RandomGeneratorModal } from './components/RandomGeneratorModal';
+import { RandomGeneratorModal } from './components/RandomGeneratorModalV2'; // v2
 import { PLATFORMS } from './data/platforms';
 import { usePageMeta } from './hooks/usePageMeta';
 import { setAIToken } from './lib/anthropic';

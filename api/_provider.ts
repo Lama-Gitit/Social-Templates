@@ -6,14 +6,22 @@ type Provider = "gemini" | "anthropic";
 // Default provider is Anthropic (Claude). Set AI_PROVIDER=gemini to switch back.
 const provider: Provider = (process.env.AI_PROVIDER as Provider) || "anthropic";
 
+// v2: Split model config per use-case.
+// - Layout generation (generateJSON) uses Haiku: fast, cheap, handles structured prompts well.
+//   ~1.5 cents/call vs ~5 cents with Sonnet. Override with LAYOUT_MODEL env var.
+// - Content generation (generateText) keeps Haiku too — short copywriting doesn't need Sonnet.
+//   Override with CONTENT_MODEL env var.
+const LAYOUT_MODEL = process.env.LAYOUT_MODEL || "claude-haiku-4-5-20251001";
+const CONTENT_MODEL = process.env.CONTENT_MODEL || "claude-haiku-4-5-20251001";
+
 const anthropicClient = provider === "anthropic" ? new Anthropic() : null;
 const geminiClient = provider === "gemini"
     ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "")
     : null;
 
-async function claudeCall(prompt: string, maxTokens: number): Promise<string> {
+async function claudeCall(prompt: string, maxTokens: number, model: string): Promise<string> {
     const response = await anthropicClient!.messages.create({
-        model: "claude-sonnet-4-6",
+        model,
         max_tokens: maxTokens,
         messages: [{ role: "user", content: prompt }],
     });
@@ -40,7 +48,7 @@ function stripMarkdownFences(text: string): string {
 
 export async function generateText(prompt: string): Promise<string> {
     if (provider === "anthropic") {
-        return claudeCall(prompt, 2048);
+        return claudeCall(prompt, 2048, CONTENT_MODEL);
     }
 
     const model = geminiClient!.getGenerativeModel({ model: "gemini-flash-latest" });
@@ -50,7 +58,7 @@ export async function generateText(prompt: string): Promise<string> {
 
 export async function generateJSON(prompt: string): Promise<unknown> {
     if (provider === "anthropic") {
-        const text = await claudeCall(prompt, 8192);
+        const text = await claudeCall(prompt, 8192, LAYOUT_MODEL);
         const cleaned = stripMarkdownFences(text);
         try {
             return JSON.parse(cleaned);

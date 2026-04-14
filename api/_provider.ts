@@ -17,6 +17,12 @@ async function claudeCall(prompt: string, maxTokens: number): Promise<string> {
         max_tokens: maxTokens,
         messages: [{ role: "user", content: prompt }],
     });
+    if (response.stop_reason === "max_tokens") {
+        throw new Error(
+            `Claude response was truncated (max_tokens ${maxTokens} hit). ` +
+            `Increase max_tokens or shorten the prompt.`
+        );
+    }
     const block = response.content.find(
         (b): b is Anthropic.TextBlock => b.type === "text"
     );
@@ -44,8 +50,14 @@ export async function generateText(prompt: string): Promise<string> {
 
 export async function generateJSON(prompt: string): Promise<unknown> {
     if (provider === "anthropic") {
-        const text = await claudeCall(prompt, 4096);
-        return JSON.parse(stripMarkdownFences(text));
+        const text = await claudeCall(prompt, 8192);
+        const cleaned = stripMarkdownFences(text);
+        try {
+            return JSON.parse(cleaned);
+        } catch (e) {
+            const reason = e instanceof Error ? e.message : String(e);
+            throw new Error(`Claude returned invalid JSON: ${reason}`);
+        }
     }
 
     const model = geminiClient!.getGenerativeModel({

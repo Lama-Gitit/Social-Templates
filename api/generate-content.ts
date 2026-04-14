@@ -27,7 +27,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const text = await generateText(fullPrompt);
         return res.status(200).json({ text });
     } catch (error) {
-        console.error("generate-content error:", error);
-        return res.status(500).json({ error: "Failed to generate content" });
+        const info = error instanceof Error
+            ? { name: error.name, message: error.message, stack: error.stack }
+            : error;
+        console.error("generate-content error:", info);
+        const message = error instanceof Error ? error.message : "Failed to generate content";
+        return res.status(500).json({ error: message });
     }
 }

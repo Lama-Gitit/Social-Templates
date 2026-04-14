@@ -23,7 +23,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const data = await generateJSON(prompt);
         return res.status(200).json(data);
     } catch (error) {
-        console.error("generate-layout error:", error);
-        return res.status(500).json({ error: "Failed to generate layout" });
+        const info = error instanceof Error
+            ? { name: error.name, message: error.message, stack: error.stack }
+            : error;
+        console.error("generate-layout error:", info);
+        const message = error instanceof Error ? error.message : "Failed to generate layout";
+        return res.status(500).json({ error: message });
     }
 }

@@ -3,25 +3,38 @@ import Anthropic from "@anthropic-ai/sdk";
 
 type Provider = "gemini" | "anthropic";
 
-const provider: Provider = (process.env.AI_PROVIDER as Provider) || "gemini";
+// Default provider is Anthropic (Claude). Set AI_PROVIDER=gemini to switch back.
+const provider: Provider = (process.env.AI_PROVIDER as Provider) || "anthropic";
 
 const anthropicClient = provider === "anthropic" ? new Anthropic() : null;
 const geminiClient = provider === "gemini"
     ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "")
     : null;
 
+async function claudeCall(prompt: string, maxTokens: number): Promise<string> {
+    const response = await anthropicClient!.messages.create({
+        model: "claude-sonnet-4-6",
+        max_tokens: maxTokens,
+        messages: [{ role: "user", content: prompt }],
+    });
+    const block = response.content.find(
+        (b): b is Anthropic.TextBlock => b.type === "text"
+    );
+    if (!block) throw new Error("No text response from Claude");
+    return block.text;
+}
+
+function stripMarkdownFences(text: string): string {
+    let cleaned = text.trim();
+    if (cleaned.startsWith("```")) {
+        cleaned = cleaned.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
+    }
+    return cleaned;
+}
+
 export async function generateText(prompt: string): Promise<string> {
     if (provider === "anthropic") {
-        const response = await anthropicClient!.messages.create({
-            model: "claude-sonnet-4-6",
-            max_tokens: 1024,
-            messages: [{ role: "user", content: prompt }],
-        });
-        const block = response.content.find(
-            (b): b is Anthropic.TextBlock => b.type === "text"
-        );
-        if (!block) throw new Error("No text response from Claude");
-        return block.text;
+        return claudeCall(prompt, 2048);
     }
 
     const model = geminiClient!.getGenerativeModel({ model: "gemini-flash-latest" });
@@ -31,12 +44,8 @@ export async function generateText(prompt: string): Promise<string> {
 
 export async function generateJSON(prompt: string): Promise<unknown> {
     if (provider === "anthropic") {
-        const text = await generateText(prompt);
-        let cleaned = text.trim();
-        if (cleaned.startsWith("```")) {
-            cleaned = cleaned.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
-        }
-        return JSON.parse(cleaned);
+        const text = await claudeCall(prompt, 4096);
+        return JSON.parse(stripMarkdownFences(text));
     }
 
     const model = geminiClient!.getGenerativeModel({

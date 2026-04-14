@@ -185,8 +185,9 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
 
         } catch (err) {
             console.error("AI Generation failed, using static fallback", err);
-            setToast({ show: true, msg: "AI generation failed. Showing offline templates instead." });
-            setTimeout(() => setToast({ show: false, msg: '' }), 4000);
+            const reason = err instanceof Error ? err.message : 'Unknown error';
+            setToast({ show: true, msg: `AI generation failed: ${reason}. Showing offline templates.` });
+            setTimeout(() => setToast({ show: false, msg: '' }), 5000);
             const results = [
                 { svg: generateCreativeSVG(w, h, selectedPlatform.brandColor, 0, selectedPlatform.name), label: 'Diagonal Split (Offline)' },
                 { svg: generateCreativeSVG(w, h, selectedPlatform.brandColor, 1, selectedPlatform.name), label: 'Modern Grid (Offline)' },

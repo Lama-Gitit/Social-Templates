@@ -356,14 +356,14 @@ export const generateSVG = (template: Template, brandColor: string) => {
         content += `
     <g id="${label} - Circular Crop Guide (delete me)">
         <circle cx="${cx}" cy="${cy}" r="${r - 2}" stroke="${color}" stroke-width="2" stroke-dasharray="8 8" fill="none"/>
-        <text x="${cx}" y="${cy}" font-family="Arial, sans-serif" font-weight="bold" font-size="${width / 10}" fill="${color}" text-anchor="middle" dominant-baseline="middle" opacity="0.2">CROP</text>
+        <text x="${cx}" y="${cy}" font-family="Arial" font-weight="bold" font-size="${width / 10}" fill="${color}" text-anchor="middle" dominant-baseline="middle" opacity="0.2">CROP</text>
     </g>`;
     } else if (category === 'cover') {
         const profSize = height * 0.6;
         content += `
     <g id="${label} - Profile Pic Overlap (delete me)">
         <circle cx="${height * 0.2 + profSize / 2}" cy="${height - profSize / 3}" r="${profSize / 2}" fill="#1A1A1C" stroke="${color}" stroke-width="2" stroke-dasharray="4 4" opacity="0.7"/>
-        <text x="${height * 0.2 + profSize / 2}" y="${height - profSize / 3}" font-family="Arial, sans-serif" font-size="${profSize / 5}" fill="${color}" text-anchor="middle" dominant-baseline="middle" opacity="0.6">Profile Pic</text>
+        <text x="${height * 0.2 + profSize / 2}" y="${height - profSize / 3}" font-family="Arial" font-size="${profSize / 5}" fill="${color}" text-anchor="middle" dominant-baseline="middle" opacity="0.6">Profile Pic</text>
     </g>`;
     } else if (category === 'story') {
         const safeZoneH = 250;
@@ -371,17 +371,17 @@ export const generateSVG = (template: Template, brandColor: string) => {
     <g id="${label} - UI Overlay Zones (delete me)">
         <rect x="0" y="0" width="${width}" height="${safeZoneH}" fill="${color}" fill-opacity="0.1"/>
         <line x1="0" y1="${safeZoneH}" x2="${width}" y2="${safeZoneH}" stroke="${color}" stroke-width="2" stroke-dasharray="10 5"/>
-        <text x="${width / 2}" y="${safeZoneH / 2}" font-family="Arial, sans-serif" font-size="40" fill="${color}" text-anchor="middle" dominant-baseline="middle" opacity="0.5">UI OVERLAY</text>
+        <text x="${width / 2}" y="${safeZoneH / 2}" font-family="Arial" font-size="40" fill="${color}" text-anchor="middle" dominant-baseline="middle" opacity="0.5">UI OVERLAY</text>
         <rect x="0" y="${height - safeZoneH}" width="${width}" height="${safeZoneH}" fill="${color}" fill-opacity="0.1"/>
         <line x1="0" y1="${height - safeZoneH}" x2="${width}" y2="${height - safeZoneH}" stroke="${color}" stroke-width="2" stroke-dasharray="10 5"/>
-        <text x="${width / 2}" y="${height - (safeZoneH / 2)}" font-family="Arial, sans-serif" font-size="40" fill="${color}" text-anchor="middle" dominant-baseline="middle" opacity="0.5">UI OVERLAY</text>
+        <text x="${width / 2}" y="${height - (safeZoneH / 2)}" font-family="Arial" font-size="40" fill="${color}" text-anchor="middle" dominant-baseline="middle" opacity="0.5">UI OVERLAY</text>
     </g>`;
     }
 
     content += `
     <g id="${label} - Info (delete me)">
-        <text x="50%" y="33%" font-family="Arial, sans-serif" font-weight="bold" font-size="${Math.max(24, width / 20)}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle">${label}</text>
-        <text x="50%" y="33%" font-family="Arial, sans-serif" font-size="${Math.max(16, width / 30)}" fill="${secondaryLabelColor}" text-anchor="middle" dominant-baseline="middle" dy="${Math.max(24, width / 20) * 1.2}">${width} x ${height} px</text>
+        <text x="50%" y="33%" font-family="Arial" font-weight="bold" font-size="${Math.max(24, width / 20)}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle">${label}</text>
+        <text x="50%" y="33%" font-family="Arial" font-size="${Math.max(16, width / 30)}" fill="${secondaryLabelColor}" text-anchor="middle" dominant-baseline="middle" dy="${Math.max(24, width / 20) * 1.2}">${width} x ${height} px</text>
     </g>
   `;
 
@@ -407,10 +407,10 @@ export const generateCreativeSVG = (width: number, height: number, brandColor: s
         <line x1="0" y1="0" x2="${width}" y2="${height}" stroke="${brandColor}" stroke-width="3"/>
       </g>
       <g id="${platformName} ${styleName} - Placeholders (delete me)">
-        <text x="${width * 0.25}" y="${height * 0.75}" font-family="Arial, sans-serif" font-weight="bold" font-size="${width / 15}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle">IMAGE 1</text>
-        <text x="${width * 0.75}" y="${height * 0.25}" font-family="Arial, sans-serif" font-weight="bold" font-size="${width / 15}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle">IMAGE 2</text>
+        <text x="${width * 0.25}" y="${height * 0.75}" font-family="Arial" font-weight="bold" font-size="${width / 15}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle">IMAGE 1</text>
+        <text x="${width * 0.75}" y="${height * 0.25}" font-family="Arial" font-weight="bold" font-size="${width / 15}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle">IMAGE 2</text>
         <rect x="${width * 0.1}" y="${height * 0.1}" width="${width * 0.3}" height="${height * 0.05}" fill="${brandColor}"/>
-        <text x="${width * 0.25}" y="${height * 0.125}" font-family="Arial, sans-serif" font-weight="bold" font-size="${width / 30}" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle">${platformName.toUpperCase()}</text>
+        <text x="${width * 0.25}" y="${height * 0.125}" font-family="Arial" font-weight="bold" font-size="${width / 30}" fill="#FFFFFF" text-anchor="middle" dominant-baseline="middle">${platformName.toUpperCase()}</text>
       </g>
     `;
     } else if (styleIndex === 1) {
@@ -424,9 +424,9 @@ export const generateCreativeSVG = (width: number, height: number, brandColor: s
         <line x1="${splitX}" y1="${splitY}" x2="${splitX}" y2="${height}" stroke="${brandColor}" stroke-width="3"/>
       </g>
       <g id="${platformName} ${styleName} - Placeholders (delete me)">
-        <text x="${width / 2}" y="${splitY / 2}" font-family="Arial, sans-serif" font-weight="bold" font-size="${width / 12}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle" opacity="0.3">FEATURE IMAGE</text>
-        <text x="${splitX / 2}" y="${splitY + (height - splitY) / 2}" font-family="Arial, sans-serif" font-weight="bold" font-size="${width / 20}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle">DETAIL 1</text>
-        <text x="${splitX + splitX / 2}" y="${splitY + (height - splitY) / 2}" font-family="Arial, sans-serif" font-weight="bold" font-size="${width / 20}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle">DETAIL 2</text>
+        <text x="${width / 2}" y="${splitY / 2}" font-family="Arial" font-weight="bold" font-size="${width / 12}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle" opacity="0.3">FEATURE IMAGE</text>
+        <text x="${splitX / 2}" y="${splitY + (height - splitY) / 2}" font-family="Arial" font-weight="bold" font-size="${width / 20}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle">DETAIL 1</text>
+        <text x="${splitX + splitX / 2}" y="${splitY + (height - splitY) / 2}" font-family="Arial" font-weight="bold" font-size="${width / 20}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle">DETAIL 2</text>
       </g>
     `;
     } else {
@@ -437,7 +437,7 @@ export const generateCreativeSVG = (width: number, height: number, brandColor: s
         <rect x="${margin}" y="${height - margin * 4}" width="${width - margin * 2}" height="${margin * 3}" fill="#1A1A1C" stroke="${brandColor}" stroke-width="1"/>
       </g>
       <g id="${platformName} ${styleName} - Placeholders (delete me)">
-        <text x="${width / 2}" y="${height / 2 - margin}" font-family="Arial, sans-serif" font-weight="bold" font-size="${width / 10}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle" opacity="0.1">PHOTO AREA</text>
+        <text x="${width / 2}" y="${height / 2 - margin}" font-family="Arial" font-weight="bold" font-size="${width / 10}" fill="${labelColor}" text-anchor="middle" dominant-baseline="middle" opacity="0.1">PHOTO AREA</text>
         <line x1="${margin * 2}" y1="${height - margin * 3}" x2="${width - margin * 2}" y2="${height - margin * 3}" stroke="${brandColor}" stroke-width="4" stroke-linecap="round"/>
         <line x1="${margin * 2}" y1="${height - margin * 2}" x2="${width * 0.6}" y2="${height - margin * 2}" stroke="${brandColor}" stroke-width="2" stroke-linecap="round"/>
       </g>

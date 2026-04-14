@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { generateJSON } from "./_provider";
-import { checkAuth } from "./_auth";
-import { checkRateLimit } from "./_rate-limit";
+import { generateJSON } from "./_provider.js";
+import { checkAuth } from "./_auth.js";
+import { checkRateLimit } from "./_rate-limit.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (req.method !== "POST") {

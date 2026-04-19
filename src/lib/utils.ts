@@ -5,6 +5,16 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
 
+const COPY_COUNTS_KEY = 'copy_counts';
+
+export function trackCopy(platformId: string, label: string) {
+    const key = `${platformId}:${label}`;
+    const counts = JSON.parse(localStorage.getItem(COPY_COUNTS_KEY) || '{}');
+    counts[key] = (counts[key] || 0) + 1;
+    localStorage.setItem(COPY_COUNTS_KEY, JSON.stringify(counts));
+}
+
+
 /** Allowlisted SVG elements — anything not on this list gets removed. */
 const ALLOWED_ELEMENTS = new Set([
     'svg', 'g', 'defs', 'clippath', 'mask', 'use', 'symbol',

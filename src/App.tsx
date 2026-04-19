@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { BrowserRouter, Routes, Route, useParams, Link, Navigate } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { TemplateCard } from './components/TemplateCard';
 import { AIAssistant } from './components/AIAssistant';
 import { RandomGeneratorModal } from './components/RandomGeneratorModalV2'; // v2
-import { PLATFORMS } from './data/platforms';
+import { PLATFORMS, type TemplateCategory } from './data/platforms';
 import { usePageMeta } from './hooks/usePageMeta';
 import { setAIToken } from './lib/anthropic';
-import { Search } from 'lucide-react';
+import { Lightbulb, ChevronDown } from 'lucide-react';
 
 function hexToHSL(hex: string): string {
   let r = 0, g = 0, b = 0;
@@ -37,19 +37,36 @@ function hexToHSL(hex: string): string {
   return `${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
 }
 
-const MOST_USED = [
-  { platformId: 'instagram', label: 'Instagram Stories', width: 1080, height: 1920 },
-  { platformId: 'instagram', label: 'Instagram Feed (4:5)', width: 1080, height: 1350 },
-  { platformId: 'youtube', label: 'YouTube Thumbnail', width: 1280, height: 720 },
-  { platformId: 'tiktok', label: 'TikTok Video', width: 1080, height: 1920 },
-  { platformId: 'x', label: 'X Header', width: 1500, height: 500 },
-  { platformId: 'x', label: 'X Post (Vertical)', width: 1080, height: 1350 },
-  { platformId: 'linkedin', label: 'LinkedIn Cover', width: 1584, height: 396 },
-  { platformId: 'linkedin', label: 'LinkedIn Feed', width: 1080, height: 1350 },
-  { platformId: 'facebook', label: 'Facebook Cover', width: 1640, height: 856 },
-  { platformId: 'pinterest', label: 'Pinterest Pin', width: 1000, height: 1500 },
-  { platformId: 'threads', label: 'Threads Post', width: 1080, height: 1920 },
-  { platformId: 'snapchat', label: 'Snapchat Story', width: 1080, height: 1920 },
+// Flat list of all templates across all platforms for the "What are you making?" section
+const ALL_TEMPLATES = PLATFORMS.flatMap(p =>
+  p.templates.map(t => ({
+    ...t,
+    platformId: p.id,
+    platformName: p.name,
+    platformSlug: p.slug,
+    platformIcon: p.icon,
+    platformColor: p.color,
+    platformBrandColor: p.brandColor,
+  }))
+);
+
+const MORPH_FORMATS = [
+  { w: 120, h: 213, ratio: '9:16', name: 'Instagram Story' },
+  { w: 213, h: 120, ratio: '16:9', name: 'YouTube Thumbnail' },
+  { w: 150, h: 150, ratio: '1:1', name: 'Square Post' },
+  { w: 120, h: 150, ratio: '4:5', name: 'Feed Post' },
+  { w: 220, h: 55, ratio: '4:1', name: 'LinkedIn Banner' },
+  { w: 120, h: 213, ratio: '9:16', name: 'TikTok Video' },
+  { w: 120, h: 180, ratio: '2:3', name: 'Pinterest Pin' },
+  { w: 200, h: 104, ratio: '~2:1', name: 'Facebook Cover' },
+];
+
+const CATEGORY_LABELS: { value: TemplateCategory; label: string }[] = [
+  { value: 'story', label: 'Stories & Reels' },
+  { value: 'post', label: 'Feed Posts' },
+  { value: 'cover', label: 'Covers & Banners' },
+  { value: 'profile', label: 'Profiles' },
+  { value: 'ad', label: 'Ads' },
 ];
 
 const aiParams = new URLSearchParams(window.location.search);
@@ -107,6 +124,16 @@ function PlatformPage() {
               </div>
             </header>
 
+            {/* Design tip callout */}
+            {platform.tips.length > 0 && (
+              <div className="mb-12 p-5 md:p-6 border rounded-sm flex items-start gap-4 animate-in fade-in slide-in-from-bottom-1 duration-700" style={{ borderColor: `hsla(var(--primary), 0.2)`, backgroundColor: `hsla(var(--primary), 0.03)` }}>
+                <Lightbulb size={16} className="flex-shrink-0 mt-0.5 opacity-60" style={{ color: 'hsl(var(--primary))' }} />
+                <p className="text-[11px] font-bold text-white/60 uppercase tracking-wider leading-relaxed">
+                  {platform.tips[Math.floor(Math.random() * platform.tips.length)]}
+                </p>
+              </div>
+            )}
+
             <div className="grid md:grid-cols-4 gap-12 mb-16">
               <div className="md:col-span-3">
                 <h2 className="text-[10px] font-black mb-6 uppercase tracking-[0.3em]" style={{ color: 'hsl(var(--primary))' }}>Platform Guide</h2>
@@ -133,6 +160,7 @@ function PlatformPage() {
                   key={idx}
                   template={template}
                   platformColor={platform.color}
+                  platformId={platform.id}
                 />
               ))}
             </div>
@@ -195,11 +223,82 @@ function PlatformPage() {
   );
 }
 
+// --- Morphing Frame Component ---
+function MorphingFrame() {
+  const [morphIdx, setMorphIdx] = useState(0);
+  const [prevIdx, setPrevIdx] = useState(MORPH_FORMATS.length - 1);
+  const [prev2Idx, setPrev2Idx] = useState(MORPH_FORMATS.length - 2);
+  const intervalRef = useRef<ReturnType<typeof setInterval>>(null);
+
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      setMorphIdx(prev => {
+        const next = (prev + 1) % MORPH_FORMATS.length;
+        setPrevIdx(prev);
+        setPrev2Idx((prev - 1 + MORPH_FORMATS.length) % MORPH_FORMATS.length);
+        return next;
+      });
+    }, 2500);
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+  }, []);
+
+  const f = MORPH_FORMATS[morphIdx];
+  const g1 = MORPH_FORMATS[prevIdx];
+  const g2 = MORPH_FORMATS[prev2Idx];
+
+  // Scale up on desktop
+  const scale = typeof window !== 'undefined' && window.innerWidth >= 1024 ? 1.35 : 1;
+  const fw = Math.round(f.w * scale);
+  const fh = Math.round(f.h * scale);
+  const g1w = Math.round(g1.w * scale);
+  const g1h = Math.round(g1.h * scale);
+  const g2w = Math.round(g2.w * scale);
+  const g2h = Math.round(g2.h * scale);
+
+  return (
+    <div className="flex-shrink-0 w-full lg:w-[380px] h-[260px] lg:h-[460px] flex items-center justify-center relative">
+      {/* Ghost frames */}
+      <div
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border border-white/[0.03] pointer-events-none transition-all duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)]"
+        style={{ width: g2w, height: g2h }}
+      />
+      <div
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border border-white/[0.04] pointer-events-none transition-all duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)]"
+        style={{ width: g1w, height: g1h }}
+      />
+      {/* Main frame */}
+      <div
+        className="relative flex items-center justify-center border-2 border-primary transition-all duration-1000 ease-[cubic-bezier(0.4,0,0.2,1)]"
+        style={{
+          width: fw,
+          height: fh,
+          boxShadow: '0 0 80px -20px rgba(255,59,45,0.25)',
+        }}
+      >
+        <div
+          className="absolute inset-0 opacity-[0.12] pointer-events-none"
+          style={{
+            backgroundImage: 'linear-gradient(to right, hsl(var(--primary)) 1px, transparent 1px), linear-gradient(to bottom, hsl(var(--primary)) 1px, transparent 1px)',
+            backgroundSize: '10px 10px',
+          }}
+        />
+        {/* Centered label inside frame */}
+        <div className="z-10 flex flex-col items-center gap-1 transition-opacity duration-300">
+          <span className="text-[11px] font-black uppercase tracking-[0.2em] text-primary">{f.ratio}</span>
+          <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-white/35">{f.name}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // --- Home Page ---
 function HomePage() {
-  const [isAIOpen, setIsAIOpen] = useState(false);
   const [isRandomGeneratorOpen, setIsRandomGeneratorOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState<TemplateCategory | null>('story');
+  const [categoryExpanded, setCategoryExpanded] = useState(false);
+  const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
+  const makingSectionRef = useRef<HTMLElement>(null);
 
   const themeHSL = '5 74% 47%';
 
@@ -209,9 +308,19 @@ function HomePage() {
     canonicalPath: '/',
   });
 
-  const filteredMostUsed = MOST_USED.filter(size =>
-    size.label.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Reset expanded state when category changes
+  useEffect(() => {
+    setCategoryExpanded(false);
+  }, [activeCategory]);
+
+  // All templates for active category (no dedup — show each platform)
+  const categoryPreview = useMemo(() => {
+    if (!activeCategory) return [];
+    return ALL_TEMPLATES.filter(t => t.category === activeCategory);
+  }, [activeCategory]);
+
+  const visiblePreview = categoryExpanded ? categoryPreview : categoryPreview.slice(0, 3);
+  const hiddenCount = categoryPreview.length - 3;
 
   return (
     <div
@@ -228,171 +337,257 @@ function HomePage() {
       >
         <div className="flex flex-col gap-12">
           <div className="animate-in fade-in duration-1000">
-            <header className="mb-8 md:mb-32">
-              <div className="mb-4 md:mb-8 opacity-40">
-                <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.6em]">Social Frames Library</p>
-              </div>
-              <h1 className="text-[48px] sm:text-[64px] md:text-[90px] lg:text-[120px] font-black text-foreground mb-4 md:mb-8 tracking-tighter uppercase leading-[0.9] md:leading-[0.8] block overflow-visible">
-                Copy&#x2011;ready<br />Social SVG<br /><span className="text-primary"> Templates</span>
-              </h1>
-              <div className="max-w-xl">
-                <p className="text-white/60 font-medium text-base md:text-lg uppercase tracking-[0.1em] leading-relaxed">
-                  Pick a platform, choose a format, and copy the perfect SVG frame into your design tool.
+
+            {/* ── Hero with Morphing Frame ── */}
+            <header className="flex flex-col-reverse lg:flex-row items-center min-h-0 lg:min-h-[500px] mb-16 lg:mb-20 gap-8 lg:gap-12">
+              <div className="flex-1 max-w-full lg:max-w-[540px] text-center lg:text-left">
+                <p className="text-[10px] font-black uppercase tracking-[0.6em] text-white/40 mb-4">Social Frames</p>
+                <h1 className="text-[clamp(40px,5.5vw,72px)] font-black text-foreground mb-5 tracking-[-0.03em] uppercase leading-[0.88]">
+                  Every social<br />media <span className="text-primary">frame</span><br />you need.
+                </h1>
+                <p className="text-sm font-bold uppercase tracking-[0.12em] text-white/50 leading-relaxed mb-8">
+                  Pick a format. Copy the SVG. Paste into Figma, Sketch, or any design tool. Sized perfectly for every platform.
                 </p>
+                <button
+                  onClick={() => makingSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-transparent border border-white/15 text-foreground text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:border-primary hover:text-primary hover:bg-primary/5 active:scale-95 mx-auto lg:mx-0"
+                >
+                  Browse Formats <ChevronDown size={14} />
+                </button>
               </div>
-              <p className="max-w-2xl mt-6 md:mt-10 text-white/30 text-sm md:text-base leading-relaxed">
-                A free library of copy-ready SVG frames for 10+ social media platforms, covering 45+ format sizes. From Instagram Stories (1080x1920) to YouTube Thumbnails (1280x720). Grab the exact dimensions you need and paste directly into Figma, Sketch, or any design tool.
-              </p>
+              <MorphingFrame />
             </header>
 
-            {/* Essential Formats Section */}
-            <section className="mb-20 md:mb-40">
-              <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8 mb-8 md:mb-16 pb-8 border-b border-border/10">
-                <div>
-                  <h2 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">Essential Formats</h2>
-                  <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em]">Quick Deployment Kit</p>
-                </div>
+            {/* ── What Are You Making? ── */}
+            <section
+              className="mb-20 md:mb-24 -mx-6 md:-mx-8 px-6 md:px-8 py-10 md:py-12 bg-white/[0.02] border-y border-white/[0.06]"
+              ref={makingSectionRef}
+              id="making"
+            >
+              <h2 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter mb-8">What are you making?</h2>
 
-                <div className="relative w-full md:w-96 group">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60 group-focus-within:text-primary transition-colors" />
-                  <input
-                    type="text"
-                    placeholder="SEARCH FORMATS..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-card/60 border border-white/20 rounded-sm py-5 pl-12 pr-4 text-[10px] font-black tracking-[0.4em] text-white placeholder-white/40 focus:outline-none focus:border-primary/60 focus:bg-card/80 transition-all uppercase"
-                  />
-                </div>
+              {/* Category pills */}
+              <div className="flex flex-wrap gap-2.5 mb-8">
+                {CATEGORY_LABELS.map(({ value, label }) => (
+                  <button
+                    key={value}
+                    onClick={() => setActiveCategory(activeCategory === value ? null : value)}
+                    className={`px-6 py-3.5 text-[10px] font-black uppercase tracking-[0.2em] border transition-all duration-200 active:scale-95 ${
+                      activeCategory === value
+                        ? 'bg-primary/[0.06] border-primary/40 text-primary'
+                        : 'bg-white/[0.02] border-white/10 text-white/40 hover:text-white/70 hover:border-white/20'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {filteredMostUsed.map((size) => {
-                  const platform = PLATFORMS.find(p => p.id === size.platformId)!;
-                  return (
-                    <Link
-                      key={size.label}
-                      to={`/${platform.slug}`}
-                      className="group bg-card p-6 md:p-8 border border-border/40 hover:bg-white/5 hover:border-foreground/20 transition-all text-left flex flex-col gap-4 md:gap-6 active:scale-[0.98]"
+
+              {/* Category preview — compact list */}
+              {activeCategory && visiblePreview.length > 0 && (
+                <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <div className="border border-border/30 overflow-hidden">
+                    {visiblePreview.map((t, idx) => {
+                      const platform = PLATFORMS.find(p => p.id === t.platformId)!;
+                      const aspectRatio = t.width / t.height;
+                      return (
+                        <Link
+                          key={`${t.platformId}:${t.label}`}
+                          to={`/${platform.slug}`}
+                          className="group flex items-center gap-6 md:gap-8 px-5 md:px-6 py-4 md:py-5 transition-all hover:bg-white/[0.02] active:scale-[0.995]"
+                          style={{
+                            borderBottom: idx < visiblePreview.length - 1 ? '1px solid rgba(255,255,255,0.03)' : undefined,
+                          }}
+                        >
+                          {/* Aspect ratio shape */}
+                          <div className="flex-shrink-0 w-9 h-9 flex items-center justify-center">
+                            <div
+                              className="border transition-colors duration-300"
+                              style={{
+                                borderColor: `${t.platformBrandColor}35`,
+                                aspectRatio: `${aspectRatio}`,
+                                height: aspectRatio > 1 ? 'auto' : '28px',
+                                width: aspectRatio > 1 ? '28px' : 'auto',
+                                backgroundColor: `${t.platformBrandColor}08`,
+                                borderRadius: t.category === 'profile' ? '50%' : undefined,
+                              }}
+                            />
+                          </div>
+
+                          {/* Platform name */}
+                          <span className="text-[9px] font-black text-white/40 uppercase tracking-[0.15em] w-24 md:w-28 flex-shrink-0">{t.platformName}</span>
+
+                          {/* Template label */}
+                          <span className="text-[11px] font-black text-white/80 uppercase tracking-[-0.01em] flex-grow group-hover:text-white transition-colors">
+                            {t.label}
+                          </span>
+
+                          {/* Dimensions */}
+                          <span className="text-[9px] font-bold text-white/20 tracking-[0.1em] flex-shrink-0 hidden sm:block">
+                            {t.width}×{t.height}
+                          </span>
+
+                          {/* Arrow */}
+                          <span className="text-white/12 group-hover:text-primary group-hover:translate-x-0.5 transition-all text-sm flex-shrink-0">→</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+
+                  {/* Show more / less */}
+                  {hiddenCount > 0 && (
+                    <button
+                      onClick={() => setCategoryExpanded(!categoryExpanded)}
+                      className="inline-flex items-center gap-2 mt-4 text-[9px] font-extrabold uppercase tracking-[0.2em] text-primary/60 hover:text-primary transition-colors bg-transparent border-none cursor-pointer"
                     >
-                      <div className="flex justify-between items-start">
-                        <platform.icon size={18} className="text-white/80 group-hover:text-white transition-colors" />
-                        <span className="text-[9px] font-black text-white/40 uppercase tracking-widest">{size.width}x{size.height}</span>
-                      </div>
-                      <p className="text-[10px] md:text-[11px] font-black uppercase tracking-widest text-white/90 group-hover:text-white transition-colors">{size.label}</p>
-                    </Link>
-                  );
-                })}
-              </div>
+                      {categoryExpanded ? 'Show less' : `Show ${hiddenCount} more`}
+                      <ChevronDown size={12} className={`transition-transform duration-200 ${categoryExpanded ? 'rotate-180' : ''}`} />
+                    </button>
+                  )}
+                </div>
+              )}
             </section>
 
-            {/* Social Platforms Section */}
+            {/* ── Browse by Platform ── */}
             <section className="mb-24">
-              <header className="mb-16 pb-6 border-b border-border/20">
-                <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Social Platforms</h2>
-              </header>
+              <div className="flex items-baseline justify-between mb-8 pb-6 border-b border-border/20">
+                <h2 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter">Browse by Platform</h2>
+              </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4">
                 {PLATFORMS.map((platform) => (
                   <Link
                     key={platform.id}
                     to={`/${platform.slug}`}
-                    className="group bg-card p-8 border border-border/40 transition-all text-left flex flex-col items-center justify-center gap-6 hover:bg-white/5 hover:border-foreground/20 active:scale-95"
+                    className="group bg-card p-8 border border-border/40 transition-all duration-300 text-left flex flex-col items-center justify-center gap-4 active:scale-95 hover:scale-[1.02]"
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = `${platform.brandColor}50`;
+                      e.currentTarget.style.backgroundColor = `${platform.brandColor}08`;
+                      e.currentTarget.style.boxShadow = `0 0 40px -15px ${platform.brandColor}30`;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = '';
+                      e.currentTarget.style.backgroundColor = '';
+                      e.currentTarget.style.boxShadow = '';
+                    }}
                   >
-                    <platform.icon size={28} className="text-white/60 group-hover:text-white transition-all duration-500" />
-                    <span className="text-[10px] font-black text-white uppercase tracking-[0.3em] opacity-60 group-hover:opacity-100 transition-all">{platform.name}</span>
+                    <platform.icon
+                      size={28}
+                      className="text-white/40 group-hover:text-white transition-all duration-300"
+                    />
+                    <span className="text-[10px] font-black text-white uppercase tracking-[0.3em] opacity-50 group-hover:opacity-100 transition-all">{platform.name}</span>
+                    <span className="text-[9px] font-bold text-white/15 uppercase tracking-[0.15em]">
+                      {platform.templates.length} templates
+                    </span>
                   </Link>
                 ))}
               </div>
             </section>
 
-            {/* Social Media Size Guide */}
+            {/* ── FAQ Section ── */}
             <section className="mb-24">
-              <header className="mb-12 pb-6 border-b border-border/20">
-                <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-2">Social Media Size Guide</h2>
-                <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em]">Every dimension you need, all in one place</p>
-              </header>
-
-              <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                  <thead>
-                    <tr className="border-b border-border/20">
-                      <th className="pb-4 pr-6 text-[9px] font-black text-white/40 uppercase tracking-[0.3em]">Platform</th>
-                      <th className="pb-4 pr-6 text-[9px] font-black text-white/40 uppercase tracking-[0.3em]">Format</th>
-                      <th className="pb-4 pr-6 text-[9px] font-black text-white/40 uppercase tracking-[0.3em]">Dimensions</th>
-                      <th className="pb-4 text-[9px] font-black text-white/40 uppercase tracking-[0.3em]">Ratio</th>
-                    </tr>
-                  </thead>
-                  <tbody className="text-[10px] font-bold text-white/70">
-                    {[
-                      ['Instagram', 'instagram-templates', 'Story / Reel', '1080 x 1920', '9:16'],
-                      ['Instagram', 'instagram-templates', 'Feed Post', '1080 x 1350', '4:5'],
-                      ['Instagram', 'instagram-templates', 'Square Post', '1080 x 1080', '1:1'],
-                      ['YouTube', 'youtube-templates', 'Thumbnail', '1280 x 720', '16:9'],
-                      ['YouTube', 'youtube-templates', 'Channel Banner', '2560 x 1440', '16:9'],
-                      ['TikTok', 'tiktok-templates', 'Video', '1080 x 1920', '9:16'],
-                      ['LinkedIn', 'linkedin-templates', 'Profile Banner', '1584 x 396', '4:1'],
-                      ['LinkedIn', 'linkedin-templates', 'Post', '1080 x 1350', '4:5'],
-                      ['Facebook', 'facebook-templates', 'Cover Photo', '1640 x 856', '~2:1'],
-                      ['Facebook', 'facebook-templates', 'Shared Image', '1200 x 630', '~2:1'],
-                      ['X (Twitter)', 'x-templates', 'Post', '1080 x 1350', '4:5'],
-                      ['X (Twitter)', 'x-templates', 'Header', '1500 x 500', '3:1'],
-                      ['Pinterest', 'pinterest-templates', 'Pin', '1000 x 1500', '2:3'],
-                      ['Snapchat', 'snapchat-templates', 'Story / Ad', '1080 x 1920', '9:16'],
-                      ['Threads', 'threads-templates', 'Post', '1080 x 1920', '9:16'],
-                      ['Bluesky', 'bluesky-templates', 'Post', '1080 x 1080', '1:1'],
-                    ].map(([platform, slug, format, dimensions, ratio], i) => (
-                      <tr key={i} className="border-b border-border/10 hover:bg-white/[0.02] transition-colors">
-                        <td className="py-3 pr-6 uppercase tracking-wider"><Link to={`/${slug}`} className="text-white/50 hover:text-primary transition-colors">{platform}</Link></td>
-                        <td className="py-3 pr-6 uppercase tracking-wider">{format}</td>
-                        <td className="py-3 pr-6 uppercase tracking-widest text-primary/70 font-black">{dimensions}</td>
-                        <td className="py-3 uppercase tracking-wider text-white/40">{ratio}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="flex items-baseline justify-between mb-8 pb-6 border-b border-border/20">
+                <div>
+                  <h2 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter mb-2">Frequently Asked Questions</h2>
+                  <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em]">Common questions about sizes & templates</p>
+                </div>
               </div>
-              <p className="mt-8 text-white/20 text-xs leading-relaxed max-w-2xl">
-                All dimensions are in pixels. These are the recommended sizes for optimal quality across each platform. Sizes may vary as platforms update their specifications.
-              </p>
-            </section>
 
-            {/* FAQ Section */}
-            <section className="mb-24">
-              <header className="mb-12 pb-6 border-b border-border/20">
-                <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-2">Frequently Asked Questions</h2>
-                <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em]">Common questions about social media sizes & templates</p>
-              </header>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
                   { q: 'What size is an Instagram Story?', a: 'Instagram Stories are 1080 x 1920 pixels with a 9:16 aspect ratio. This same vertical format is used for Instagram Reels and other full-screen mobile content.', link: '/instagram-templates' },
                   { q: 'What size is a YouTube Thumbnail?', a: 'YouTube Thumbnails are 1280 x 720 pixels (16:9 aspect ratio). This is the recommended size for clear, high-quality thumbnails that display well on all devices.', link: '/youtube-templates' },
                   { q: 'What size is a LinkedIn Banner?', a: 'LinkedIn personal profile banners are 1584 x 396 pixels. LinkedIn company page covers are 1128 x 191 pixels. For LinkedIn feed posts, 1080 x 1350 pixels (4:5 ratio) gets the most screen real estate.', link: '/linkedin-templates' },
                   { q: 'What size is a TikTok video?', a: 'TikTok videos are 1080 x 1920 pixels with a 9:16 aspect ratio. This full-screen vertical format is the standard for all TikTok content including videos, ads, and stories.', link: '/tiktok-templates' },
                   { q: 'What size is a Facebook Cover Photo?', a: 'Facebook Cover Photos are 1640 x 856 pixels on desktop. Shared images in the feed perform best at 1200 x 630 pixels. Facebook Stories use the same 1080 x 1920 format as Instagram.', link: '/facebook-templates' },
-                  { q: 'What are the standard social media image sizes?', a: 'The most common sizes are: Instagram Post 1080x1350, Instagram Story 1080x1920, YouTube Thumbnail 1280x720, Facebook Cover 1640x856, LinkedIn Banner 1584x396, TikTok Video 1080x1920, Pinterest Pin 1000x1500, and X/Twitter Post 1080x1350.' },
-                  { q: 'What is Social Frames?', a: 'Social Frames is a free library of copy-ready SVG frames for 10+ social media platforms, covering 45+ format sizes. Pick a platform, choose a format, and instantly copy the perfect SVG frame into Figma, Sketch, or any design tool. It also includes an AI-powered template generator.' },
+                  { q: 'What is Social Frames?', a: 'Social Frames is a free library of copy-ready SVG frames for 10+ social media platforms, covering 45+ format sizes. Pick a platform, choose a format, and instantly copy the perfect SVG frame into Figma, Sketch, or any design tool.', link: undefined },
                 ].map(({ q, a, link }, i) => (
-                  <details key={i} className="group border border-border/20 rounded-sm bg-card/20 hover:bg-card/30 transition-colors">
-                    <summary className="cursor-pointer px-6 py-5 text-[11px] font-black text-white uppercase tracking-wider list-none flex justify-between items-center">
+                  <details key={i} className="group border border-border/20 bg-white/[0.01] hover:bg-white/[0.02] transition-colors">
+                    <summary className="cursor-pointer px-6 py-5 text-[11px] font-black text-white uppercase tracking-[0.05em] list-none flex justify-between items-center">
                       {q}
                       <span className="text-white/20 group-open:rotate-45 transition-transform text-lg font-bold">+</span>
                     </summary>
-                    <p className="px-6 pb-5 text-sm text-white/50 leading-relaxed">
+                    <p className="px-6 pb-5 text-[13px] text-white/50 leading-[1.7]">
                       {a}
-                      {link && <Link to={link} className="block mt-2 text-primary/70 hover:text-primary text-[10px] font-black uppercase tracking-widest transition-colors">Browse templates →</Link>}
+                      {link && <Link to={link} className="block mt-2 text-primary/60 hover:text-primary text-[10px] font-black uppercase tracking-[0.15em] transition-colors">Browse templates →</Link>}
                     </p>
                   </details>
                 ))}
               </div>
             </section>
+
+            {/* ── Size Guide (collapsible) ── */}
+            <section className="mb-20">
+              <button
+                onClick={() => setSizeGuideOpen(!sizeGuideOpen)}
+                className={`w-full flex items-center justify-between px-6 py-5 border border-border/20 transition-all hover:bg-white/[0.02] cursor-pointer bg-transparent text-left ${sizeGuideOpen ? 'border-b-0' : ''}`}
+              >
+                <h3 className="text-[11px] font-black text-white uppercase tracking-[0.15em]">Full Size Guide — All Platforms</h3>
+                <span className={`text-white/20 text-lg font-bold transition-transform duration-200 ${sizeGuideOpen ? 'rotate-45' : ''}`}>+</span>
+              </button>
+              {sizeGuideOpen && (
+                <div className="border border-border/20 border-t-0 p-6 animate-in fade-in duration-200">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="border-b border-border/20">
+                          <th className="pb-3 pr-4 text-[9px] font-black text-white/30 uppercase tracking-[0.3em]">Platform</th>
+                          <th className="pb-3 pr-4 text-[9px] font-black text-white/30 uppercase tracking-[0.3em]">Format</th>
+                          <th className="pb-3 pr-4 text-[9px] font-black text-white/30 uppercase tracking-[0.3em]">Dimensions</th>
+                          <th className="pb-3 text-[9px] font-black text-white/30 uppercase tracking-[0.3em]">Ratio</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-[10px] font-bold text-white/60">
+                        {[
+                          ['Instagram', 'instagram-templates', 'Story / Reel', '1080 × 1920', '9:16'],
+                          ['Instagram', 'instagram-templates', 'Feed Post', '1080 × 1350', '4:5'],
+                          ['Instagram', 'instagram-templates', 'Square Post', '1080 × 1080', '1:1'],
+                          ['YouTube', 'youtube-templates', 'Thumbnail', '1280 × 720', '16:9'],
+                          ['YouTube', 'youtube-templates', 'Channel Banner', '2560 × 1440', '16:9'],
+                          ['TikTok', 'tiktok-templates', 'Video', '1080 × 1920', '9:16'],
+                          ['LinkedIn', 'linkedin-templates', 'Profile Banner', '1584 × 396', '4:1'],
+                          ['LinkedIn', 'linkedin-templates', 'Post', '1080 × 1350', '4:5'],
+                          ['Facebook', 'facebook-templates', 'Cover Photo', '1640 × 856', '~2:1'],
+                          ['Facebook', 'facebook-templates', 'Shared Image', '1200 × 630', '~2:1'],
+                          ['X (Twitter)', 'x-templates', 'Post', '1080 × 1350', '4:5'],
+                          ['X (Twitter)', 'x-templates', 'Header', '1500 × 500', '3:1'],
+                          ['Pinterest', 'pinterest-templates', 'Pin', '1000 × 1500', '2:3'],
+                          ['Snapchat', 'snapchat-templates', 'Story / Ad', '1080 × 1920', '9:16'],
+                          ['Threads', 'threads-templates', 'Post', '1080 × 1920', '9:16'],
+                          ['Bluesky', 'bluesky-templates', 'Post', '1080 × 1080', '1:1'],
+                        ].map(([platform, slug, format, dimensions, ratio], i) => (
+                          <tr key={i} className="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors">
+                            <td className="py-2.5 pr-4"><Link to={`/${slug}`} className="text-white/50 hover:text-primary transition-colors uppercase tracking-wider">{platform}</Link></td>
+                            <td className="py-2.5 pr-4 uppercase tracking-wider">{format}</td>
+                            <td className="py-2.5 pr-4 text-primary/70 font-black tracking-[0.05em]">{dimensions}</td>
+                            <td className="py-2.5 uppercase tracking-wider text-white/40">{ratio}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </section>
+
+            {/* ── Footer Nav ── */}
+            <nav className="pt-8 border-t border-border/20">
+              <p className="text-[9px] font-black text-white/15 uppercase tracking-[0.2em] mb-4">All Platforms</p>
+              <div className="flex flex-wrap gap-2">
+                {PLATFORMS.map(p => (
+                  <Link
+                    key={p.id}
+                    to={`/${p.slug}`}
+                    className="text-[9px] font-black uppercase tracking-[0.15em] text-white/30 hover:text-white px-3.5 py-2 border border-white/[0.06] hover:border-white/15 transition-all"
+                  >
+                    {p.name}
+                  </Link>
+                ))}
+              </div>
+            </nav>
+
           </div>
         </div>
-
-        <AIAssistant
-          isOpen={isAIOpen}
-          onClose={() => setIsAIOpen(false)}
-          platformName=""
-        />
 
         <RandomGeneratorModal
           isOpen={isRandomGeneratorOpen}

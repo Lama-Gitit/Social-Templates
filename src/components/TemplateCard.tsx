@@ -1,14 +1,15 @@
 import { Copy, Check } from 'lucide-react';
 import { useState, useRef } from 'react';
-import { cn } from '../lib/utils';
+import { cn, trackCopy } from '../lib/utils';
 import { generateSVG, type Template } from '../data/platforms';
 
 interface TemplateCardProps {
     template: Template;
     platformColor: string;
+    platformId?: string;
 }
 
-export function TemplateCard({ template, platformColor }: TemplateCardProps) {
+export function TemplateCard({ template, platformColor, platformId }: TemplateCardProps) {
     const [copied, setCopied] = useState(false);
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
     const aspectRatio = template.width / template.height;
@@ -17,6 +18,7 @@ export function TemplateCard({ template, platformColor }: TemplateCardProps) {
         const svgCode = generateSVG(template, platformColor);
         try {
             await navigator.clipboard.writeText(svgCode);
+            if (platformId) trackCopy(platformId, template.label);
             if (timeoutRef.current) clearTimeout(timeoutRef.current);
             setCopied(true);
             timeoutRef.current = setTimeout(() => setCopied(false), 2000);

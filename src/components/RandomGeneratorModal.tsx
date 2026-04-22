@@ -79,8 +79,10 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
 
     const updateUsage = () => {
         const now = Date.now();
+        const minuteAgo = now - 60000;
         const newUsage = {
-            lastTimes: [...usage.lastTimes.slice(-1), now],
+            // Keep all timestamps still within the last minute + the new one
+            lastTimes: [...usage.lastTimes.filter(t => t > minuteAgo), now],
             dailyCount: usage.dailyCount + 1,
             today: usage.today
         };
@@ -169,7 +171,7 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
 
                 // Update persistent history (Max 20 items)
                 const newHistoryItems = results.map((r: { label: string; svg: string }) => ({
-                    id: Math.random().toString(36).substr(2, 9),
+                    id: Math.random().toString(36).substring(2, 11),
                     label: r.label,
                     svg: r.svg,
                     platform: selectedPlatform.name,
@@ -443,19 +445,19 @@ export function RandomGeneratorModal({ isOpen, onClose }: RandomGeneratorModalPr
                                             </div>
                                         ))}
                                     </div>
-
-                                    {/* Toast Notification */}
-                                    {toast.show && (
-                                        <div className="fixed bottom-12 left-1/2 -translate-x-1/2 bg-background border border-primary/40 text-primary px-8 py-4 rounded-sm shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[110] animate-in fade-in slide-in-from-bottom-2 duration-300 flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.3em]">
-                                            <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
-                                            {toast.msg}
-                                        </div>
-                                    )}
                                 </div>
                             )}
                         </>
                     )}
                 </div>
+
+                {/* Toast — rendered at modal root so it shows on every step */}
+                {toast.show && (
+                    <div className="fixed bottom-12 left-1/2 -translate-x-1/2 bg-background border border-primary/40 text-primary px-8 py-4 rounded-sm shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[110] animate-in fade-in slide-in-from-bottom-2 duration-300 flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.3em]">
+                        <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
+                        {toast.msg}
+                    </div>
+                )}
             </div>
         </div>
     );

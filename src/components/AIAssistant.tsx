@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Send, X, Bot, Copy, Loader2, RefreshCw, Wand2 } from 'lucide-react';
 import { generateSocialContent } from '../lib/anthropic';
 
@@ -13,6 +13,16 @@ export function AIAssistant({ isOpen, onClose, platformName }: AIAssistantProps)
     const [response, setResponse] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+
+    // Clear all state whenever the modal is closed
+    useEffect(() => {
+        if (!isOpen) {
+            setTopic('');
+            setResponse('');
+            setError('');
+            setIsLoading(false);
+        }
+    }, [isOpen]);
 
     const handleGenerate = async () => {
         if (!topic.trim()) return;

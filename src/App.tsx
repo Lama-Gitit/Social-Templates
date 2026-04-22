@@ -4,38 +4,11 @@ import { Layout } from './components/Layout';
 import { TemplateCard } from './components/TemplateCard';
 import { AIAssistant } from './components/AIAssistant';
 import { RandomGeneratorModal } from './components/RandomGeneratorModalV2'; // v2
-import { PLATFORMS, type TemplateCategory } from './data/platforms';
+import { PLATFORMS } from './data/platforms';
 import { usePageMeta } from './hooks/usePageMeta';
 import { setAIToken } from './lib/anthropic';
-import { Lightbulb, ChevronDown } from 'lucide-react';
-
-function hexToHSL(hex: string): string {
-  let r = 0, g = 0, b = 0;
-  if (hex.length === 4) {
-    r = parseInt(hex[1] + hex[1], 16);
-    g = parseInt(hex[2] + hex[2], 16);
-    b = parseInt(hex[3] + hex[3], 16);
-  } else if (hex.length === 7) {
-    r = parseInt(hex.substring(1, 3), 16);
-    g = parseInt(hex.substring(3, 5), 16);
-    b = parseInt(hex.substring(5, 7), 16);
-  }
-  r /= 255; g /= 255; b /= 255;
-  const max = Math.max(r, g, b), min = Math.min(r, g, b);
-  let h = 0, s = 0;
-  const l = (max + min) / 2;
-  if (max !== min) {
-    const d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
-    }
-    h /= 6;
-  }
-  return `${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
-}
+import { hexToHSL } from './lib/utils';
+import { Lightbulb, ChevronDown, Search } from 'lucide-react';
 
 // Flat list of all templates across all platforms for the "What are you making?" section
 const ALL_TEMPLATES = PLATFORMS.flatMap(p =>
@@ -61,12 +34,13 @@ const MORPH_FORMATS = [
   { w: 200, h: 104, ratio: '~2:1', name: 'Facebook Cover' },
 ];
 
-const CATEGORY_LABELS: { value: TemplateCategory; label: string }[] = [
-  { value: 'story', label: 'Stories & Reels' },
-  { value: 'post', label: 'Feed Posts' },
-  { value: 'cover', label: 'Covers & Banners' },
-  { value: 'profile', label: 'Profiles' },
-  { value: 'ad', label: 'Ads' },
+// Top 5 popular templates shown by default (before any search)
+const POPULAR_TEMPLATE_KEYS = [
+  'instagram:Stories & Reels',
+  'youtube:Video Thumbnail',
+  'instagram:Square Post',
+  'linkedin:Personal Cover',
+  'tiktok:Video / Story',
 ];
 
 const aiParams = new URLSearchParams(window.location.search);
@@ -85,7 +59,10 @@ function PlatformPage() {
   const [isRandomGeneratorOpen, setIsRandomGeneratorOpen] = useState(false);
 
   const platform = PLATFORMS.find(p => p.slug === slug);
-  const themeHSL = platform ? hexToHSL(platform.brandColor || platform.color) : '5 74% 47%';
+  const themeHSL = useMemo(
+    () => platform ? hexToHSL(platform.brandColor || platform.color) : '5 74% 47%',
+    [platform]
+  );
 
   usePageMeta({
     title: platform?.metaTitle || 'Social Frames',
@@ -144,8 +121,8 @@ function PlatformPage() {
                   Design Tips
                 </h3>
                 <ul className="space-y-4">
-                  {platform.tips.map((tip, idx) => (
-                    <li key={idx} className="text-[10px] text-foreground flex items-start gap-4 font-black uppercase tracking-wider leading-relaxed">
+                  {platform.tips.map((tip) => (
+                    <li key={tip} className="text-[10px] text-foreground flex items-start gap-4 font-black uppercase tracking-wider leading-relaxed">
                       <span className="mt-1.5 w-1 h-1 flex-shrink-0" style={{ backgroundColor: 'hsl(var(--primary))' }} />
                       {tip}
                     </li>
@@ -155,9 +132,9 @@ function PlatformPage() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {platform.templates.map((template, idx) => (
+              {platform.templates.map((template) => (
                 <TemplateCard
-                  key={idx}
+                  key={`${template.width}x${template.height}-${template.label}`}
                   template={template}
                   platformColor={platform.color}
                   platformId={platform.id}
@@ -295,8 +272,7 @@ function MorphingFrame() {
 // --- Home Page ---
 function HomePage() {
   const [isRandomGeneratorOpen, setIsRandomGeneratorOpen] = useState(false);
-  const [activeCategory, setActiveCategory] = useState<TemplateCategory | null>('story');
-  const [categoryExpanded, setCategoryExpanded] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
   const makingSectionRef = useRef<HTMLElement>(null);
 
@@ -308,19 +284,30 @@ function HomePage() {
     canonicalPath: '/',
   });
 
-  // Reset expanded state when category changes
-  useEffect(() => {
-    setCategoryExpanded(false);
-  }, [activeCategory]);
+  const isSearching = searchQuery.trim().length > 0;
 
-  // All templates for active category (no dedup — show each platform)
-  const categoryPreview = useMemo(() => {
-    if (!activeCategory) return [];
-    return ALL_TEMPLATES.filter(t => t.category === activeCategory);
-  }, [activeCategory]);
+  // Default top 5 popular templates
+  const popularTemplates = useMemo(() => {
+    return POPULAR_TEMPLATE_KEYS.map(key => {
+      const [platformId, label] = key.split(':');
+      return ALL_TEMPLATES.find(t => t.platformId === platformId && t.label === label);
+    }).filter(Boolean) as typeof ALL_TEMPLATES;
+  }, []);
 
-  const visiblePreview = categoryExpanded ? categoryPreview : categoryPreview.slice(0, 3);
-  const hiddenCount = categoryPreview.length - 3;
+  // Search results — filter by template label, platform name, or dimensions
+  const searchResults = useMemo(() => {
+    if (!isSearching) return [];
+    const q = searchQuery.trim().toLowerCase();
+    return ALL_TEMPLATES.filter(t =>
+      t.label.toLowerCase().includes(q) ||
+      t.platformName.toLowerCase().includes(q) ||
+      `${t.width}x${t.height}`.includes(q) ||
+      `${t.width}×${t.height}`.includes(q) ||
+      t.category.toLowerCase().includes(q)
+    );
+  }, [searchQuery, isSearching]);
+
+  const displayedTemplates = isSearching ? searchResults : popularTemplates;
 
   return (
     <div
@@ -358,94 +345,99 @@ function HomePage() {
               <MorphingFrame />
             </header>
 
-            {/* ── What Are You Making? ── */}
+            {/* ── What Are You Making? (Search + Top 5) ── */}
             <section
-              className="mb-20 md:mb-24 -mx-6 md:-mx-8 px-6 md:px-8 py-10 md:py-12 bg-white/[0.02] border-y border-white/[0.06]"
+              className="mb-20 md:mb-24"
               ref={makingSectionRef}
               id="making"
             >
               <h2 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter mb-8">What are you making?</h2>
 
-              {/* Category pills */}
-              <div className="flex flex-wrap gap-2.5 mb-8">
-                {CATEGORY_LABELS.map(({ value, label }) => (
+              {/* Search input */}
+              <div className="relative mb-6 max-w-xl">
+                <Search size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-white/20 pointer-events-none" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search formats... (e.g. instagram story, youtube thumbnail)"
+                  className="w-full pl-12 pr-5 py-4 bg-card border border-border/40 text-foreground text-[13px] font-bold tracking-[0.03em] outline-none transition-all focus:border-primary/50 placeholder:text-white/20 placeholder:text-[10px] placeholder:font-extrabold placeholder:uppercase placeholder:tracking-[0.15em]"
+                />
+                {isSearching && (
                   <button
-                    key={value}
-                    onClick={() => setActiveCategory(activeCategory === value ? null : value)}
-                    className={`px-6 py-3.5 text-[10px] font-black uppercase tracking-[0.2em] border transition-all duration-200 active:scale-95 ${
-                      activeCategory === value
-                        ? 'bg-primary/[0.06] border-primary/40 text-primary'
-                        : 'bg-white/[0.02] border-white/10 text-white/40 hover:text-white/70 hover:border-white/20'
-                    }`}
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 text-xs font-bold uppercase tracking-wider transition-colors bg-transparent border-none cursor-pointer"
                   >
-                    {label}
+                    Clear
                   </button>
-                ))}
+                )}
               </div>
 
-              {/* Category preview — compact list */}
-              {activeCategory && visiblePreview.length > 0 && (
-                <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                  <div className="border border-border/30 overflow-hidden">
-                    {visiblePreview.map((t, idx) => {
-                      const platform = PLATFORMS.find(p => p.id === t.platformId)!;
-                      const aspectRatio = t.width / t.height;
-                      return (
-                        <Link
-                          key={`${t.platformId}:${t.label}`}
-                          to={`/${platform.slug}`}
-                          className="group flex items-center gap-6 md:gap-8 px-5 md:px-6 py-4 md:py-5 transition-all hover:bg-white/[0.02] active:scale-[0.995]"
-                          style={{
-                            borderBottom: idx < visiblePreview.length - 1 ? '1px solid rgba(255,255,255,0.03)' : undefined,
-                          }}
-                        >
-                          {/* Aspect ratio shape */}
-                          <div className="flex-shrink-0 w-9 h-9 flex items-center justify-center">
-                            <div
-                              className="border transition-colors duration-300"
-                              style={{
-                                borderColor: `${t.platformBrandColor}35`,
-                                aspectRatio: `${aspectRatio}`,
-                                height: aspectRatio > 1 ? 'auto' : '28px',
-                                width: aspectRatio > 1 ? '28px' : 'auto',
-                                backgroundColor: `${t.platformBrandColor}08`,
-                                borderRadius: t.category === 'profile' ? '50%' : undefined,
-                              }}
-                            />
-                          </div>
+              {/* Label */}
+              <p className="text-[9px] font-extrabold text-white/25 uppercase tracking-[0.25em] mb-4">
+                {isSearching
+                  ? searchResults.length > 0
+                    ? `${searchResults.length} result${searchResults.length === 1 ? '' : 's'}`
+                    : 'No results'
+                  : 'Popular formats'
+                }
+              </p>
 
-                          {/* Platform name */}
-                          <span className="text-[9px] font-black text-white/40 uppercase tracking-[0.15em] w-24 md:w-28 flex-shrink-0">{t.platformName}</span>
+              {/* Results list */}
+              {displayedTemplates.length > 0 ? (
+                <div className="border border-border/30 overflow-hidden animate-in fade-in duration-200">
+                  {displayedTemplates.map((t, idx) => {
+                    const platform = PLATFORMS.find(p => p.id === t.platformId)!;
+                    const aspectRatio = t.width / t.height;
+                    return (
+                      <Link
+                        key={`${t.platformId}:${t.label}`}
+                        to={`/${platform.slug}`}
+                        className="group flex items-center gap-6 md:gap-8 px-5 md:px-6 py-4 md:py-5 transition-all hover:bg-white/[0.02] active:scale-[0.995]"
+                        style={{
+                          borderBottom: idx < displayedTemplates.length - 1 ? '1px solid rgba(255,255,255,0.03)' : undefined,
+                        }}
+                      >
+                        {/* Aspect ratio shape */}
+                        <div className="flex-shrink-0 w-9 h-9 flex items-center justify-center">
+                          <div
+                            className="border transition-colors duration-300"
+                            style={{
+                              borderColor: `${t.platformBrandColor}35`,
+                              aspectRatio: `${aspectRatio}`,
+                              height: aspectRatio > 1 ? 'auto' : '28px',
+                              width: aspectRatio > 1 ? '28px' : 'auto',
+                              backgroundColor: `${t.platformBrandColor}08`,
+                              borderRadius: t.category === 'profile' ? '50%' : undefined,
+                            }}
+                          />
+                        </div>
 
-                          {/* Template label */}
-                          <span className="text-[11px] font-black text-white/80 uppercase tracking-[-0.01em] flex-grow group-hover:text-white transition-colors">
-                            {t.label}
-                          </span>
+                        {/* Platform name */}
+                        <span className="text-[9px] font-black text-white/40 uppercase tracking-[0.15em] w-24 md:w-28 flex-shrink-0">{t.platformName}</span>
 
-                          {/* Dimensions */}
-                          <span className="text-[9px] font-bold text-white/20 tracking-[0.1em] flex-shrink-0 hidden sm:block">
-                            {t.width}×{t.height}
-                          </span>
+                        {/* Template label */}
+                        <span className="text-[11px] font-black text-white/80 uppercase tracking-[-0.01em] flex-grow group-hover:text-white transition-colors">
+                          {t.label}
+                        </span>
 
-                          {/* Arrow */}
-                          <span className="text-white/12 group-hover:text-primary group-hover:translate-x-0.5 transition-all text-sm flex-shrink-0">→</span>
-                        </Link>
-                      );
-                    })}
-                  </div>
+                        {/* Dimensions */}
+                        <span className="text-[9px] font-bold text-white/20 tracking-[0.1em] flex-shrink-0 hidden sm:block">
+                          {t.width}×{t.height}
+                        </span>
 
-                  {/* Show more / less */}
-                  {hiddenCount > 0 && (
-                    <button
-                      onClick={() => setCategoryExpanded(!categoryExpanded)}
-                      className="inline-flex items-center gap-2 mt-4 text-[9px] font-extrabold uppercase tracking-[0.2em] text-primary/60 hover:text-primary transition-colors bg-transparent border-none cursor-pointer"
-                    >
-                      {categoryExpanded ? 'Show less' : `Show ${hiddenCount} more`}
-                      <ChevronDown size={12} className={`transition-transform duration-200 ${categoryExpanded ? 'rotate-180' : ''}`} />
-                    </button>
-                  )}
+                        {/* Arrow */}
+                        <span className="text-white/12 group-hover:text-primary group-hover:translate-x-0.5 transition-all text-sm flex-shrink-0">→</span>
+                      </Link>
+                    );
+                  })}
                 </div>
-              )}
+              ) : isSearching ? (
+                <div className="border border-border/30 px-6 py-10 text-center">
+                  <p className="text-[11px] font-bold text-white/30 uppercase tracking-wider">No templates match "{searchQuery}"</p>
+                  <p className="text-[10px] text-white/15 mt-2">Try a different term — like a platform name, format, or size</p>
+                </div>
+              ) : null}
             </section>
 
             {/* ── Browse by Platform ── */}

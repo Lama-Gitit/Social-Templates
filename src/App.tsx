@@ -401,13 +401,13 @@ function HomePage() {
                         {/* Aspect ratio shape */}
                         <div className="flex-shrink-0 w-9 h-9 flex items-center justify-center">
                           <div
-                            className="border transition-colors duration-300"
+                            className="border-2 transition-all duration-300 group-hover:scale-105"
                             style={{
-                              borderColor: `${t.platformBrandColor}35`,
+                              borderColor: `${t.platformBrandColor}B8`,
                               aspectRatio: `${aspectRatio}`,
                               height: aspectRatio > 1 ? 'auto' : '28px',
                               width: aspectRatio > 1 ? '28px' : 'auto',
-                              backgroundColor: `${t.platformBrandColor}08`,
+                              backgroundColor: `${t.platformBrandColor}28`,
                               borderRadius: t.category === 'profile' ? '50%' : undefined,
                             }}
                           />

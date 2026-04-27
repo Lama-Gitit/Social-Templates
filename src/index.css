@@ -87,6 +87,22 @@
 
     --radius: 0.5rem;
 
+    /*
+     * ── Text Opacity Hierarchy ──────────────────────────────────────────────
+     * Background ≈ hsl(240 13% 2%) = #050506. Contrast ratios below are
+     * approximate effective contrast vs that background.
+     *
+     *   Tier 1 — primary   : text-white / text-foreground  ~20:1  headings, key UI
+     *   Tier 2 — body      : text-white/80                 ~16:1  body text, active labels
+     *   Tier 3 — secondary : text-white/60                  ~7.7:1 (AAA)  secondary copy
+     *   Tier 4 — tertiary  : text-white/45                  ~4.8:1 (AA)   meta, captions
+     *   Tier 5 — muted     : text-white/30                  ~2.6:1  decorative/placeholder
+     *
+     * RULE: Never use /20 or below for any text a user needs to read.
+     *       /15 and lower are reserved for borders and decorative dividers only.
+     * ────────────────────────────────────────────────────────────────────────
+     */
+
     /* Font Scale Logic */
     --font-uxxl: clamp(4rem, 8vw, 6.5rem);
     /* ~64px to 104px */

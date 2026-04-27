@@ -96,7 +96,7 @@ function PlatformPage() {
                 </div>
                 <div>
                   <h1 className="text-us md:text-uxl font-black tracking-tighter text-foreground uppercase leading-none">{platform.name}</h1>
-                  <p className="text-[9px] md:text-[11px] font-black mt-2 md:mt-4 tracking-[0.3em] uppercase opacity-40">Free SVG Templates | Copy-Ready Frames</p>
+                  <p className="text-[9px] md:text-[11px] font-black mt-2 md:mt-4 tracking-[0.3em] uppercase opacity-55">Free SVG Templates | Copy-Ready Frames</p>
                 </div>
               </div>
             </header>
@@ -144,8 +144,8 @@ function PlatformPage() {
 
             {platform.geoCopy && (
               <section className="mt-16 pt-12 border-t border-border/20">
-                <h2 className="text-[10px] font-black mb-4 uppercase tracking-[0.3em] text-white/30">{platform.name} Image Sizes & Dimensions</h2>
-                <p className="text-white/40 text-sm leading-relaxed max-w-3xl">
+                <h2 className="text-[10px] font-black mb-4 uppercase tracking-[0.3em] text-white/50">{platform.name} Image Sizes & Dimensions</h2>
+                <p className="text-white/60 text-sm leading-relaxed max-w-3xl">
                   {platform.geoCopy}
                 </p>
               </section>
@@ -159,9 +159,9 @@ function PlatformPage() {
                     <details key={i} className="group border border-border/20 rounded-sm bg-card/20 hover:bg-card/30 transition-colors">
                       <summary className="cursor-pointer px-6 py-5 text-[11px] font-black text-white uppercase tracking-wider list-none flex justify-between items-center">
                         {q}
-                        <span className="text-white/20 group-open:rotate-45 transition-transform text-lg font-bold">+</span>
+                        <span className="text-white/40 group-open:rotate-45 transition-transform text-lg font-bold">+</span>
                       </summary>
-                      <p className="px-6 pb-5 text-sm text-white/50 leading-relaxed">{a}</p>
+                      <p className="px-6 pb-5 text-sm text-white/60 leading-relaxed">{a}</p>
                     </details>
                   ))}
                 </div>
@@ -169,13 +169,13 @@ function PlatformPage() {
             )}
 
             <nav className="mt-16 pt-12 border-t border-border/20">
-              <h3 className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] mb-6">More Platforms</h3>
+              <h3 className="text-[10px] font-black text-white/50 uppercase tracking-[0.3em] mb-6">More Platforms</h3>
               <div className="flex flex-wrap gap-3">
                 {PLATFORMS.filter(p => p.id !== platform.id).map(p => (
                   <Link
                     key={p.id}
                     to={`/${p.slug}`}
-                    className="text-[9px] font-black uppercase tracking-[0.2em] text-white/40 hover:text-white px-4 py-2 border border-border/20 hover:border-border/40 rounded-sm transition-colors"
+                    className="text-[9px] font-black uppercase tracking-[0.2em] text-white/55 hover:text-white px-4 py-2 border border-border/30 hover:border-border/60 rounded-sm transition-colors"
                   >
                     {p.name}
                   </Link>
@@ -262,7 +262,7 @@ function MorphingFrame() {
         {/* Centered label inside frame */}
         <div className="z-10 flex flex-col items-center gap-1 transition-opacity duration-300">
           <span className="text-[11px] font-black uppercase tracking-[0.2em] text-primary">{f.ratio}</span>
-          <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-white/35">{f.name}</span>
+          <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-white/50">{f.name}</span>
         </div>
       </div>
     </div>
@@ -328,16 +328,16 @@ function HomePage() {
             {/* ── Hero with Morphing Frame ── */}
             <header className="flex flex-col-reverse lg:flex-row items-center min-h-0 lg:min-h-[500px] mb-16 lg:mb-20 gap-8 lg:gap-12">
               <div className="flex-1 max-w-full lg:max-w-[540px] text-center lg:text-left">
-                <p className="text-[10px] font-black uppercase tracking-[0.6em] text-white/40 mb-4">Social Frames</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.6em] text-white/55 mb-4">Social Frames</p>
                 <h1 className="text-[clamp(40px,5.5vw,72px)] font-black text-foreground mb-5 tracking-[-0.03em] uppercase leading-[0.88]">
                   Every social<br />media <span className="text-primary">frame</span><br />you need.
                 </h1>
-                <p className="text-sm font-bold uppercase tracking-[0.12em] text-white/50 leading-relaxed mb-8">
+                <p className="text-sm font-bold uppercase tracking-[0.12em] text-white/65 leading-relaxed mb-8">
                   Pick a format. Copy the SVG. Paste into Figma, Sketch, or any design tool. Sized perfectly for every platform.
                 </p>
                 <button
                   onClick={() => makingSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-transparent border border-white/15 text-foreground text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:border-primary hover:text-primary hover:bg-primary/5 active:scale-95 mx-auto lg:mx-0"
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-transparent border border-white/30 text-foreground text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:border-primary hover:text-primary hover:bg-primary/5 active:scale-95 mx-auto lg:mx-0"
                 >
                   Browse Formats <ChevronDown size={14} />
                 </button>
@@ -355,18 +355,18 @@ function HomePage() {
 
               {/* Search input */}
               <div className="relative mb-6 max-w-xl">
-                <Search size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-white/20 pointer-events-none" />
+                <Search size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search formats... (e.g. instagram story, youtube thumbnail)"
-                  className="w-full pl-12 pr-5 py-4 bg-card border border-border/40 text-foreground text-[13px] font-bold tracking-[0.03em] outline-none transition-all focus:border-primary/50 placeholder:text-white/20 placeholder:text-[10px] placeholder:font-extrabold placeholder:uppercase placeholder:tracking-[0.15em]"
+                  className="w-full pl-12 pr-5 py-4 bg-card border border-border/40 text-foreground text-[13px] font-bold tracking-[0.03em] outline-none transition-all focus:border-primary/50 placeholder:text-white/35 placeholder:text-[10px] placeholder:font-extrabold placeholder:uppercase placeholder:tracking-[0.15em]"
                 />
                 {isSearching && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 text-xs font-bold uppercase tracking-wider transition-colors bg-transparent border-none cursor-pointer"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/55 hover:text-white text-xs font-bold uppercase tracking-wider transition-colors bg-transparent border-none cursor-pointer"
                   >
                     Clear
                   </button>
@@ -374,7 +374,7 @@ function HomePage() {
               </div>
 
               {/* Label */}
-              <p className="text-[9px] font-extrabold text-white/25 uppercase tracking-[0.25em] mb-4">
+              <p className="text-[9px] font-extrabold text-white/45 uppercase tracking-[0.25em] mb-4">
                 {isSearching
                   ? searchResults.length > 0
                     ? `${searchResults.length} result${searchResults.length === 1 ? '' : 's'}`
@@ -414,7 +414,7 @@ function HomePage() {
                         </div>
 
                         {/* Platform name */}
-                        <span className="text-[9px] font-black text-white/40 uppercase tracking-[0.15em] w-24 md:w-28 flex-shrink-0">{t.platformName}</span>
+                        <span className="text-[9px] font-black text-white/55 uppercase tracking-[0.15em] w-24 md:w-28 flex-shrink-0">{t.platformName}</span>
 
                         {/* Template label */}
                         <span className="text-[11px] font-black text-white/80 uppercase tracking-[-0.01em] flex-grow group-hover:text-white transition-colors">
@@ -422,20 +422,20 @@ function HomePage() {
                         </span>
 
                         {/* Dimensions */}
-                        <span className="text-[9px] font-bold text-white/20 tracking-[0.1em] flex-shrink-0 hidden sm:block">
+                        <span className="text-[9px] font-bold text-white/45 tracking-[0.1em] flex-shrink-0 hidden sm:block">
                           {t.width}×{t.height}
                         </span>
 
                         {/* Arrow */}
-                        <span className="text-white/12 group-hover:text-primary group-hover:translate-x-0.5 transition-all text-sm flex-shrink-0">→</span>
+                        <span className="text-white/35 group-hover:text-primary group-hover:translate-x-0.5 transition-all text-sm flex-shrink-0">→</span>
                       </Link>
                     );
                   })}
                 </div>
               ) : isSearching ? (
                 <div className="border border-border/30 px-6 py-10 text-center">
-                  <p className="text-[11px] font-bold text-white/30 uppercase tracking-wider">No templates match "{searchQuery}"</p>
-                  <p className="text-[10px] text-white/15 mt-2">Try a different term — like a platform name, format, or size</p>
+                  <p className="text-[11px] font-bold text-white/55 uppercase tracking-wider">No templates match "{searchQuery}"</p>
+                  <p className="text-[10px] text-white/45 mt-2">Try a different term — like a platform name, format, or size</p>
                 </div>
               ) : null}
             </section>
@@ -467,8 +467,8 @@ function HomePage() {
                       size={28}
                       className="text-white/40 group-hover:text-white transition-all duration-300"
                     />
-                    <span className="text-[10px] font-black text-white uppercase tracking-[0.3em] opacity-50 group-hover:opacity-100 transition-all">{platform.name}</span>
-                    <span className="text-[9px] font-bold text-white/15 uppercase tracking-[0.15em]">
+                    <span className="text-[10px] font-black text-white uppercase tracking-[0.3em] opacity-65 group-hover:opacity-100 transition-all">{platform.name}</span>
+                    <span className="text-[9px] font-bold text-white/35 uppercase tracking-[0.15em]">
                       {platform.templates.length} templates
                     </span>
                   </Link>
@@ -481,7 +481,7 @@ function HomePage() {
               <div className="flex items-baseline justify-between mb-8 pb-6 border-b border-border/20">
                 <div>
                   <h2 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter mb-2">Frequently Asked Questions</h2>
-                  <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.3em]">Common questions about sizes & templates</p>
+                  <p className="text-[9px] font-black text-white/50 uppercase tracking-[0.3em]">Common questions about sizes & templates</p>
                 </div>
               </div>
 
@@ -497,11 +497,11 @@ function HomePage() {
                   <details key={i} className="group border border-border/20 bg-white/[0.01] hover:bg-white/[0.02] transition-colors">
                     <summary className="cursor-pointer px-6 py-5 text-[11px] font-black text-white uppercase tracking-[0.05em] list-none flex justify-between items-center">
                       {q}
-                      <span className="text-white/20 group-open:rotate-45 transition-transform text-lg font-bold">+</span>
+                      <span className="text-white/40 group-open:rotate-45 transition-transform text-lg font-bold">+</span>
                     </summary>
-                    <p className="px-6 pb-5 text-[13px] text-white/50 leading-[1.7]">
+                    <p className="px-6 pb-5 text-[13px] text-white/60 leading-[1.7]">
                       {a}
-                      {link && <Link to={link} className="block mt-2 text-primary/60 hover:text-primary text-[10px] font-black uppercase tracking-[0.15em] transition-colors">Browse templates →</Link>}
+                      {link && <Link to={link} className="block mt-2 text-primary/80 hover:text-primary text-[10px] font-black uppercase tracking-[0.15em] transition-colors">Browse templates →</Link>}
                     </p>
                   </details>
                 ))}
@@ -523,13 +523,13 @@ function HomePage() {
                     <table className="w-full text-left border-collapse">
                       <thead>
                         <tr className="border-b border-border/20">
-                          <th className="pb-3 pr-4 text-[9px] font-black text-white/30 uppercase tracking-[0.3em]">Platform</th>
-                          <th className="pb-3 pr-4 text-[9px] font-black text-white/30 uppercase tracking-[0.3em]">Format</th>
-                          <th className="pb-3 pr-4 text-[9px] font-black text-white/30 uppercase tracking-[0.3em]">Dimensions</th>
-                          <th className="pb-3 text-[9px] font-black text-white/30 uppercase tracking-[0.3em]">Ratio</th>
+                          <th className="pb-3 pr-4 text-[9px] font-black text-white/50 uppercase tracking-[0.3em]">Platform</th>
+                          <th className="pb-3 pr-4 text-[9px] font-black text-white/50 uppercase tracking-[0.3em]">Format</th>
+                          <th className="pb-3 pr-4 text-[9px] font-black text-white/50 uppercase tracking-[0.3em]">Dimensions</th>
+                          <th className="pb-3 text-[9px] font-black text-white/50 uppercase tracking-[0.3em]">Ratio</th>
                         </tr>
                       </thead>
-                      <tbody className="text-[10px] font-bold text-white/60">
+                      <tbody className="text-[10px] font-bold text-white/70">
                         {[
                           ['Instagram', 'instagram-templates', 'Story / Reel', '1080 × 1920', '9:16'],
                           ['Instagram', 'instagram-templates', 'Feed Post', '1080 × 1350', '4:5'],
@@ -548,11 +548,11 @@ function HomePage() {
                           ['Threads', 'threads-templates', 'Post', '1080 × 1920', '9:16'],
                           ['Bluesky', 'bluesky-templates', 'Post', '1080 × 1080', '1:1'],
                         ].map(([platform, slug, format, dimensions, ratio], i) => (
-                          <tr key={i} className="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors">
-                            <td className="py-2.5 pr-4"><Link to={`/${slug}`} className="text-white/50 hover:text-primary transition-colors uppercase tracking-wider">{platform}</Link></td>
+                          <tr key={i} className="border-b border-white/[0.07] hover:bg-white/[0.02] transition-colors">
+                            <td className="py-2.5 pr-4"><Link to={`/${slug}`} className="text-white/60 hover:text-primary transition-colors uppercase tracking-wider">{platform}</Link></td>
                             <td className="py-2.5 pr-4 uppercase tracking-wider">{format}</td>
-                            <td className="py-2.5 pr-4 text-primary/70 font-black tracking-[0.05em]">{dimensions}</td>
-                            <td className="py-2.5 uppercase tracking-wider text-white/40">{ratio}</td>
+                            <td className="py-2.5 pr-4 text-primary/80 font-black tracking-[0.05em]">{dimensions}</td>
+                            <td className="py-2.5 uppercase tracking-wider text-white/55">{ratio}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -564,13 +564,13 @@ function HomePage() {
 
             {/* ── Footer Nav ── */}
             <nav className="pt-8 border-t border-border/20">
-              <p className="text-[9px] font-black text-white/15 uppercase tracking-[0.2em] mb-4">All Platforms</p>
+              <p className="text-[9px] font-black text-white/45 uppercase tracking-[0.2em] mb-4">All Platforms</p>
               <div className="flex flex-wrap gap-2">
                 {PLATFORMS.map(p => (
                   <Link
                     key={p.id}
                     to={`/${p.slug}`}
-                    className="text-[9px] font-black uppercase tracking-[0.15em] text-white/30 hover:text-white px-3.5 py-2 border border-white/[0.06] hover:border-white/15 transition-all"
+                    className="text-[9px] font-black uppercase tracking-[0.15em] text-white/45 hover:text-white px-3.5 py-2 border border-white/[0.12] hover:border-white/30 transition-all"
                   >
                     {p.name}
                   </Link>

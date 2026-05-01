@@ -288,7 +288,7 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                                         <Shuffle size={48} />
                                     </div>
                                     <h4 className="text-white font-black uppercase tracking-tight mb-2">Archive Empty</h4>
-                                    <p className="text-white/30 text-[10px] uppercase tracking-widest">Execute a generation cycle to populate the archive.</p>
+                                    <p className="text-white/50 text-[10px] uppercase tracking-widest">Execute a generation cycle to populate the archive.</p>
                                     <button
                                         onClick={() => setActiveTab('generate')}
                                         className="mt-8 px-8 py-3 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-sm text-[10px] font-black uppercase tracking-[0.3em] transition-all"
@@ -303,7 +303,7 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                                             <div className="flex justify-between items-start mb-4">
                                                 <div>
                                                     <h4 className="font-black text-white text-[11px] uppercase tracking-tight truncate pr-2 group-hover:text-primary transition-colors">{res.label}</h4>
-                                                    <p className="text-[8px] text-white/30 uppercase tracking-[0.3em] mt-1">{res.platform}</p>
+                                                    <p className="text-[8px] text-white/50 uppercase tracking-[0.3em] mt-1">{res.platform}</p>
                                                 </div>
                                             </div>
                                             <div className="bg-background border border-border/40 rounded-sm mb-5 overflow-hidden flex items-center justify-center p-6 relative aspect-[4/3] group-hover:border-primary/20 transition-all duration-700">
@@ -324,7 +324,7 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                                             >
                                                 <Copy size={12} /> Copy SVG Frame
                                             </button>
-                                            <div className="mt-4 text-[8px] text-white/20 border-t border-border/10 pt-4 flex justify-between uppercase tracking-[0.2em] font-black">
+                                            <div className="mt-4 text-[8px] text-white/40 border-t border-border/10 pt-4 flex justify-between uppercase tracking-[0.2em] font-black">
                                                 <span>{res.date.split(',')[0]}</span>
                                                 <span>{res.date.split(',')[1]}</span>
                                             </div>
@@ -340,7 +340,7 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                                 <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
                                     <div className="text-center">
                                         <h2 className="text-3xl font-black text-white uppercase tracking-tighter mb-4">01. Choose Platform</h2>
-                                        <p className="text-[10px] text-white/40 uppercase tracking-[0.4em]">Select target system environment</p>
+                                        <p className="text-[10px] text-white/55 uppercase tracking-[0.4em]">Select target system environment</p>
                                     </div>
                                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
                                         {PLATFORMS.map(p => (
@@ -360,7 +360,7 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                             {/* STEP 2: Format */}
                             {step === 2 && selectedPlatform && (
                                 <div className="space-y-12 max-w-4xl mx-auto relative animate-in fade-in slide-in-from-bottom-4 duration-700">
-                                    <button onClick={() => setStep(1)} className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-white/30 hover:text-primary transition-all duration-300">
+                                    <button onClick={() => setStep(1)} className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-white/50 hover:text-primary transition-all duration-300">
                                         <ArrowLeft size={14} /> Back to Systems
                                     </button>
 
@@ -369,7 +369,7 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                                             <selectedPlatform.icon size={32} style={{ color: selectedPlatform.color }} />
                                         </div>
                                         <h2 className="text-3xl font-black text-white uppercase tracking-tighter mb-4">02. Geometric Format</h2>
-                                        <p className="text-[10px] text-white/40 uppercase tracking-[0.4em]">Optimizing for {selectedPlatform.name} logic</p>
+                                        <p className="text-[10px] text-white/55 uppercase tracking-[0.4em]">Optimizing for {selectedPlatform.name} logic</p>
                                     </div>
 
                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -380,7 +380,7 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                                             <div className={`w-12 h-16 rounded-sm border transition-all duration-500 ${selectedType === 'vertical' ? 'bg-primary/20 border-primary' : 'bg-white/5 border-white/10 group-hover:border-white/30'}`}></div>
                                             <div className="text-center">
                                                 <span className={`block font-black uppercase tracking-[0.3em] text-[11px] mb-2 ${selectedType === 'vertical' ? 'text-primary' : 'text-white/60'}`}>Vertical</span>
-                                                <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.2em]">4:5 Portrait</span>
+                                                <span className="text-[9px] font-black text-white/45 uppercase tracking-[0.2em]">4:5 Portrait</span>
                                             </div>
                                         </button>
 
@@ -391,7 +391,7 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                                             <div className={`w-14 h-14 rounded-sm border transition-all duration-500 ${selectedType === 'square' ? 'bg-primary/20 border-primary' : 'bg-white/5 border-white/10 group-hover:border-white/30'}`}></div>
                                             <div className="text-center">
                                                 <span className={`block font-black uppercase tracking-[0.3em] text-[11px] mb-2 ${selectedType === 'square' ? 'text-primary' : 'text-white/60'}`}>Square</span>
-                                                <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.2em]">1:1 Classic</span>
+                                                <span className="text-[9px] font-black text-white/45 uppercase tracking-[0.2em]">1:1 Classic</span>
                                             </div>
                                         </button>
 
@@ -402,7 +402,7 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                                             <div className={`w-20 h-10 rounded-sm border transition-all duration-500 ${selectedType === 'landscape' ? 'bg-primary/20 border-primary' : 'bg-white/5 border-white/10 group-hover:border-white/30'}`}></div>
                                             <div className="text-center">
                                                 <span className={`block font-black uppercase tracking-[0.3em] text-[11px] mb-2 ${selectedType === 'landscape' ? 'text-primary' : 'text-white/60'}`}>Landscape</span>
-                                                <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.2em]">16:9 Cinematic</span>
+                                                <span className="text-[9px] font-black text-white/45 uppercase tracking-[0.2em]">16:9 Cinematic</span>
                                             </div>
                                         </button>
                                     </div>
@@ -434,7 +434,7 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                             {step === 3 && (
                                 <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
                                     <div className="flex justify-between items-center pb-6 border-b border-border/20">
-                                        <button onClick={() => setStep(2)} className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-white/30 hover:text-primary transition-all duration-300">
+                                        <button onClick={() => setStep(2)} className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-white/50 hover:text-primary transition-all duration-300">
                                             <ArrowLeft size={14} /> Back
                                         </button>
                                         <div className="flex items-center gap-3 text-primary bg-primary/5 border border-primary/20 px-6 py-2 rounded-sm text-[10px] font-black uppercase tracking-[0.3em]">

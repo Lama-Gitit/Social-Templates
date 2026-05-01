@@ -57,7 +57,7 @@ export function AIAssistant({ isOpen, onClose, platformName }: AIAssistantProps)
                         </div>
                         <div>
                             <h3 className="text-2xl font-black text-white uppercase tracking-tighter leading-none mb-2">AI Content Assistant</h3>
-                            <p className="text-[9px] font-black uppercase tracking-[0.3em] opacity-40">SVG Templates for Social Content · <span className="text-primary font-black">{platformName}</span></p>
+                            <p className="text-[9px] font-black uppercase tracking-[0.3em] opacity-55">SVG Templates for Social Content · <span className="text-primary font-black">{platformName}</span></p>
                         </div>
                     </div>
                     <button
@@ -78,7 +78,7 @@ export function AIAssistant({ isOpen, onClose, platformName }: AIAssistantProps)
                                 <div className="absolute inset-0 bg-primary/5 blur-xl group-hover:bg-primary/10 transition-colors" />
                             </div>
                             <h4 className="text-lg font-black text-white uppercase tracking-tight mb-3">Neural Environment Synthesis</h4>
-                            <p className="text-[10px] text-white/40 max-w-md mx-auto uppercase tracking-widest leading-relaxed">
+                            <p className="text-[10px] text-white/55 max-w-md mx-auto uppercase tracking-widest leading-relaxed">
                                 Deploy a targeted brainstorming sequence. Generated data is optimized for {platformName} architecture standards.
                             </p>
                         </div>
@@ -86,7 +86,7 @@ export function AIAssistant({ isOpen, onClose, platformName }: AIAssistantProps)
 
                     {/* Input Area */}
                     <div className="space-y-4">
-                        <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Target Objective</label>
+                        <label className="block text-[10px] font-black text-white/55 uppercase tracking-[0.4em]">Target Objective</label>
                         <div className="flex gap-3">
                             <input
                                 type="text"
@@ -119,7 +119,7 @@ export function AIAssistant({ isOpen, onClose, platformName }: AIAssistantProps)
                         <div className="bg-card/30 rounded-sm p-8 border border-border/20 animate-in fade-in slide-in-from-bottom-4 duration-700 relative overflow-hidden">
                             <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
                             <div className="flex items-center justify-between mb-6">
-                                <h4 className="text-[9px] font-black text-white/30 uppercase tracking-[0.5em]">Synthetic Output / AI</h4>
+                                <h4 className="text-[9px] font-black text-white/50 uppercase tracking-[0.5em]">Synthetic Output / AI</h4>
                                 <div className="flex gap-2">
                                     <button
                                         onClick={handleGenerate}

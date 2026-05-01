@@ -15,7 +15,9 @@ export function Sidebar({ className, activePlatformId, onOpenRandomGenerator, ai
     return (
         <div className={cn("flex flex-col h-full bg-background text-foreground w-64 p-4 border-r border-border/40", className)}>
             <div className="mb-12 p-3">
-                <SocialFramesLogo />
+                <Link to="/" aria-label="Go to homepage" className="block">
+                    <SocialFramesLogo />
+                </Link>
                 <p className="text-[9px] text-muted-foreground uppercase tracking-[0.3em] font-black mt-3">SVG Templates for Social Content</p>
             </div>
 

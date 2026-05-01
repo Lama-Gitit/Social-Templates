@@ -185,10 +185,11 @@ export const PLATFORMS: PlatformData[] = [
             { label: 'Profile Picture', width: 640, height: 640, desc: '1:1 • Circular crop', category: 'profile' },
             { label: 'Portrait Post', width: 1080, height: 1350, desc: '4:5 • Highest engagement', category: 'post' },
             { label: 'Square Post', width: 1080, height: 1080, desc: '1:1 • Classic format', category: 'post' },
+            { label: 'Landscape Post', width: 1080, height: 566, desc: '1.91:1 • Wide format', category: 'post' },
             { label: 'Post & Video', width: 1080, height: 1920, desc: '9:16 • Mobile optimized', category: 'post' },
             { label: 'Carousel Slide', width: 1080, height: 1920, desc: '9:16 • Consistent height', category: 'post' },
         ],
-        geoCopy: "Threads supports five image formats: Profile Pictures at 640x640 pixels (synced with your Instagram profile), Portrait Posts at 1080x1350 pixels (4:5), Square Posts at 1080x1080 pixels (1:1), full-screen Posts and Videos at 1080x1920 pixels (9:16), and Carousel Slides at 1080x1920 pixels (9:16). The 4:5 portrait format currently delivers the highest engagement on Threads. Unlike many platforms, Threads displays full 9:16 vertical images without cropping, making it one of the most visually immersive text-first platforms.",
+        geoCopy: "Threads supports six image formats: Profile Pictures at 640x640 pixels (synced with your Instagram profile), Portrait Posts at 1080x1350 pixels (4:5), Square Posts at 1080x1080 pixels (1:1), Landscape Posts at 1080x566 pixels (1.91:1), full-screen Posts and Videos at 1080x1920 pixels (9:16), and Carousel Slides at 1080x1920 pixels (9:16). The 4:5 portrait format currently delivers the highest engagement on Threads. Unlike many platforms, Threads displays full 9:16 vertical images without cropping, making it one of the most visually immersive text-first platforms.",
         faqs: [
             { q: 'What size is a Threads post?', a: 'Threads posts and videos are 1080 x 1920 pixels (9:16). Threads displays full vertical images without cropping.' },
             { q: 'Does Threads sync with Instagram?', a: 'Yes. Your Threads profile picture syncs automatically with your Instagram profile picture at 320 x 320 pixels.' },
@@ -298,12 +299,12 @@ export const PLATFORMS: PlatformData[] = [
         templates: [
             { label: 'Standard Pin', width: 1000, height: 1500, desc: '2:3 • Gold standard', category: 'post' },
             { label: 'Square Pin', width: 1000, height: 1000, desc: '1:1 • Acceptable', category: 'post' },
-            { label: 'Board Cover', width: 600, height: 600, desc: '1:1 • Collection', category: 'cover' },
+            { label: 'Board Cover', width: 1000, height: 1000, desc: '1:1 • Collection', category: 'cover' },
         ],
-        geoCopy: "Pinterest uses three image formats: Standard Pins at 1000x1500 pixels (2:3), Square Pins at 1000x1000 pixels (1:1), and Board Covers at 600x600 pixels (1:1). The 2:3 vertical ratio is unique to Pinterest and is the gold standard for the platform. Tall images naturally dominate Pinterest's masonry grid layout, and pins with text overlays tend to perform better because they communicate the pin's value at a glance while scrolling.",
+        geoCopy: "Pinterest uses three image formats: Standard Pins at 1000x1500 pixels (2:3), Square Pins at 1000x1000 pixels (1:1), and Board Covers at 1000x1000 pixels (1:1). The 2:3 vertical ratio is unique to Pinterest and is the gold standard for the platform. Tall images naturally dominate Pinterest's masonry grid layout, and pins with text overlays tend to perform better because they communicate the pin's value at a glance while scrolling.",
         faqs: [
             { q: 'What size is a Pinterest Pin?', a: 'The standard Pinterest Pin size is 1000 x 1500 pixels (2:3 ratio). This vertical format dominates the Pinterest masonry grid and gets the most visibility.' },
-            { q: 'What size is a Pinterest Board Cover?', a: 'Pinterest Board Covers are 600 x 600 pixels (1:1 square).' },
+            { q: 'What size is a Pinterest Board Cover?', a: 'Pinterest Board Covers are 1000 x 1000 pixels (1:1 square). Pinterest displays the final cover at 222 x 150, but uploading at 1000 x 1000 preserves quality across desktop and mobile.' },
         ],
     },
     {
@@ -321,11 +322,13 @@ export const PLATFORMS: PlatformData[] = [
             "Top 150px and Bottom 150px are usually covered.",
         ],
         templates: [
+            { label: 'Profile Picture', width: 320, height: 320, desc: '1:1 • Bitmoji or photo', category: 'profile' },
             { label: 'Snap / Story / Ad', width: 1080, height: 1920, desc: '9:16 • Full screen', category: 'story' },
             { label: 'Geofilter', width: 1080, height: 2340, desc: '9:19.5 • Tall device', category: 'ad' },
         ],
-        geoCopy: "Snapchat uses two main image formats: Snaps, Stories, and Ads at 1080x1920 pixels (9:16) and Geofilters at 1080x2340 pixels (9:19.5 for taller devices). Snapchat is entirely full-screen vertical. The top 150 pixels and bottom 150 pixels are typically covered by Snapchat's header and footer UI, so always leave generous buffers and keep critical content in the middle 75% of the screen.",
+        geoCopy: "Snapchat uses three main image formats: Profile Pictures at 320x320 pixels (1:1, usually a Bitmoji or photo), Snaps, Stories, and Ads at 1080x1920 pixels (9:16), and Geofilters at 1080x2340 pixels (9:19.5 for taller devices). Snapchat is entirely full-screen vertical. The top 150 pixels and bottom 150 pixels are typically covered by Snapchat's header and footer UI, so always leave generous buffers and keep critical content in the middle 75% of the screen.",
         faqs: [
+            { q: 'What size is a Snapchat Profile Picture?', a: 'Snapchat Profile Pictures are 320 x 320 pixels (1:1). Most people use a Bitmoji, but a photo works at the same spec.' },
             { q: 'What size is a Snapchat Story?', a: 'Snapchat Stories and Ads are 1080 x 1920 pixels (9:16). Keep critical content in the middle 75% of the screen since the top and bottom 150px are covered by UI.' },
             { q: 'What size is a Snapchat Geofilter?', a: 'Snapchat Geofilters are 1080 x 2340 pixels (9:19.5 ratio) to accommodate taller device screens.' },
         ],

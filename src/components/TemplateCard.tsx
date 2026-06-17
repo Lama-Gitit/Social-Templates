@@ -54,8 +54,12 @@ export function TemplateCard({ template, platformColor, platformId }: TemplateCa
                         borderWidth: '1px',
                         backgroundColor: 'hsla(var(--primary), 0.03)',
                         aspectRatio: `${aspectRatio}`,
-                        height: aspectRatio > 1 ? 'auto' : '150px',
-                        width: aspectRatio > 1 ? '150px' : 'auto',
+                        // Drive sizing off width for every ratio and let height follow via
+                        // aspect-ratio. This keeps the frame's true proportions even when the
+                        // card is narrower than the target — a square stays square instead of
+                        // being stretched into a rectangle by maxWidth clamping.
+                        width: aspectRatio >= 1 ? '150px' : `${Math.round(150 * aspectRatio)}px`,
+                        height: 'auto',
                         maxHeight: '100%',
                         maxWidth: '100%',
                         boxShadow: `0 0 40px -10px hsla(var(--primary), 0.2)`,

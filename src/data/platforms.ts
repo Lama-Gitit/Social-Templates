@@ -9,10 +9,11 @@ import {
     Hash,
     Share2,
     Camera,
+    Globe,
 } from 'lucide-react';
 
 // --- Types ---
-export type TemplateCategory = 'profile' | 'post' | 'story' | 'cover' | 'ad';
+export type TemplateCategory = 'profile' | 'post' | 'story' | 'cover' | 'ad' | 'web';
 
 export type Template = {
     label: string;
@@ -341,6 +342,36 @@ export const PLATFORMS: PlatformData[] = [
             { q: 'What size is a Snapchat Profile Picture?', a: 'Snapchat Profile Pictures are 320 x 320 pixels (1:1). Most people use a Bitmoji, but a photo works at the same spec.' },
             { q: 'What size is a Snapchat Story?', a: 'Snapchat Stories and Ads are 1080 x 1920 pixels (9:16). Keep critical content centered — the top 150px and bottom 330px are reserved for Snapchat UI.' },
             { q: 'What size is a Snapchat Geofilter?', a: 'Snapchat Geofilters are 1080 x 1920 pixels (9:16) and must be saved as a transparent PNG. Avoid placing artwork in the top 150 pixels or bottom 330 pixels.' },
+        ],
+    },
+    {
+        id: 'web',
+        slug: 'og-image-templates',
+        name: 'Web',
+        icon: Globe,
+        color: '#6366F1',
+        brandColor: '#6366F1',
+        bg: 'bg-indigo-50',
+        intro: "Your link's first impression. The Open Graph image is the card that renders when your site is shared on iMessage, Slack, WhatsApp, Discord, LinkedIn, and X — design it once and it works everywhere.",
+        metaTitle: "Open Graph Image Templates | Free OG Image, Favicon & Web Frames",
+        metaDescription: "Free copy-ready SVG templates for your website's metadata. Perfectly sized frames for Open Graph images (1200x630), X summary cards, favicons (48x48), and Apple touch icons (180x180).",
+        tips: [
+            "Open Graph images are 1200x630 — keep text away from the edges, since some apps crop the card to a square.",
+            "One og:image powers the preview on iMessage, Slack, WhatsApp, Discord, Facebook, and LinkedIn.",
+            "Design favicons to read at 16px — simplify to a single shape or letter.",
+        ],
+        templates: [
+            { label: 'Open Graph Image', width: 1200, height: 630, desc: '1.91:1 • Universal share card', category: 'web' },
+            { label: 'X Summary Card', width: 1200, height: 628, desc: '1.91:1 • summary_large_image', category: 'web' },
+            { label: 'Favicon', width: 48, height: 48, desc: '1:1 • Scales to 16/32', category: 'web' },
+            { label: 'Apple Touch Icon', width: 180, height: 180, desc: '1:1 • iOS home screen', category: 'web' },
+        ],
+        geoCopy: "Websites need four key image sizes for sharing and branding: the Open Graph Image at 1200x630 pixels (1.91:1), which renders as the link-preview card across iMessage, Slack, WhatsApp, Discord, Facebook, and LinkedIn from a single og:image meta tag; the X Summary Card at 1200x628 pixels (1.91:1) for Twitter's summary_large_image; the Favicon at 48x48 pixels (1:1), which browsers scale down to 16 and 32 pixels in tabs and bookmarks; and the Apple Touch Icon at 180x180 pixels (1:1), shown when a site is saved to an iOS home screen. Keep important text and logos away from the edges of the Open Graph image because some apps crop it to a square, and simplify favicons to a single shape or letter so they stay legible at 16 pixels.",
+        faqs: [
+            { q: 'What size is an Open Graph (OG) image?', a: 'The standard Open Graph image is 1200 x 630 pixels (1.91:1 aspect ratio). This is the card shown when your link is shared on Facebook, LinkedIn, iMessage, Slack, WhatsApp, and Discord. Reference it with the og:image meta tag.' },
+            { q: 'What size is a Twitter/X card image?', a: 'The X (Twitter) summary_large_image card is 1200 x 628 pixels (1.91:1) — effectively the same as a standard Open Graph image, so one 1200x630 graphic works for both.' },
+            { q: 'What size should a favicon be?', a: 'Provide a favicon at 48 x 48 pixels and browsers will scale it down to 16 and 32 pixels for tabs and bookmarks. Keep the design to a single shape or letter so it stays clear at the smallest size.' },
+            { q: 'What size is an Apple touch icon?', a: 'The Apple touch icon is 180 x 180 pixels (1:1). iOS uses it when someone saves your site to their home screen, applying rounded corners automatically.' },
         ],
     }
 ];

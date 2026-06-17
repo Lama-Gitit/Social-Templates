@@ -547,6 +547,7 @@ function HomePage() {
                           ['Snapchat', 'snapchat-templates', 'Story / Ad', '1080 × 1920', '9:16'],
                           ['Threads', 'threads-templates', 'Post', '1080 × 1920', '9:16'],
                           ['Bluesky', 'bluesky-templates', 'Post', '1080 × 1080', '1:1'],
+                          ['Web', 'og-image-templates', 'Open Graph', '1200 × 630', '1.91:1'],
                         ].map(([platform, slug, format, dimensions, ratio], i) => (
                           <tr key={i} className="border-b border-white/[0.07] hover:bg-white/[0.02] transition-colors">
                             <td className="py-2.5 pr-4"><Link to={`/${slug}`} className="text-white/60 hover:text-primary transition-colors uppercase tracking-wider">{platform}</Link></td>

@@ -101,6 +101,19 @@
       (t.category === 'profile' ? 'border-radius:50%;' : '');
   }
 
+  // Split a string into lowercase word tokens ("X (Twitter)" -> ["x","twitter"]).
+  function tokens(s) {
+    return s.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+  }
+
+  // Every query word must prefix-match a word in the haystack, so "x" finds
+  // "X (Twitter)" without matching every label that merely contains an x.
+  function matchesQuery(q, haystack) {
+    const queryWords = tokens(q);
+    const hayWords = tokens(haystack);
+    return queryWords.every(qw => hayWords.some(hw => hw.startsWith(qw)));
+  }
+
   function render(query) {
     const q = query.trim().toLowerCase();
     list.innerHTML = '';
@@ -108,9 +121,8 @@
     for (const p of CATALOG) {
       const matches = p.templates.filter(t =>
         !q ||
-        t.label.toLowerCase().includes(q) ||
-        p.name.toLowerCase().includes(q) ||
-        (t.width + 'x' + t.height).includes(q)
+        matchesQuery(q, p.name + ' ' + t.label + ' ' + t.category) ||
+        (/\d/.test(q) && (t.width + 'x' + t.height).includes(q))
       );
       if (!matches.length) continue;
       shown += matches.length;

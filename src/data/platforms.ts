@@ -53,22 +53,24 @@ export const PLATFORMS: PlatformData[] = [
         bg: 'bg-red-50',
         intro: "The video search engine. Channel banners are displayed on TVs (huge) but cropped heavily for Mobile.",
         metaTitle: "YouTube SVG Templates | Free Thumbnail, Banner & Shorts Frames",
-        metaDescription: "Free copy-ready SVG templates for YouTube. Grab perfectly sized frames for Thumbnails (1280x720), Channel Banners (2560x1440), Shorts (1080x1920), and more.",
+        metaDescription: "Free copy-ready SVG templates for YouTube. Grab perfectly sized frames for Thumbnails (3840x2160 4K), Channel Banners (2560x1440), Shorts (1080x1920), and more.",
         tips: [
             "Place logo/text in the 'Safe Zone' (center 1546x423).",
-            "Thumbnails are critical."
+            "Thumbnails are critical.",
+            "Design thumbnails at 4K — TVs expose soft 720p art."
         ],
         templates: [
             { label: 'Channel Banner', width: 2560, height: 1440, desc: '16:9 • TV size', category: 'cover' },
-            { label: 'Video Thumbnail', width: 1280, height: 720, desc: '16:9 • CTR Driver', category: 'cover' },
+            { label: 'Video Thumbnail (4K)', width: 3840, height: 2160, desc: '16:9 • Recommended', category: 'cover' },
+            { label: 'Video Thumbnail (Min)', width: 1280, height: 720, desc: '16:9 • Baseline size', category: 'cover' },
             { label: 'Podcast Thumbnail', width: 1280, height: 1280, desc: '1:1 • Podcast art', category: 'cover' },
             { label: 'Profile Picture', width: 800, height: 800, desc: '1:1 • Channel icon', category: 'profile' },
             { label: 'Shorts', width: 1080, height: 1920, desc: '9:16 • Vertical', category: 'story' },
             { label: 'Community Post', width: 1000, height: 1000, desc: '1:1 • Channel tab', category: 'post' },
         ],
-        geoCopy: "YouTube requires six key image sizes: Channel Banners at 2560x1440 pixels (safe area 1546x423 in the center), Video Thumbnails at 1280x720 pixels (16:9), Podcast Thumbnails at 1280x1280 pixels (1:1), Profile Pictures at 800x800 pixels, Shorts at 1080x1920 pixels (9:16), and Community Posts at 1000x1000 pixels (1:1). Thumbnails are the single most important visual on YouTube because they directly affect click-through rates. Always place logos and text within the banner safe zone since YouTube crops banners differently on TV, desktop, and mobile.",
+        geoCopy: "YouTube requires seven key image sizes: Channel Banners at 2560x1440 pixels (safe area 1546x423 in the center), Video Thumbnails at 3840x2160 pixels (4K, 16:9 — the current recommended size) with 1280x720 pixels as the accepted minimum, Podcast Thumbnails at 1280x1280 pixels (1:1), Profile Pictures at 800x800 pixels, Shorts at 1080x1920 pixels (9:16), and Community Posts at 1000x1000 pixels (1:1). YouTube raised its recommended thumbnail resolution to 4K to serve the growing share of viewing on smart TVs and large displays, where a 1280x720 thumbnail looks noticeably soft. Thumbnail file size caps at 50MB on desktop and 2MB on mobile. Thumbnails are the single most important visual on YouTube because they directly affect click-through rates. Always place logos and text within the banner safe zone since YouTube crops banners differently on TV, desktop, and mobile.",
         faqs: [
-            { q: 'What size is a YouTube Thumbnail?', a: 'YouTube Thumbnails are 1280 x 720 pixels (16:9 aspect ratio). This is the recommended size for clear thumbnails that display well across all devices.' },
+            { q: 'What size is a YouTube Thumbnail?', a: 'YouTube now recommends 3840 x 2160 pixels (4K, 16:9) for thumbnails. 1280 x 720 pixels remains the accepted minimum and still looks clean on phones and in search, but 4K holds up on smart TVs and large displays. File size caps at 50MB on desktop and 2MB on mobile.' },
             { q: 'What size is a YouTube Channel Banner?', a: 'YouTube Channel Banners are 2560 x 1440 pixels. The safe area for text and logos is 1546 x 423 pixels in the center, since YouTube crops the banner differently on TV, desktop, and mobile.' },
             { q: 'What size are YouTube Shorts?', a: 'YouTube Shorts use a 1080 x 1920 pixel format (9:16 vertical aspect ratio), the same dimensions as Instagram Stories and TikTok videos.' },
         ],
@@ -250,14 +252,15 @@ export const PLATFORMS: PlatformData[] = [
         templates: [
             { label: 'Header Image', width: 1500, height: 500, desc: '3:1 • Profile header', category: 'cover' },
             { label: 'Profile Picture', width: 400, height: 400, desc: '1:1 • Avatar', category: 'profile' },
-            { label: 'Post (Vertical)', width: 800, height: 1000, desc: '4:5 • 1000px max', category: 'post' },
-            { label: 'Post (Landscape)', width: 1000, height: 563, desc: '16:9 • 1000px max', category: 'post' },
-            { label: 'Post (Square)', width: 1000, height: 1000, desc: '1:1 • 1000px max', category: 'post' },
+            { label: 'Post (Vertical)', width: 1200, height: 1500, desc: '4:5 • Highest engagement', category: 'post' },
+            { label: 'Post (Landscape)', width: 1600, height: 900, desc: '16:9 • Wide format', category: 'post' },
+            { label: 'Post (Square)', width: 1200, height: 1200, desc: '1:1 • Balanced view', category: 'post' },
         ],
-        geoCopy: "Bluesky uses five image formats: Header Images at 1500x500 pixels (3:1), Profile Pictures at 400x400 pixels, Vertical Posts at 800x1000 pixels (4:5), Landscape Posts at 1000x563 pixels (16:9), and Square Posts at 1000x1000 pixels (1:1). Bluesky caps post images at 1000 pixels on the longest side and 1MB per image, which is the strictest image spec of any major platform. Larger images will be downscaled automatically, so design at 1000px or below to preserve quality.",
+        geoCopy: "Bluesky uses five image formats: Header Images at 1500x500 pixels (3:1), Profile Pictures at 400x400 pixels, Vertical Posts at 1200x1500 pixels (4:5), Landscape Posts at 1600x900 pixels (16:9), and Square Posts at 1200x1200 pixels (1:1). Since the April 2026 update Bluesky accepts post images up to 2MB and 4000 pixels on the longest side, a significant increase from the previous 1MB and 2000 pixel caps. Bluesky also displays multi-image posts as a swipeable carousel, so mixed aspect ratios are shown without cropping.",
         faqs: [
             { q: 'What size is a Bluesky header?', a: 'Bluesky header images are 1500 x 500 pixels (3:1), similar to X (Twitter). Headers behave the same way across both platforms.' },
-            { q: 'What size is a Bluesky post?', a: 'Bluesky caps post images at 1000 pixels on the longest side and 1MB per image. Use 800 x 1000 pixels for vertical (4:5), 1000 x 563 for landscape (16:9), and 1000 x 1000 for square (1:1).' },
+            { q: 'What size is a Bluesky post?', a: 'Bluesky accepts post images up to 4000 pixels on the longest side and 2MB per image. Use 1200 x 1500 pixels for vertical (4:5), 1600 x 900 for landscape (16:9), and 1200 x 1200 for square (1:1).' },
+            { q: 'How many images can a Bluesky post have?', a: 'Bluesky supports up to four images per post, displayed as a swipeable carousel. Mixed aspect ratios are shown without cropping, so images do not need to match each other.' },
         ],
     },
     {
@@ -334,13 +337,13 @@ export const PLATFORMS: PlatformData[] = [
         templates: [
             { label: 'Profile Picture', width: 320, height: 320, desc: '1:1 • Bitmoji or photo', category: 'profile' },
             { label: 'Snap / Story / Ad', width: 1080, height: 1920, desc: '9:16 • Full screen', category: 'story' },
-            { label: 'Geofilter', width: 1080, height: 1920, desc: '9:16 • Transparent PNG', category: 'ad' },
+            { label: 'Geofilter', width: 1080, height: 2340, desc: '~21:9 • Transparent PNG, ≤300KB', category: 'ad' },
         ],
-        geoCopy: "Snapchat uses three main image formats: Profile Pictures at 320x320 pixels (1:1, usually a Bitmoji or photo), Snaps, Stories, and Ads at 1080x1920 pixels (9:16), and Geofilters at 1080x1920 pixels (9:16) saved as transparent PNG. Snapchat is entirely full-screen vertical. The top 150 pixels are reserved for the profile/UI and the bottom 330 pixels are reserved for the call-to-action button, so always leave generous buffers in those zones and keep critical content centered.",
+        geoCopy: "Snapchat uses three main image formats: Profile Pictures at 320x320 pixels (1:1, usually a Bitmoji or photo), Snaps, Stories, and Ads at 1080x1920 pixels (9:16), and Geofilters at 1080x2340 pixels saved as transparent PNG under 300KB. The Geofilter canvas is taller than a standard Snap because it has to cover edge-to-edge on modern tall phone screens, with roughly a 210 pixel buffer at the top and bottom. Snapchat is entirely full-screen vertical. The top 150 pixels are reserved for the profile/UI and the bottom 330 pixels are reserved for the call-to-action button, so always leave generous buffers in those zones and keep critical content centered.",
         faqs: [
             { q: 'What size is a Snapchat Profile Picture?', a: 'Snapchat Profile Pictures are 320 x 320 pixels (1:1). Most people use a Bitmoji, but a photo works at the same spec.' },
             { q: 'What size is a Snapchat Story?', a: 'Snapchat Stories and Ads are 1080 x 1920 pixels (9:16). Keep critical content centered — the top 150px and bottom 330px are reserved for Snapchat UI.' },
-            { q: 'What size is a Snapchat Geofilter?', a: 'Snapchat Geofilters are 1080 x 1920 pixels (9:16) and must be saved as a transparent PNG. Avoid placing artwork in the top 150 pixels or bottom 330 pixels.' },
+            { q: 'What size is a Snapchat Geofilter?', a: 'Snapchat Geofilters are 1080 x 2340 pixels and must be saved as a transparent PNG under 300KB. The canvas is taller than a standard Snap so it covers edge-to-edge on tall phone screens — leave roughly 210 pixels clear at the top and bottom.' },
         ],
     }
 ];

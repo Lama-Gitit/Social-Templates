@@ -7,7 +7,7 @@ import { RandomGeneratorModal } from './components/RandomGeneratorModalV2'; // v
 import { PLATFORMS } from './data/platforms';
 import { usePageMeta } from './hooks/usePageMeta';
 import { setAIToken } from './lib/anthropic';
-import { hexToHSL } from './lib/utils';
+import { hexToHSL, matchesQuery } from './lib/utils';
 import { Lightbulb, ChevronDown, Search } from 'lucide-react';
 
 // Flat list of all templates across all platforms for the "What are you making?" section
@@ -37,7 +37,7 @@ const MORPH_FORMATS = [
 // Top 5 popular templates shown by default (before any search)
 const POPULAR_TEMPLATE_KEYS = [
   'instagram:Stories & Reels',
-  'youtube:Video Thumbnail',
+  'youtube:Video Thumbnail (4K)',
   'instagram:Square Post',
   'linkedin:Personal Cover',
   'tiktok:Video / Story',
@@ -298,12 +298,10 @@ function HomePage() {
   const searchResults = useMemo(() => {
     if (!isSearching) return [];
     const q = searchQuery.trim().toLowerCase();
+    const hasDigit = /\d/.test(q);
     return ALL_TEMPLATES.filter(t =>
-      t.label.toLowerCase().includes(q) ||
-      t.platformName.toLowerCase().includes(q) ||
-      `${t.width}x${t.height}`.includes(q) ||
-      `${t.width}×${t.height}`.includes(q) ||
-      t.category.toLowerCase().includes(q)
+      matchesQuery(q, `${t.platformName} ${t.label} ${t.category}`) ||
+      (hasDigit && (`${t.width}x${t.height}`.includes(q) || `${t.width}×${t.height}`.includes(q)))
     );
   }, [searchQuery, isSearching]);
 

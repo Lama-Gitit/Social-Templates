@@ -1,0 +1,151 @@
+<!-- Template for the plugin UI. Do not edit figma-plugin/ui.html directly —
+     run `npm run build:figma` to regenerate it from this file with the
+     catalog injected from src/data/platforms.ts. -->
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    background: #050506;
+    color: #fff;
+    font-family: 'Inter', 'Helvetica Neue', sans-serif;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .search-wrap { padding: 12px 12px 8px; }
+  #search {
+    width: 100%;
+    padding: 9px 12px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    outline: none;
+  }
+  #search:focus { border-color: rgba(255,255,255,0.4); }
+  #search::placeholder { color: rgba(255,255,255,0.35); }
+  #list { flex: 1; overflow-y: auto; padding-bottom: 8px; }
+  .platform-header {
+    padding: 12px 14px 6px;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 14px;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    text-align: left;
+  }
+  .row:hover { background: rgba(255,255,255,0.05); }
+  .shape-box {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .shape { border-width: 2px; border-style: solid; }
+  .row .label {
+    flex: 1;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+  .row .dims {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.5);
+  }
+  .empty {
+    padding: 24px 14px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+  }
+</style>
+
+<div class="search-wrap">
+  <input id="search" type="text" placeholder="Search formats..." />
+</div>
+<div id="list"></div>
+
+<script>
+  // Injected at build time from src/data/platforms.ts — single source of truth.
+  const CATALOG = [{"id":"youtube","name":"YouTube","brandColor":"#FF0000","templates":[{"label":"Channel Banner","width":2560,"height":1440,"category":"cover"},{"label":"Video Thumbnail (4K)","width":3840,"height":2160,"category":"cover"},{"label":"Video Thumbnail (Min)","width":1280,"height":720,"category":"cover"},{"label":"Podcast Thumbnail","width":1280,"height":1280,"category":"cover"},{"label":"Profile Picture","width":800,"height":800,"category":"profile"},{"label":"Shorts","width":1080,"height":1920,"category":"story"},{"label":"Community Post","width":1000,"height":1000,"category":"post"}]},{"id":"instagram","name":"Instagram","brandColor":"#E1306C","templates":[{"label":"Profile Picture","width":320,"height":320,"category":"profile"},{"label":"Tall Portrait","width":1080,"height":1440,"category":"post"},{"label":"Vertical Feed","width":1080,"height":1350,"category":"post"},{"label":"Square Post","width":1080,"height":1080,"category":"post"},{"label":"Landscape Feed","width":1080,"height":566,"category":"post"},{"label":"Stories & Reels","width":1080,"height":1920,"category":"story"},{"label":"Reel Cover","width":420,"height":654,"category":"cover"}]},{"id":"x","name":"X (Twitter)","brandColor":"#FFFFFF","templates":[{"label":"Header Image","width":1500,"height":500,"category":"cover"},{"label":"Profile Picture","width":400,"height":400,"category":"profile"},{"label":"Post (Landscape)","width":1200,"height":675,"category":"post"},{"label":"Post (Vertical)","width":1080,"height":1350,"category":"post"},{"label":"Post (Square)","width":1200,"height":1200,"category":"post"},{"label":"Card Image","width":800,"height":418,"category":"ad"}]},{"id":"facebook","name":"Facebook","brandColor":"#1877F2","templates":[{"label":"Profile Picture","width":320,"height":320,"category":"profile"},{"label":"Cover (Desktop)","width":820,"height":312,"category":"cover"},{"label":"Cover (Mobile)","width":640,"height":360,"category":"cover"},{"label":"Event Cover","width":1920,"height":1005,"category":"cover"},{"label":"Group Cover","width":1640,"height":856,"category":"cover"},{"label":"Vertical Post","width":1080,"height":1350,"category":"post"},{"label":"Stories","width":1080,"height":1920,"category":"story"}]},{"id":"threads","name":"Threads","brandColor":"#FFFFFF","templates":[{"label":"Profile Picture","width":640,"height":640,"category":"profile"},{"label":"Portrait Post","width":1080,"height":1350,"category":"post"},{"label":"Square Post","width":1080,"height":1080,"category":"post"},{"label":"Landscape Post","width":1080,"height":566,"category":"post"},{"label":"Post & Video","width":1080,"height":1920,"category":"post"},{"label":"Carousel Slide","width":1080,"height":1920,"category":"post"}]},{"id":"linkedin","name":"LinkedIn","brandColor":"#2D84D7","templates":[{"label":"Profile Picture","width":400,"height":400,"category":"profile"},{"label":"Personal Cover","width":1584,"height":396,"category":"cover"},{"label":"Company Cover","width":1128,"height":191,"category":"cover"},{"label":"Event Cover","width":1776,"height":444,"category":"cover"},{"label":"Link Post / Ad","width":1200,"height":627,"category":"post"},{"label":"Article Cover","width":1920,"height":1080,"category":"cover"},{"label":"Video Thumbnail","width":1280,"height":720,"category":"cover"},{"label":"Portrait Post","width":1080,"height":1350,"category":"post"}]},{"id":"bluesky","name":"Bluesky","brandColor":"#0085FF","templates":[{"label":"Header Image","width":1500,"height":500,"category":"cover"},{"label":"Profile Picture","width":400,"height":400,"category":"profile"},{"label":"Post (Vertical)","width":1200,"height":1500,"category":"post"},{"label":"Post (Landscape)","width":1600,"height":900,"category":"post"},{"label":"Post (Square)","width":1200,"height":1200,"category":"post"}]},{"id":"tiktok","name":"TikTok","brandColor":"#EE1D52","templates":[{"label":"Video / Story","width":1080,"height":1920,"category":"story"},{"label":"Profile Picture","width":200,"height":200,"category":"profile"},{"label":"Carousel Slide","width":1080,"height":1920,"category":"post"}]},{"id":"pinterest","name":"Pinterest","brandColor":"#FF0022","templates":[{"label":"Standard Pin","width":1000,"height":1500,"category":"post"},{"label":"Square Pin","width":1000,"height":1000,"category":"post"},{"label":"Idea Pin","width":1080,"height":1920,"category":"story"},{"label":"Board Cover","width":1000,"height":1000,"category":"cover"}]},{"id":"snapchat","name":"Snapchat","brandColor":"#FFFC00","templates":[{"label":"Profile Picture","width":320,"height":320,"category":"profile"},{"label":"Snap / Story / Ad","width":1080,"height":1920,"category":"story"},{"label":"Geofilter","width":1080,"height":2340,"category":"ad"}]}];
+
+  const list = document.getElementById('list');
+  const search = document.getElementById('search');
+
+  function shapeStyle(t, color) {
+    const ratio = t.width / t.height;
+    const size = ratio > 1 ? { width: '22px', height: (22 / ratio) + 'px' } : { width: (22 * ratio) + 'px', height: '22px' };
+    return `width:${size.width};height:${size.height};border-color:${color}B8;background:${color}28;` +
+      (t.category === 'profile' ? 'border-radius:50%;' : '');
+  }
+
+  function render(query) {
+    const q = query.trim().toLowerCase();
+    list.innerHTML = '';
+    let shown = 0;
+    for (const p of CATALOG) {
+      const matches = p.templates.filter(t =>
+        !q ||
+        t.label.toLowerCase().includes(q) ||
+        p.name.toLowerCase().includes(q) ||
+        (t.width + 'x' + t.height).includes(q)
+      );
+      if (!matches.length) continue;
+      shown += matches.length;
+
+      const header = document.createElement('div');
+      header.className = 'platform-header';
+      header.textContent = p.name;
+      list.appendChild(header);
+
+      for (const t of matches) {
+        const row = document.createElement('button');
+        row.className = 'row';
+        row.innerHTML =
+          `<span class="shape-box"><span class="shape" style="${shapeStyle(t, p.brandColor)}"></span></span>` +
+          `<span class="label"></span><span class="dims">${t.width}×${t.height}</span>`;
+        row.querySelector('.label').textContent = t.label;
+        row.onclick = () => parent.postMessage({ pluginMessage: {
+          type: 'insert-frame',
+          platformName: p.name,
+          label: t.label,
+          width: t.width,
+          height: t.height,
+          brandColor: p.brandColor,
+        } }, '*');
+        list.appendChild(row);
+      }
+    }
+    if (!shown) {
+      const empty = document.createElement('div');
+      empty.className = 'empty';
+      empty.textContent = 'No formats match';
+      list.appendChild(empty);
+    }
+  }
+
+  search.addEventListener('input', () => render(search.value));
+  render('');
+</script>

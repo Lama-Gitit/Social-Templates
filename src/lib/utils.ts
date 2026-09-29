@@ -99,3 +99,13 @@ export function sanitizeSVG(svg: string): string {
         return '<svg xmlns="http://www.w3.org/2000/svg"></svg>';
     }
 }
+
+// Word-prefix search: every query word must prefix-match a word in the
+// haystack, so "x" finds "X (Twitter)" without matching every string that
+// merely contains an x. Same logic as the Figma plugin search.
+export function matchesQuery(query: string, haystack: string): boolean {
+    const tokens = (s: string) => s.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+    const queryWords = tokens(query);
+    const hayWords = tokens(haystack);
+    return queryWords.every(qw => hayWords.some(hw => hw.startsWith(qw)));
+}

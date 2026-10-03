@@ -57,15 +57,16 @@ const { renderToString } = await import('react-dom/server');
 const { StaticRouter } = await import('react-router-dom');
 const { AppRoutes } = await import('../src/App.tsx');
 const { PLATFORMS } = await import('../src/data/platforms.ts');
+const { HOME_META } = await import('../src/data/copy.ts');
+const { renderSchemaBlocks } = await import('../src/data/schema.ts');
 
 // --- 2. Routes ------------------------------------------------------------
 const ORIGIN = 'https://socialframes.app';
 
 const HOME = {
   path: '/',
-  title: 'Social Frames | Free SVG Templates for Every Social Media Platform',
-  description:
-    'Free library of copy-ready SVG templates for 10+ social media platforms. Instantly grab perfectly sized frames for Instagram Stories, YouTube Thumbnails, LinkedIn Banners, TikTok, and 45+ more formats.',
+  title: HOME_META.title,
+  description: HOME_META.description,
 };
 
 type RouteSpec = { path: string; title: string; description: string };
@@ -129,6 +130,22 @@ function buildHead(html: string, route: RouteSpec, opts: { canonical?: boolean }
     /<meta name="twitter:description" content="[^"]*"\s*\/?>/,
     `<meta name="twitter:description" content="${desc}" />`
   );
+
+  // Structured data: one FAQPage per route (plus WebApplication on home),
+  // built from the same data the page renders. Any static blocks in the shell
+  // are replaced, so there is never a homepage schema on a subpage.
+  out = out.replace(
+    /\s*<!-- Structured Data: (?:WebApplication|FAQPage) -->\s*<script type="application\/ld\+json">[\s\S]*?<\/script>/g,
+    ''
+  );
+  out = out.replace(
+    /<script type="application\/ld\+json">[\s\S]*?<\/script>/g,
+    ''
+  );
+  const schema = renderSchemaBlocks(route.path);
+  if (schema) {
+    out = out.replace('</head>', `    ${schema}\n  </head>`);
+  }
 
   return out;
 }

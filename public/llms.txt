@@ -1,0 +1,36 @@
+# Social Frames
+
+> Social Frames is a free library of copy-ready SVG frames for social media. Pick a format, copy the SVG, paste it into Figma, Sketch, or any design tool. 11 platforms, 60 formats, no signup.
+
+URL: https://socialframes.app/
+
+## What this site answers
+
+- What size is an Instagram Story? 1080 x 1920 px (9:16). Reels use the same frame.
+- What size is an Instagram post? 1080 x 1350 px (4:5) fills the most screen; 1080 x 1440 px (3:4) matches the new grid crop.
+- What size is a YouTube thumbnail? 3840 x 2160 px (4K, 16:9) is recommended; 1280 x 720 px is the accepted minimum.
+- What size is a YouTube channel banner? 2560 x 1440 px, with the safe area for text at 1546 x 423 px in the center.
+- What size is a LinkedIn banner? 1584 x 396 px personal, 1128 x 191 px company page.
+- What size is a TikTok video? 1080 x 1920 px (9:16).
+- What size is a Facebook cover photo? 820 x 312 px desktop, 640 x 360 px mobile.
+- What size is a Snapchat geofilter? 1080 x 2340 px.
+- What size is an Open Graph image? 1200 x 630 px.
+
+## Main pages
+
+- [Social Frames home](https://socialframes.app/): search all 60 formats, browse platforms, full size guide
+- [Instagram templates](https://socialframes.app/instagram-templates): story, reel, feed, profile and cover sizes
+- [YouTube templates](https://socialframes.app/youtube-templates): thumbnail, banner, shorts and podcast sizes
+- [X templates](https://socialframes.app/x-templates): header, post and card sizes
+- [Facebook templates](https://socialframes.app/facebook-templates): cover, event, group and post sizes
+- [LinkedIn templates](https://socialframes.app/linkedin-templates): banner, post and article cover sizes
+- [TikTok templates](https://socialframes.app/tiktok-templates): video, carousel and profile sizes
+- [Pinterest templates](https://socialframes.app/pinterest-templates): pin, idea pin and board cover sizes
+- [Threads templates](https://socialframes.app/threads-templates): post, carousel and profile sizes
+- [Bluesky templates](https://socialframes.app/bluesky-templates): header and post sizes
+- [Snapchat templates](https://socialframes.app/snapchat-templates): story, geofilter and profile sizes
+- [Web and Open Graph templates](https://socialframes.app/og-image-templates): OG image, favicon and touch icon sizes
+
+## How to use the frames
+
+Every frame is a plain SVG sized to the exact pixel dimensions of the target platform. Copy it from any platform page and paste it into your design tool as a frame, artboard, or selection guide. All frames are free, with no account required.

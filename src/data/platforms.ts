@@ -150,7 +150,7 @@ export const PLATFORMS: PlatformData[] = [
         bg: 'bg-blue-50',
         intro: "The universal directory. Covers here are tricky because they display differently on desktop vs. mobile.",
         metaTitle: "Facebook SVG Templates | Free Cover, Post & Story Frames",
-        metaDescription: "Free copy-ready SVG templates for Facebook. Perfectly sized frames for Covers (851x315), Event Covers (1920x1005), Posts (1080x1350), and Stories.",
+        metaDescription: "Free copy-ready SVG templates for Facebook. Perfectly sized frames for Covers (820x312), Event Covers (1920x1005), Posts (1080x1350), and Stories.",
         tips: [
             "Desktop crops top/bottom; Mobile crops sides.",
             "Keep critical text in the center of covers.",

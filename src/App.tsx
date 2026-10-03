@@ -6,6 +6,8 @@ import { NotFoundPage } from './components/NotFoundPage';
 import { AIAssistant } from './components/AIAssistant';
 import { RandomGeneratorModal } from './components/RandomGeneratorModalV2'; // v2
 import { PLATFORMS } from './data/platforms';
+import { HOME_FAQ } from './data/faq';
+import { HOME_META } from './data/copy';
 import { usePageMeta } from './hooks/usePageMeta';
 import { setAIToken } from './lib/anthropic';
 import { hexToHSL, matchesQuery, readableHSL } from './lib/utils';
@@ -288,8 +290,8 @@ function HomePage() {
   const themeHSL = '5 100% 60%';
 
   usePageMeta({
-    title: 'Social Frames | Free SVG Templates for Every Social Media Platform',
-    description: 'Free library of copy-ready SVG templates for 10+ social media platforms. Instantly grab perfectly sized frames for Instagram Stories, YouTube Thumbnails, LinkedIn Banners, TikTok, and 45+ more formats.',
+    title: HOME_META.title,
+    description: HOME_META.description,
     canonicalPath: '/',
   });
 
@@ -496,14 +498,7 @@ function HomePage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {[
-                  { q: 'What size is an Instagram Story?', a: 'Instagram Stories are 1080 x 1920 pixels with a 9:16 aspect ratio. This same vertical format is used for Instagram Reels and other full-screen mobile content.', link: '/instagram-templates' },
-                  { q: 'What size is a YouTube Thumbnail?', a: 'YouTube Thumbnails are 1280 x 720 pixels (16:9 aspect ratio). This is the recommended size for clear, high-quality thumbnails that display well on all devices.', link: '/youtube-templates' },
-                  { q: 'What size is a LinkedIn Banner?', a: 'LinkedIn personal profile banners are 1584 x 396 pixels. LinkedIn company page covers are 1128 x 191 pixels. For LinkedIn feed posts, 1080 x 1350 pixels (4:5 ratio) gets the most screen real estate.', link: '/linkedin-templates' },
-                  { q: 'What size is a TikTok video?', a: 'TikTok videos are 1080 x 1920 pixels with a 9:16 aspect ratio. This full-screen vertical format is the standard for all TikTok content including videos, ads, and stories.', link: '/tiktok-templates' },
-                  { q: 'What size is a Facebook Cover Photo?', a: 'Facebook Cover Photos are 1640 x 856 pixels on desktop. Shared images in the feed perform best at 1200 x 630 pixels. Facebook Stories use the same 1080 x 1920 format as Instagram.', link: '/facebook-templates' },
-                  { q: 'What is Social Frames?', a: 'Social Frames is a free library of copy-ready SVG frames for 10+ social media platforms, covering 45+ format sizes. Pick a platform, choose a format, and instantly copy the perfect SVG frame into Figma, Sketch, or any design tool.', link: undefined },
-                ].map(({ q, a, link }, i) => (
+                {HOME_FAQ.map(({ q, a, link }, i) => (
                   <details key={i} className="group border border-border/20 bg-white/[0.01] hover:bg-white/[0.02] transition-colors">
                     <summary className="cursor-pointer px-6 py-5 text-[11px] font-black text-white uppercase tracking-[0.05em] list-none flex justify-between items-center">
                       {q}

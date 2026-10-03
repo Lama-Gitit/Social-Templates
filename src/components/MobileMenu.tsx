@@ -32,12 +32,15 @@ export function MobileMenu({ activePlatformId, onOpenRandomGenerator, aiEnabled 
                 <span className="text-[10px] font-black uppercase tracking-[0.2em]">{isOpen ? 'Close' : 'Menu'}</span>
             </button>
 
-            {/* Full Screen Menu */}
+            {/* Full Screen Menu. When closed it must leave the tab order and the
+                accessibility tree: opacity 0 alone keeps every link focusable. */}
             <div
                 className={cn(
                     "fixed inset-0 z-40 bg-background/95 backdrop-blur-xl transition-all duration-500 md:hidden flex flex-col p-8 pt-8",
                     isOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full pointer-events-none"
                 )}
+                inert={!isOpen}
+                aria-hidden={!isOpen}
             >
 
                 <nav aria-label="Primary" className="flex-1 space-y-2 overflow-y-auto pb-32">

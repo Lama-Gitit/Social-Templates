@@ -7,7 +7,7 @@ import { AIAssistant } from './components/AIAssistant';
 import { RandomGeneratorModal } from './components/RandomGeneratorModalV2'; // v2
 import { PLATFORMS } from './data/platforms';
 import { HOME_FAQ } from './data/faq';
-import { HOME_META } from './data/copy';
+import { HOME_META, SIZE_GUIDE } from './data/copy';
 import { usePageMeta } from './hooks/usePageMeta';
 import { setAIToken } from './lib/anthropic';
 import { hexToHSL, matchesQuery, readableHSL } from './lib/utils';
@@ -281,7 +281,6 @@ function MorphingFrame() {
 function HomePage() {
   const [isRandomGeneratorOpen, setIsRandomGeneratorOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
   const makingSectionRef = useRef<HTMLElement>(null);
 
   // The homepage uses the brand accent from index.css. A darker variant here
@@ -513,20 +512,17 @@ function HomePage() {
               </div>
             </section>
 
-            {/* ── Size Guide (collapsible) ── */}
+            {/* ── Size Guide ──
+                A <details> rather than a JS toggle: its content stays in the
+                HTML, so the full table is readable by crawlers and AI tools
+                without running JavaScript. */}
             <section className="mb-20" aria-labelledby="size-guide-heading">
-              <h2 id="size-guide-heading" className="text-[11px] font-black text-white uppercase tracking-[0.15em]">
-                <button
-                  onClick={() => setSizeGuideOpen(!sizeGuideOpen)}
-                  aria-expanded={sizeGuideOpen}
-                  className={`w-full flex items-center justify-between px-0 py-5 border border-border/20 transition-all hover:bg-white/[0.02] cursor-pointer bg-transparent text-left pl-6 ${sizeGuideOpen ? 'border-b-0' : ''}`}
-                >
-                  <span>Full Size Guide: All Platforms</span>
-                  <span aria-hidden="true" className={`text-white/60 text-lg font-bold transition-transform duration-200 ${sizeGuideOpen ? 'rotate-45' : ''}`}>+</span>
-                </button>
-              </h2>
-              {sizeGuideOpen && (
-                <div className="border border-border/20 border-t-0 p-6 animate-in fade-in duration-200">
+              <details className="group border border-border/20">
+                <summary className="cursor-pointer px-6 py-5 flex items-center justify-between list-none hover:bg-white/[0.02] transition-all">
+                  <h2 id="size-guide-heading" className="text-[11px] font-black text-white uppercase tracking-[0.15em]">Full Size Guide: All Platforms</h2>
+                  <span aria-hidden="true" className="text-white/60 text-lg font-bold group-open:rotate-45 transition-transform duration-200">+</span>
+                </summary>
+                <div className="border-t border-border/20 p-6">
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                       <thead>
@@ -538,37 +534,19 @@ function HomePage() {
                         </tr>
                       </thead>
                       <tbody className="text-[10px] font-bold text-white/70">
-                        {[
-                          ['Instagram', 'instagram-templates', 'Story / Reel', '1080 × 1920', '9:16'],
-                          ['Instagram', 'instagram-templates', 'Feed Post', '1080 × 1350', '4:5'],
-                          ['Instagram', 'instagram-templates', 'Square Post', '1080 × 1080', '1:1'],
-                          ['YouTube', 'youtube-templates', 'Thumbnail', '1280 × 720', '16:9'],
-                          ['YouTube', 'youtube-templates', 'Channel Banner', '2560 × 1440', '16:9'],
-                          ['TikTok', 'tiktok-templates', 'Video', '1080 × 1920', '9:16'],
-                          ['LinkedIn', 'linkedin-templates', 'Profile Banner', '1584 × 396', '4:1'],
-                          ['LinkedIn', 'linkedin-templates', 'Post', '1080 × 1350', '4:5'],
-                          ['Facebook', 'facebook-templates', 'Cover Photo', '1640 × 856', '~2:1'],
-                          ['Facebook', 'facebook-templates', 'Shared Image', '1200 × 630', '~2:1'],
-                          ['X (Twitter)', 'x-templates', 'Post', '1080 × 1350', '4:5'],
-                          ['X (Twitter)', 'x-templates', 'Header', '1500 × 500', '3:1'],
-                          ['Pinterest', 'pinterest-templates', 'Pin', '1000 × 1500', '2:3'],
-                          ['Snapchat', 'snapchat-templates', 'Story / Ad', '1080 × 1920', '9:16'],
-                          ['Threads', 'threads-templates', 'Post', '1080 × 1920', '9:16'],
-                          ['Bluesky', 'bluesky-templates', 'Post', '1080 × 1080', '1:1'],
-                          ['Web', 'og-image-templates', 'Open Graph', '1200 × 630', '1.91:1'],
-                        ].map(([platform, slug, format, dimensions, ratio], i) => (
-                          <tr key={i} className="border-b border-white/[0.07] hover:bg-white/[0.02] transition-colors">
-                            <td className="py-2.5 pr-4"><Link to={`/${slug}`} className="text-white/60 hover:text-primary-text transition-colors uppercase tracking-wider">{platform}</Link></td>
-                            <td className="py-2.5 pr-4 uppercase tracking-wider">{format}</td>
-                            <td className="py-2.5 pr-4 text-primary-text font-black tracking-[0.05em]">{dimensions}</td>
-                            <td className="py-2.5 uppercase tracking-wider text-white/60">{ratio}</td>
+                        {SIZE_GUIDE.map((row, i) => (
+                          <tr key={`${row.slug}-${row.format}-${i}`} className="border-b border-white/[0.07] hover:bg-white/[0.02] transition-colors">
+                            <td className="py-2.5 pr-4"><Link to={`/${row.slug}`} className="text-white/60 hover:text-primary-text transition-colors uppercase tracking-wider">{row.platform}</Link></td>
+                            <td className="py-2.5 pr-4 uppercase tracking-wider">{row.format}</td>
+                            <td className="py-2.5 pr-4 text-primary-text font-black tracking-[0.05em]">{row.dimensions}</td>
+                            <td className="py-2.5 uppercase tracking-wider text-white/60">{row.ratio}</td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
                 </div>
-              )}
+              </details>
             </section>
 
             {/* ── Footer Nav ── */}

@@ -3,14 +3,13 @@ import { BrowserRouter, Routes, Route, useParams, Link } from 'react-router-dom'
 import { Layout } from './components/Layout';
 import { TemplateCard } from './components/TemplateCard';
 import { NotFoundPage } from './components/NotFoundPage';
-import { TipCallout } from './components/TipCallout';
 import { AIAssistant } from './components/AIAssistant';
 import { RandomGeneratorModal } from './components/RandomGeneratorModalV2'; // v2
 import { PLATFORMS } from './data/platforms';
 import { usePageMeta } from './hooks/usePageMeta';
 import { setAIToken } from './lib/anthropic';
 import { hexToHSL, matchesQuery, readableHSL } from './lib/utils';
-import { ChevronDown, Search } from 'lucide-react';
+import { ChevronDown, Lightbulb, Search } from 'lucide-react';
 
 // Flat list of all templates across all platforms for the "What are you making?" section
 const ALL_TEMPLATES = PLATFORMS.flatMap(p =>
@@ -67,18 +66,6 @@ function PlatformPage() {
     [platform]
   );
 
-  // Stable tip per platform. A Math.random() pick would differ between the
-  // prerendered HTML and the client render, which breaks hydration. Hashing
-  // the slug gives the same index on both sides and stays varied per platform.
-  const tipIndex = useMemo(() => {
-    if (!platform || platform.tips.length === 0) return 0;
-    let h = 0;
-    for (let i = 0; i < platform.slug.length; i++) {
-      h = (h * 31 + platform.slug.charCodeAt(i)) >>> 0;
-    }
-    return h % platform.tips.length;
-  }, [platform]);
-
   usePageMeta({
     title: platform?.metaTitle || 'Social Frames',
     description: platform?.metaDescription || '',
@@ -107,7 +94,7 @@ function PlatformPage() {
       >
         <div className="flex flex-col gap-12">
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-            <header className="platform-header flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12 pb-8 md:pb-12 border-b border-border/40">
+            <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12 pb-8 md:pb-12 border-b border-border/40">
               <div className="flex items-center gap-6 md:gap-10">
                 <div className="p-4 md:p-8 bg-card border border-border/40 rounded-sm">
                   <platform.icon size={32} className="md:w-14 md:h-14" style={{ color: 'hsl(var(--primary))' }} />
@@ -119,18 +106,14 @@ function PlatformPage() {
               </div>
             </header>
 
-            {/* Design tip callout */}
-            {platform.tips.length > 0 && (
-              <TipCallout>{platform.tips[tipIndex]}</TipCallout>
-            )}
-
-            <section className="platform-guide grid md:grid-cols-4 gap-12 mb-16" aria-labelledby="platform-guide-heading">
+            <section className="grid md:grid-cols-4 gap-12 mb-16" aria-labelledby="platform-guide-heading">
               <div className="md:col-span-3">
                 <h2 id="platform-guide-heading" className="text-[10px] font-black mb-6 uppercase tracking-[0.3em] text-primary-text">Platform Guide</h2>
                 <p className="text-foreground text-3xl leading-tight font-black tracking-tighter uppercase">{platform.intro}</p>
               </div>
-              <aside className="design-tips bg-card/50 p-8 border border-border/40 rounded" aria-labelledby="design-tips-heading">
-                <h3 id="design-tips-heading" className="text-[9px] font-black text-muted-foreground mb-6 flex items-center gap-2 uppercase tracking-[0.3em]">
+              <aside className="bg-card/50 p-8 border border-border/40 border-l-2 border-l-primary rounded" aria-labelledby="design-tips-heading">
+                <h3 id="design-tips-heading" className="text-[10px] font-black mb-6 flex items-center gap-2.5 uppercase tracking-[0.3em] text-primary-text">
+                  <Lightbulb size={14} aria-hidden="true" className="flex-shrink-0" />
                   Design Tips
                 </h3>
                 <ul className="space-y-4">
@@ -144,7 +127,7 @@ function PlatformPage() {
               </aside>
             </section>
 
-            <section className="template-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" aria-label={`${platform.name} templates`}>
+            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" aria-label={`${platform.name} templates`}>
               {platform.templates.map((template) => (
                 <TemplateCard
                   key={`${template.width}x${template.height}-${template.label}`}
@@ -156,8 +139,8 @@ function PlatformPage() {
             </section>
 
             {platform.geoCopy && (
-              <section className="mt-16 pt-12 border-t border-border/20">
-                <h2 className="text-[10px] font-black mb-4 uppercase tracking-[0.3em] text-white/60">{platform.name} Image Sizes & Dimensions</h2>
+              <section className="mt-16 pt-12 border-t border-border/20" aria-labelledby="sizes-heading">
+                <h2 id="sizes-heading" className="text-[10px] font-black mb-4 uppercase tracking-[0.3em] text-white/60">{platform.name} Image Sizes & Dimensions</h2>
                 <p className="text-white/60 text-sm leading-relaxed max-w-3xl">
                   {platform.geoCopy}
                 </p>
@@ -165,8 +148,8 @@ function PlatformPage() {
             )}
 
             {platform.faqs.length > 0 && (
-              <section className="mt-16 pt-12 border-t border-border/20">
-                <h2 className="text-lg font-black text-white uppercase tracking-tighter mb-8">{platform.name} FAQ</h2>
+              <section className="mt-16 pt-12 border-t border-border/20" aria-labelledby="platform-faq-heading">
+                <h2 id="platform-faq-heading" className="text-lg font-black text-white uppercase tracking-tighter mb-8">{platform.name} FAQ</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {platform.faqs.map(({ q, a }, i) => (
                     <details key={i} className="group border border-border/20 rounded-sm bg-card/20 hover:bg-card/30 transition-colors">
@@ -181,14 +164,14 @@ function PlatformPage() {
               </section>
             )}
 
-            <nav className="mt-16 pt-12 border-t border-border/20">
-              <h3 id="more-platforms-heading" className="text-[10px] font-black text-white/60 uppercase tracking-[0.3em] mb-6">More Platforms</h3>
+            <nav className="mt-16 pt-12 border-t border-border/20" aria-labelledby="more-platforms-heading">
+              <h2 id="more-platforms-heading" className="text-[10px] font-black text-white/60 uppercase tracking-[0.3em] mb-6">More Platforms</h2>
               <div className="flex flex-wrap gap-3">
                 {PLATFORMS.filter(p => p.id !== platform.id).map(p => (
                   <Link
                     key={p.id}
                     to={`/${p.slug}`}
-                    className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60 hover:text-white px-4 py-2 border border-border/30 hover:border-border/60 rounded-sm transition-colors"
+                    className="inline-flex items-center min-h-11 text-[9px] font-black uppercase tracking-[0.2em] text-white/60 hover:text-white px-4 py-2 border border-border/30 hover:border-border/60 rounded-sm transition-colors"
                   >
                     {p.name}
                   </Link>
@@ -376,8 +359,9 @@ function HomePage() {
               className="mb-20 md:mb-24"
               ref={makingSectionRef}
               id="making"
+              aria-labelledby="making-heading"
             >
-              <h2 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter mb-8">What are you making?</h2>
+              <h2 id="making-heading" className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter mb-8">What are you making?</h2>
 
               {/* Search input */}
               <div className="relative mb-6 max-w-xl">
@@ -461,15 +445,15 @@ function HomePage() {
               ) : isSearching ? (
                 <div className="border border-border/30 px-6 py-10 text-center">
                   <p className="text-[11px] font-bold text-white/60 uppercase tracking-wider">No templates match "{searchQuery}"</p>
-                  <p className="text-[10px] text-white/60 mt-2">Try a different term — like a platform name, format, or size</p>
+                  <p className="text-[10px] text-white/60 mt-2">Try a different term, like a platform name, format, or size</p>
                 </div>
               ) : null}
             </section>
 
             {/* ── Browse by Platform ── */}
-            <section className="mb-24">
+            <section className="mb-24" aria-labelledby="browse-heading">
               <div className="flex items-baseline justify-between mb-8 pb-6 border-b border-border/20">
-                <h2 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter">Browse by Platform</h2>
+                <h2 id="browse-heading" className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter">Browse by Platform</h2>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4">
@@ -503,10 +487,10 @@ function HomePage() {
             </section>
 
             {/* ── FAQ Section ── */}
-            <section className="mb-24">
+            <section className="mb-24" aria-labelledby="faq-heading">
               <div className="flex items-baseline justify-between mb-8 pb-6 border-b border-border/20">
                 <div>
-                  <h2 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter mb-2">Frequently Asked Questions</h2>
+                  <h2 id="faq-heading" className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter mb-2">Frequently Asked Questions</h2>
                   <p className="text-[9px] font-black text-white/60 uppercase tracking-[0.3em]">Common questions about sizes & templates</p>
                 </div>
               </div>
@@ -527,7 +511,7 @@ function HomePage() {
                     </summary>
                     <p className="px-6 pb-5 text-[13px] text-white/60 leading-[1.7]">
                       {a}
-                      {link && <Link to={link} className="block mt-2 text-primary-text hover:text-primary-text text-[10px] font-black uppercase tracking-[0.15em] transition-colors">Browse templates →</Link>}
+                      {link && <Link to={link} className="inline-flex items-center min-h-11 mt-2 text-primary-text hover:text-primary-text text-[10px] font-black uppercase tracking-[0.15em] transition-colors">Browse templates →</Link>}
                     </p>
                   </details>
                 ))}
@@ -535,14 +519,17 @@ function HomePage() {
             </section>
 
             {/* ── Size Guide (collapsible) ── */}
-            <section className="mb-20">
-              <button
-                onClick={() => setSizeGuideOpen(!sizeGuideOpen)}
-                className={`w-full flex items-center justify-between px-6 py-5 border border-border/20 transition-all hover:bg-white/[0.02] cursor-pointer bg-transparent text-left ${sizeGuideOpen ? 'border-b-0' : ''}`}
-              >
-                <h3 className="text-[11px] font-black text-white uppercase tracking-[0.15em]">Full Size Guide — All Platforms</h3>
-                <span className={`text-white/60 text-lg font-bold transition-transform duration-200 ${sizeGuideOpen ? 'rotate-45' : ''}`}>+</span>
-              </button>
+            <section className="mb-20" aria-labelledby="size-guide-heading">
+              <h2 id="size-guide-heading" className="text-[11px] font-black text-white uppercase tracking-[0.15em]">
+                <button
+                  onClick={() => setSizeGuideOpen(!sizeGuideOpen)}
+                  aria-expanded={sizeGuideOpen}
+                  className={`w-full flex items-center justify-between px-0 py-5 border border-border/20 transition-all hover:bg-white/[0.02] cursor-pointer bg-transparent text-left pl-6 ${sizeGuideOpen ? 'border-b-0' : ''}`}
+                >
+                  <span>Full Size Guide: All Platforms</span>
+                  <span aria-hidden="true" className={`text-white/60 text-lg font-bold transition-transform duration-200 ${sizeGuideOpen ? 'rotate-45' : ''}`}>+</span>
+                </button>
+              </h2>
               {sizeGuideOpen && (
                 <div className="border border-border/20 border-t-0 p-6 animate-in fade-in duration-200">
                   <div className="overflow-x-auto">
@@ -590,14 +577,14 @@ function HomePage() {
             </section>
 
             {/* ── Footer Nav ── */}
-            <nav className="pt-8 border-t border-border/20">
+            <nav className="pt-8 border-t border-border/20" aria-labelledby="all-platforms-heading">
               <h2 id="all-platforms-heading" className="text-[9px] font-black text-white/60 uppercase tracking-[0.2em] mb-4">All Platforms</h2>
               <div className="flex flex-wrap gap-2">
                 {PLATFORMS.map(p => (
                   <Link
                     key={p.id}
                     to={`/${p.slug}`}
-                    className="text-[9px] font-black uppercase tracking-[0.15em] text-white/60 hover:text-white px-3.5 py-2 border border-white/[0.12] hover:border-white/30 transition-all"
+                    className="inline-flex items-center min-h-11 text-[9px] font-black uppercase tracking-[0.15em] text-white/60 hover:text-white px-3.5 py-2 border border-white/[0.12] hover:border-white/30 transition-all"
                   >
                     {p.name}
                   </Link>

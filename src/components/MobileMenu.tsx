@@ -40,7 +40,7 @@ export function MobileMenu({ activePlatformId, onOpenRandomGenerator, aiEnabled 
                 )}
             >
 
-                <nav className="flex-1 space-y-2 overflow-y-auto pb-32">
+                <nav aria-label="Primary" className="flex-1 space-y-2 overflow-y-auto pb-32">
 
 
                     <p className="text-sm font-black text-white uppercase tracking-[0.4em] mb-8 border-b border-white/5 pb-4">Platforms</p>
@@ -75,7 +75,7 @@ export function MobileMenu({ activePlatformId, onOpenRandomGenerator, aiEnabled 
                         <Link
                             to="/"
                             onClick={() => setIsOpen(false)}
-                            className="flex-1 bg-white/5 border border-white/5 py-4 rounded-sm flex flex-col items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-white transition-all active:scale-95"
+                            className="flex-1 bg-white/5 border border-white/5 min-h-14 py-4 rounded-sm flex flex-col items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-white transition-all active:scale-95"
                         >
                             <LayoutGrid size={16} />
                             Studio
@@ -87,7 +87,7 @@ export function MobileMenu({ activePlatformId, onOpenRandomGenerator, aiEnabled 
                         <button
                             onClick={aiEnabled ? handleGenerator : undefined}
                             className={cn(
-                                "flex-1 bg-white/5 border border-white/5 py-4 rounded-sm flex flex-col items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all",
+                                "flex-1 bg-white/5 border border-white/5 min-h-14 py-4 rounded-sm flex flex-col items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all",
                                 aiEnabled
                                     ? "text-white/60 hover:text-white active:scale-95 cursor-pointer"
                                     : "text-white/60 cursor-default"

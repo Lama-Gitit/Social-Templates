@@ -2,13 +2,13 @@
 # Phase 1 acceptance check. Run against scripts/serve-static.mts, which mirrors
 # vercel.json (cleanUrls, trailingSlash: false, /assets immutable).
 #
-#   node scripts/serve-static.mts 5199 dist &
+#   node scripts/serve-static.mts 8115 dist &
 #   bash scripts/check-phase1.sh [base-url]
 #
 # Exit 0 means every route serves its own HTML with the right head.
 
 set -u
-BASE="${1:-http://127.0.0.1:5199}"
+BASE="${1:-http://127.0.0.1:8115}"
 pass=0
 fail=0
 

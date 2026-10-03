@@ -15,17 +15,17 @@ export function Sidebar({ className, activePlatformId, onOpenRandomGenerator, ai
     return (
         <div className={cn("flex flex-col h-full bg-background text-foreground w-64 p-4 border-r border-border/40", className)}>
             <div className="mb-12 p-3">
-                <Link to="/" aria-label="Go to homepage" className="block">
+                <Link to="/" className="block">
                     <SocialFramesLogo />
                 </Link>
                 <p className="text-[9px] text-muted-foreground uppercase tracking-[0.3em] font-black mt-3">SVG Templates for Social Content</p>
             </div>
 
-            <nav className="flex-1 space-y-1 overflow-y-auto">
+            <nav aria-label="Primary" className="flex-1 space-y-1 overflow-y-auto">
                 <Link
                     to="/"
                     className={cn(
-                        "flex items-center w-full p-2.5 rounded transition-all duration-200 group text-[10px] font-black uppercase tracking-widest",
+                        "flex items-center w-full min-h-11 px-2.5 py-2 rounded transition-all duration-200 group text-[10px] font-black uppercase tracking-widest",
                         activePlatformId === null
                             ? "bg-foreground text-background"
                             : "text-muted-foreground hover:text-foreground hover:bg-white/5"
@@ -44,7 +44,7 @@ export function Sidebar({ className, activePlatformId, onOpenRandomGenerator, ai
                         key={platform.id}
                         to={`/${platform.slug}`}
                         className={cn(
-                            "flex items-center w-full p-3 rounded-sm transition-all duration-300 group text-[9px] font-black uppercase tracking-[0.2em] mb-1",
+                            "flex items-center w-full min-h-11 px-3 py-2 rounded-sm transition-all duration-300 group text-[9px] font-black uppercase tracking-[0.2em] mb-1",
                             activePlatformId === platform.id
                                 ? "bg-primary/10 border border-primary/20 text-foreground"
                                 : "text-muted-foreground hover:text-foreground hover:bg-white/5 border border-transparent"
@@ -67,7 +67,7 @@ export function Sidebar({ className, activePlatformId, onOpenRandomGenerator, ai
                 <button
                     onClick={aiEnabled ? onOpenRandomGenerator : undefined}
                     className={cn(
-                        "flex items-center w-full p-2.5 rounded transition-all duration-200 group text-[10px] font-black uppercase tracking-widest",
+                        "flex items-center w-full min-h-11 px-2.5 py-2 rounded transition-all duration-200 group text-[10px] font-black uppercase tracking-widest",
                         aiEnabled
                             ? "text-muted-foreground hover:text-foreground hover:bg-white/5 cursor-pointer"
                             : "text-muted-foreground cursor-default"

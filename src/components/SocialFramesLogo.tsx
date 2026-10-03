@@ -30,6 +30,7 @@ export function SocialFramesLogo() {
 
     return (
         <motion.div
+            role="img"
             aria-label="Social Frames"
             className="w-full"
             initial="rest"

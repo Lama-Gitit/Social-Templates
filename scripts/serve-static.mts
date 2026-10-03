@@ -13,6 +13,7 @@
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, normalize } from 'node:path';
+import { gzipSync } from 'node:zlib';
 
 const port = Number(process.argv[2] || 5199);
 const root = normalize(process.argv[3] || 'dist');
@@ -44,9 +45,21 @@ const server = createServer(async (req, res) => {
   const url = new URL(req.url || '/', `http://localhost:${port}`);
   const pathname = decodeURIComponent(url.pathname);
 
-  const send = (status: number, body: Buffer | string, type = 'text/html; charset=utf-8', extra: Record<string, string> = {}) => {
+  // Vercel serves compressed responses. Without this, a Lighthouse run against
+  // the local preview measures uncompressed bytes and reports a fake slow LCP,
+  // so compress the compressible types here too.
+  const COMPRESSIBLE = /\.(html|js|css|svg|json|txt|xml|webmanifest)$/;
+
+  const send = (status: number, body: Buffer | string, type = 'text/html; charset=utf-8', extra: Record<string, string> = {}, filePath = '') => {
+    const buf = Buffer.isBuffer(body) ? body : Buffer.from(body);
+    const wantsGzip = (req.headers['accept-encoding'] || '').includes('gzip');
+    if (wantsGzip && COMPRESSIBLE.test(filePath || pathname) && buf.length > 512) {
+      const gz = gzipSync(buf);
+      res.writeHead(status, { 'Content-Type': type, 'Content-Encoding': 'gzip', 'Vary': 'Accept-Encoding', ...extra });
+      return res.end(gz);
+    }
     res.writeHead(status, { 'Content-Type': type, ...extra });
-    res.end(body);
+    res.end(buf);
   };
 
   // Trailing slash (except root) redirects away, like trailingSlash: false.
@@ -73,14 +86,14 @@ const server = createServer(async (req, res) => {
       if (pathname.startsWith('/assets/')) {
         headers['Cache-Control'] = 'public, max-age=31536000, immutable';
       }
-      return send(200, body, type, headers);
+      return send(200, body, type, headers, file);
     }
   }
 
   // Anything unknown gets the real 404 page, with a real 404 status.
   const notFound = join(root, '404.html');
   if (await exists(notFound)) {
-    return send(404, await readFile(notFound));
+    return send(404, await readFile(notFound), 'text/html; charset=utf-8', {}, notFound);
   }
   return send(404, 'not found', 'text/plain');
 });

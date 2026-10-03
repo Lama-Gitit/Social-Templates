@@ -9,7 +9,10 @@
     "build:prerender": "tsx --tsconfig tsconfig.app.json scripts/prerender.mts",
     "lint": "eslint .",
     "build:figma": "tsx scripts/build-figma-plugin.mts",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:consistency": "tsx --tsconfig tsconfig.app.json scripts/check-consistency.mts",
+    "check:phase1": "bash scripts/check-phase1.sh",
+    "build:touch-icon": "tsx scripts/build-touch-icon.mts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.87.0",

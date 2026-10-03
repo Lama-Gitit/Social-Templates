@@ -244,36 +244,36 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                 <div className="px-8 py-6 border-b border-border/20 bg-card/30">
                     <div className="flex justify-between items-center mb-6">
                         <div className="flex items-center gap-6">
-                            <div className="p-3 bg-primary/10 border border-primary/20 rounded-sm text-primary">
+                            <div className="p-3 bg-primary/10 border border-primary/20 rounded-sm text-primary-text">
                                 <Shuffle size={24} />
                             </div>
                             <div>
                                 <h3 className="text-2xl font-black text-white uppercase tracking-tighter leading-none mb-2">Neural Template Generator</h3>
                                 <div className="flex items-center gap-3">
-                                    <span className="text-[9px] px-2 py-0.5 rounded-sm bg-primary/20 border border-primary/30 text-primary uppercase font-black tracking-widest">
+                                    <span className="text-[9px] px-2 py-0.5 rounded-sm bg-primary/20 border border-primary/30 text-primary-text uppercase font-black tracking-widest">
                                         {Math.max(0, 5 - usage.dailyCount)} CYCLES REMAINING
                                     </span>
                                 </div>
                             </div>
                         </div>
-                        <button onClick={onClose} aria-label="Close generator" className="p-2 text-white/40 hover:bg-white/5 hover:text-white rounded-full transition-all duration-300 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"><X size={24} /></button>
+                        <button onClick={onClose} aria-label="Close generator" className="p-2 text-white/60 hover:bg-white/5 hover:text-white rounded-full transition-all duration-300 focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"><X size={24} /></button>
                     </div>
 
                     {/* Tabs */}
                     <div className="flex gap-8">
                         <button
                             onClick={() => setActiveTab('generate')}
-                            className={`pb-3 text-[10px] font-black uppercase tracking-[0.4em] transition-all relative ${activeTab === 'generate' ? 'text-primary' : 'text-white/40 hover:text-white'}`}
+                            className={`pb-3 text-[10px] font-black uppercase tracking-[0.4em] transition-all relative ${activeTab === 'generate' ? 'text-primary-text' : 'text-white/60 hover:text-white'}`}
                         >
                             Generation Core
-                            {activeTab === 'generate' && <div className="absolute bottom-0 left-0 w-full h-[2px] bg-primary shadow-[0_0_10px_hsla(var(--primary),0.5)]" />}
+                            {activeTab === 'generate' && <div className="absolute bottom-0 left-0 w-full h-[2px] bg-primary shadow-[0_0_10px_hsl(var(--primary) / 0.5)]" />}
                         </button>
                         <button
                             onClick={() => setActiveTab('history')}
-                            className={`pb-3 text-[10px] font-black uppercase tracking-[0.4em] transition-all relative ${activeTab === 'history' ? 'text-primary' : 'text-white/40 hover:text-white'}`}
+                            className={`pb-3 text-[10px] font-black uppercase tracking-[0.4em] transition-all relative ${activeTab === 'history' ? 'text-primary-text' : 'text-white/60 hover:text-white'}`}
                         >
                             Archive {history.length > 0 && `[${history.length}]`}
-                            {activeTab === 'history' && <div className="absolute bottom-0 left-0 w-full h-[2px] bg-primary shadow-[0_0_10px_hsla(var(--primary),0.5)]" />}
+                            {activeTab === 'history' && <div className="absolute bottom-0 left-0 w-full h-[2px] bg-primary shadow-[0_0_10px_hsl(var(--primary) / 0.5)]" />}
                         </button>
                     </div>
                 </div>
@@ -284,11 +284,11 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                         <div className="space-y-8">
                             {history.length === 0 ? (
                                 <div className="text-center py-32">
-                                    <div className="w-24 h-24 bg-card border border-border/40 rounded-sm flex items-center justify-center mx-auto mb-6 text-white/10">
+                                    <div className="w-24 h-24 bg-card border border-border/40 rounded-sm flex items-center justify-center mx-auto mb-6 text-white/50">
                                         <Shuffle size={48} />
                                     </div>
                                     <h4 className="text-white font-black uppercase tracking-tight mb-2">Archive Empty</h4>
-                                    <p className="text-white/50 text-[10px] uppercase tracking-widest">Execute a generation cycle to populate the archive.</p>
+                                    <p className="text-white/60 text-[10px] uppercase tracking-widest">Execute a generation cycle to populate the archive.</p>
                                     <button
                                         onClick={() => setActiveTab('generate')}
                                         className="mt-8 px-8 py-3 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-sm text-[10px] font-black uppercase tracking-[0.3em] transition-all"
@@ -302,8 +302,8 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                                         <div key={res.id} className="bg-card/30 p-5 rounded-sm border border-border/20 hover:border-primary/40 transition-all duration-500 group">
                                             <div className="flex justify-between items-start mb-4">
                                                 <div>
-                                                    <h4 className="font-black text-white text-[11px] uppercase tracking-tight truncate pr-2 group-hover:text-primary transition-colors">{res.label}</h4>
-                                                    <p className="text-[8px] text-white/50 uppercase tracking-[0.3em] mt-1">{res.platform}</p>
+                                                    <h4 className="font-black text-white text-[11px] uppercase tracking-tight truncate pr-2 group-hover:text-primary-text transition-colors">{res.label}</h4>
+                                                    <p className="text-[8px] text-white/60 uppercase tracking-[0.3em] mt-1">{res.platform}</p>
                                                 </div>
                                             </div>
                                             <div className="bg-background border border-border/40 rounded-sm mb-5 overflow-hidden flex items-center justify-center p-6 relative aspect-[4/3] group-hover:border-primary/20 transition-all duration-700">
@@ -320,11 +320,11 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                                             </div>
                                             <button
                                                 onClick={() => copyToClipboard(res.svg, res.label)}
-                                                className="w-full py-4 bg-primary/5 hover:bg-primary/10 text-primary text-[9px] font-black uppercase tracking-[0.4em] rounded-sm border border-primary/20 flex items-center justify-center gap-3 transition-all active:scale-95"
+                                                className="w-full py-4 bg-primary/5 hover:bg-primary/10 text-primary-text text-[9px] font-black uppercase tracking-[0.4em] rounded-sm border border-primary/20 flex items-center justify-center gap-3 transition-all active:scale-95"
                                             >
                                                 <Copy size={12} /> Copy SVG Frame
                                             </button>
-                                            <div className="mt-4 text-[8px] text-white/40 border-t border-border/10 pt-4 flex justify-between uppercase tracking-[0.2em] font-black">
+                                            <div className="mt-4 text-[8px] text-white/60 border-t border-border/10 pt-4 flex justify-between uppercase tracking-[0.2em] font-black">
                                                 <span>{res.date.split(',')[0]}</span>
                                                 <span>{res.date.split(',')[1]}</span>
                                             </div>
@@ -340,17 +340,17 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                                 <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
                                     <div className="text-center">
                                         <h2 className="text-3xl font-black text-white uppercase tracking-tighter mb-4">01. Choose Platform</h2>
-                                        <p className="text-[10px] text-white/55 uppercase tracking-[0.4em]">Select target system environment</p>
+                                        <p className="text-[10px] text-white/60 uppercase tracking-[0.4em]">Select target system environment</p>
                                     </div>
                                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
                                         {PLATFORMS.map(p => (
                                             <button
                                                 key={p.id}
                                                 onClick={() => { setSelectedPlatform(p); setStep(2); }}
-                                                className="flex flex-col items-center gap-4 p-8 rounded-sm border border-border/20 bg-card/20 hover:border-primary/50 hover:bg-card/40 hover:shadow-[0_0_40px_-10px_hsla(var(--primary),0.3)] transition-all duration-500 group"
+                                                className="flex flex-col items-center gap-4 p-8 rounded-sm border border-border/20 bg-card/20 hover:border-primary/50 hover:bg-card/40 hover:shadow-[0_0_40px_-10px_hsl(var(--primary) / 0.3)] transition-all duration-500 group"
                                             >
                                                 <p.icon size={32} style={{ color: p.color }} className="group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 opacity-60 group-hover:opacity-100" />
-                                                <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] group-hover:text-white transition-colors">{p.name}</span>
+                                                <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.3em] group-hover:text-white transition-colors">{p.name}</span>
                                             </button>
                                         ))}
                                     </div>
@@ -360,7 +360,7 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                             {/* STEP 2: Format */}
                             {step === 2 && selectedPlatform && (
                                 <div className="space-y-12 max-w-4xl mx-auto relative animate-in fade-in slide-in-from-bottom-4 duration-700">
-                                    <button onClick={() => setStep(1)} className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-white/50 hover:text-primary transition-all duration-300">
+                                    <button onClick={() => setStep(1)} className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-white/60 hover:text-primary-text transition-all duration-300">
                                         <ArrowLeft size={14} /> Back to Systems
                                     </button>
 
@@ -369,40 +369,40 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                                             <selectedPlatform.icon size={32} style={{ color: selectedPlatform.color }} />
                                         </div>
                                         <h2 className="text-3xl font-black text-white uppercase tracking-tighter mb-4">02. Geometric Format</h2>
-                                        <p className="text-[10px] text-white/55 uppercase tracking-[0.4em]">Optimizing for {selectedPlatform.name} logic</p>
+                                        <p className="text-[10px] text-white/60 uppercase tracking-[0.4em]">Optimizing for {selectedPlatform.name} logic</p>
                                     </div>
 
                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                                         <button
                                             onClick={() => setSelectedType('vertical')}
-                                            className={`p-10 border rounded-sm flex flex-col items-center gap-8 transition-all duration-500 group ${selectedType === 'vertical' ? 'border-primary bg-primary/5 shadow-[0_0_40px_-5px_hsla(var(--primary),0.2)]' : 'border-border/20 bg-card/10 hover:border-border/60 hover:bg-card/20'}`}
+                                            className={`p-10 border rounded-sm flex flex-col items-center gap-8 transition-all duration-500 group ${selectedType === 'vertical' ? 'border-primary bg-primary/5 shadow-[0_0_40px_-5px_hsl(var(--primary) / 0.2)]' : 'border-border/20 bg-card/10 hover:border-border/60 hover:bg-card/20'}`}
                                         >
                                             <div className={`w-12 h-16 rounded-sm border transition-all duration-500 ${selectedType === 'vertical' ? 'bg-primary/20 border-primary' : 'bg-white/5 border-white/10 group-hover:border-white/30'}`}></div>
                                             <div className="text-center">
-                                                <span className={`block font-black uppercase tracking-[0.3em] text-[11px] mb-2 ${selectedType === 'vertical' ? 'text-primary' : 'text-white/60'}`}>Vertical</span>
-                                                <span className="text-[9px] font-black text-white/45 uppercase tracking-[0.2em]">4:5 Portrait</span>
+                                                <span className={`block font-black uppercase tracking-[0.3em] text-[11px] mb-2 ${selectedType === 'vertical' ? 'text-primary-text' : 'text-white/60'}`}>Vertical</span>
+                                                <span className="text-[9px] font-black text-white/60 uppercase tracking-[0.2em]">4:5 Portrait</span>
                                             </div>
                                         </button>
 
                                         <button
                                             onClick={() => setSelectedType('square')}
-                                            className={`p-10 border rounded-sm flex flex-col items-center gap-8 transition-all duration-500 group ${selectedType === 'square' ? 'border-primary bg-primary/5 shadow-[0_0_40px_-5px_hsla(var(--primary),0.2)]' : 'border-border/20 bg-card/10 hover:border-border/60 hover:bg-card/20'}`}
+                                            className={`p-10 border rounded-sm flex flex-col items-center gap-8 transition-all duration-500 group ${selectedType === 'square' ? 'border-primary bg-primary/5 shadow-[0_0_40px_-5px_hsl(var(--primary) / 0.2)]' : 'border-border/20 bg-card/10 hover:border-border/60 hover:bg-card/20'}`}
                                         >
                                             <div className={`w-14 h-14 rounded-sm border transition-all duration-500 ${selectedType === 'square' ? 'bg-primary/20 border-primary' : 'bg-white/5 border-white/10 group-hover:border-white/30'}`}></div>
                                             <div className="text-center">
-                                                <span className={`block font-black uppercase tracking-[0.3em] text-[11px] mb-2 ${selectedType === 'square' ? 'text-primary' : 'text-white/60'}`}>Square</span>
-                                                <span className="text-[9px] font-black text-white/45 uppercase tracking-[0.2em]">1:1 Classic</span>
+                                                <span className={`block font-black uppercase tracking-[0.3em] text-[11px] mb-2 ${selectedType === 'square' ? 'text-primary-text' : 'text-white/60'}`}>Square</span>
+                                                <span className="text-[9px] font-black text-white/60 uppercase tracking-[0.2em]">1:1 Classic</span>
                                             </div>
                                         </button>
 
                                         <button
                                             onClick={() => setSelectedType('landscape')}
-                                            className={`p-10 border rounded-sm flex flex-col items-center gap-8 transition-all duration-500 group ${selectedType === 'landscape' ? 'border-primary bg-primary/5 shadow-[0_0_40px_-5px_hsla(var(--primary),0.2)]' : 'border-border/20 bg-card/10 hover:border-border/60 hover:bg-card/20'}`}
+                                            className={`p-10 border rounded-sm flex flex-col items-center gap-8 transition-all duration-500 group ${selectedType === 'landscape' ? 'border-primary bg-primary/5 shadow-[0_0_40px_-5px_hsl(var(--primary) / 0.2)]' : 'border-border/20 bg-card/10 hover:border-border/60 hover:bg-card/20'}`}
                                         >
                                             <div className={`w-20 h-10 rounded-sm border transition-all duration-500 ${selectedType === 'landscape' ? 'bg-primary/20 border-primary' : 'bg-white/5 border-white/10 group-hover:border-white/30'}`}></div>
                                             <div className="text-center">
-                                                <span className={`block font-black uppercase tracking-[0.3em] text-[11px] mb-2 ${selectedType === 'landscape' ? 'text-primary' : 'text-white/60'}`}>Landscape</span>
-                                                <span className="text-[9px] font-black text-white/45 uppercase tracking-[0.2em]">16:9 Cinematic</span>
+                                                <span className={`block font-black uppercase tracking-[0.3em] text-[11px] mb-2 ${selectedType === 'landscape' ? 'text-primary-text' : 'text-white/60'}`}>Landscape</span>
+                                                <span className="text-[9px] font-black text-white/60 uppercase tracking-[0.2em]">16:9 Cinematic</span>
                                             </div>
                                         </button>
                                     </div>
@@ -411,7 +411,7 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                                         <button
                                             onClick={handleGenerate}
                                             disabled={!selectedType || loading}
-                                            className="px-12 py-5 bg-primary text-white font-black uppercase tracking-[0.5em] text-[11px] rounded-sm shadow-[0_0_50px_-5px_hsla(var(--primary),0.4)] hover:shadow-[0_0_70px_hsla(var(--primary),0.6)] transition-all duration-500 flex items-center gap-4 transform active:scale-95 disabled:opacity-30 disabled:shadow-none"
+                                            className="px-12 py-5 bg-primary text-primary-foreground font-black uppercase tracking-[0.5em] text-[11px] rounded-sm shadow-[0_0_50px_-5px_hsl(var(--primary) / 0.4)] hover:shadow-[0_0_70px_hsl(var(--primary) / 0.6)] transition-all duration-500 flex items-center gap-4 transform active:scale-95 disabled:opacity-30 disabled:shadow-none"
                                         >
                                             <Sparkles size={18} /> Execute Cycle
                                         </button>
@@ -420,11 +420,11 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                                     {loading && (
                                         <div className="absolute inset-0 bg-background/80 z-20 flex flex-col items-center justify-center rounded-sm backdrop-blur-md animate-in fade-in duration-500">
                                             <div className="relative mb-8">
-                                                <Loader2 size={64} className="animate-spin text-primary" />
+                                                <Loader2 size={64} className="animate-spin text-primary-text" />
                                                 <div className="absolute inset-0 bg-primary/20 blur-2xl animate-pulse" />
                                             </div>
                                             <p className="text-2xl font-black text-white uppercase tracking-tighter mb-2">Architecting Layouts</p>
-                                            <p className="text-[10px] text-white/30 uppercase tracking-[0.5em] animate-pulse">Running Neural Simulation...</p>
+                                            <p className="text-[10px] text-white/60 uppercase tracking-[0.5em] animate-pulse">Running Neural Simulation...</p>
                                         </div>
                                     )}
                                 </div>
@@ -434,10 +434,10 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                             {step === 3 && (
                                 <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
                                     <div className="flex justify-between items-center pb-6 border-b border-border/20">
-                                        <button onClick={() => setStep(2)} className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-white/50 hover:text-primary transition-all duration-300">
+                                        <button onClick={() => setStep(2)} className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-white/60 hover:text-primary-text transition-all duration-300">
                                             <ArrowLeft size={14} /> Back
                                         </button>
-                                        <div className="flex items-center gap-3 text-primary bg-primary/5 border border-primary/20 px-6 py-2 rounded-sm text-[10px] font-black uppercase tracking-[0.3em]">
+                                        <div className="flex items-center gap-3 text-primary-text bg-primary/5 border border-primary/20 px-6 py-2 rounded-sm text-[10px] font-black uppercase tracking-[0.3em]">
                                             <Check size={16} /> Synthesis Complete
                                         </div>
                                     </div>
@@ -445,7 +445,7 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                         {sanitizedResults.map((res, i) => (
                                             <div key={i} className="bg-card/30 p-6 rounded-sm border border-border/20 hover:border-primary/40 transition-all duration-700 group">
-                                                <h4 className="font-black text-white text-[11px] uppercase tracking-[0.3em] mb-4 group-hover:text-primary transition-colors">{res.label}</h4>
+                                                <h4 className="font-black text-white text-[11px] uppercase tracking-[0.3em] mb-4 group-hover:text-primary-text transition-colors">{res.label}</h4>
                                                 <div className="bg-background border border-border/40 rounded-sm mb-6 overflow-hidden flex items-center justify-center p-8 relative transition-all duration-700 group-hover:border-primary/20 shadow-inner">
                                                     <div className="absolute inset-0 opacity-5 pointer-events-none group-hover:opacity-10 transition-opacity"
                                                         style={{
@@ -460,7 +460,7 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                                                 </div>
                                                 <button
                                                     onClick={() => copyToClipboard(res.svg, res.label)}
-                                                    className="w-full py-4 bg-primary text-white text-[9px] font-black uppercase tracking-[0.5em] rounded-sm transition-all duration-300 shadow-[0_0_30px_hsla(var(--primary),0.3)] hover:shadow-[0_0_50px_hsla(var(--primary),0.5)] active:scale-95 border border-primary/20"
+                                                    className="w-full py-4 bg-primary text-primary-foreground text-[9px] font-black uppercase tracking-[0.5em] rounded-sm transition-all duration-300 shadow-[0_0_30px_hsl(var(--primary) / 0.3)] hover:shadow-[0_0_50px_hsl(var(--primary) / 0.5)] active:scale-95 border border-primary/20"
                                                 >
                                                     <Copy size={12} className="inline mr-2" /> Copy SVG Frame
                                                 </button>
@@ -469,7 +469,7 @@ Make these 3 layouts fundamentally different from the previous ones.`;
                                     </div>
 
                                     {toast.show && (
-                                        <div className="fixed bottom-12 left-1/2 -translate-x-1/2 bg-background border border-primary/40 text-primary px-8 py-4 rounded-sm shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[110] animate-in fade-in slide-in-from-bottom-2 duration-300 flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.3em]">
+                                        <div className="fixed bottom-12 left-1/2 -translate-x-1/2 bg-background border border-primary/40 text-primary-text px-8 py-4 rounded-sm shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[110] animate-in fade-in slide-in-from-bottom-2 duration-300 flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.3em]">
                                             <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
                                             {toast.msg}
                                         </div>

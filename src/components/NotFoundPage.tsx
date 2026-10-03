@@ -8,7 +8,7 @@ export function NotFoundPage() {
   return (
     <div className="min-h-screen flex items-center justify-center px-6">
       <div className="max-w-xl w-full text-center flex flex-col gap-6">
-        <p className="text-[9px] font-black text-white/50 uppercase tracking-[0.3em]">404</p>
+        <p className="text-[9px] font-black text-white/60 uppercase tracking-[0.3em]">404</p>
         <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none">
           This frame does not exist
         </h1>

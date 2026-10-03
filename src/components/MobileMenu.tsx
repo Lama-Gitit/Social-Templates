@@ -60,7 +60,7 @@ export function MobileMenu({ activePlatformId, onOpenRandomGenerator, aiEnabled 
                                 <platform.icon
                                     className={cn(
                                         "w-5 h-5 transition-all duration-300",
-                                        activePlatformId === platform.id ? "text-primary" : "text-white/40"
+                                        activePlatformId === platform.id ? "text-primary-text" : "text-white/60"
                                     )}
                                 />
                                 <span className="text-[9px] font-black uppercase tracking-[0.1em]">{platform.name}</span>
@@ -75,7 +75,7 @@ export function MobileMenu({ activePlatformId, onOpenRandomGenerator, aiEnabled 
                         <Link
                             to="/"
                             onClick={() => setIsOpen(false)}
-                            className="flex-1 bg-white/5 border border-white/5 py-4 rounded-sm flex flex-col items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-all active:scale-95"
+                            className="flex-1 bg-white/5 border border-white/5 py-4 rounded-sm flex flex-col items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-white transition-all active:scale-95"
                         >
                             <LayoutGrid size={16} />
                             Studio
@@ -89,8 +89,8 @@ export function MobileMenu({ activePlatformId, onOpenRandomGenerator, aiEnabled 
                             className={cn(
                                 "flex-1 bg-white/5 border border-white/5 py-4 rounded-sm flex flex-col items-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all",
                                 aiEnabled
-                                    ? "text-white/40 hover:text-white active:scale-95 cursor-pointer"
-                                    : "text-white/20 cursor-default"
+                                    ? "text-white/60 hover:text-white active:scale-95 cursor-pointer"
+                                    : "text-white/60 cursor-default"
                             )}
                         >
                             <Shuffle size={16} />

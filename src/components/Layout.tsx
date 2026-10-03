@@ -11,7 +11,7 @@ interface LayoutProps {
 
 export function Layout({ children, activePlatformId, onOpenRandomGenerator, aiEnabled }: LayoutProps) {
     return (
-        <div className="flex h-screen w-full bg-background overflow-hidden selection:bg-primary/30 selection:text-white">
+        <div className="flex h-screen w-full bg-background overflow-hidden selection:bg-primary selection:text-primary-foreground">
             <Sidebar
                 className="hidden md:flex"
                 activePlatformId={activePlatformId}

@@ -3,13 +3,14 @@ import { BrowserRouter, Routes, Route, useParams, Link } from 'react-router-dom'
 import { Layout } from './components/Layout';
 import { TemplateCard } from './components/TemplateCard';
 import { NotFoundPage } from './components/NotFoundPage';
+import { TipCallout } from './components/TipCallout';
 import { AIAssistant } from './components/AIAssistant';
 import { RandomGeneratorModal } from './components/RandomGeneratorModalV2'; // v2
 import { PLATFORMS } from './data/platforms';
 import { usePageMeta } from './hooks/usePageMeta';
 import { setAIToken } from './lib/anthropic';
-import { hexToHSL, matchesQuery } from './lib/utils';
-import { Lightbulb, ChevronDown, Search } from 'lucide-react';
+import { hexToHSL, matchesQuery, readableHSL } from './lib/utils';
+import { ChevronDown, Search } from 'lucide-react';
 
 // Flat list of all templates across all platforms for the "What are you making?" section
 const ALL_TEMPLATES = PLATFORMS.flatMap(p =>
@@ -62,7 +63,7 @@ function PlatformPage() {
   const platform = PLATFORMS.find(p => p.slug === slug);
 
   const themeHSL = useMemo(
-    () => platform ? hexToHSL(platform.brandColor || platform.color) : '5 74% 47%',
+    () => platform ? hexToHSL(platform.brandColor || platform.color) : '5 100% 60%',
     [platform]
   );
 
@@ -94,6 +95,8 @@ function PlatformPage() {
       style={{
         '--primary': themeHSL,
         '--color-primary': `hsl(${themeHSL})`,
+        '--primary-text': readableHSL(themeHSL),
+        '--color-primary-text': `hsl(${readableHSL(themeHSL)})`,
         '--color-ring': `hsl(${themeHSL})`,
       } as React.CSSProperties}
     >
@@ -104,7 +107,7 @@ function PlatformPage() {
       >
         <div className="flex flex-col gap-12">
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-            <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12 pb-8 md:pb-12 border-b border-border/40">
+            <header className="platform-header flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12 pb-8 md:pb-12 border-b border-border/40">
               <div className="flex items-center gap-6 md:gap-10">
                 <div className="p-4 md:p-8 bg-card border border-border/40 rounded-sm">
                   <platform.icon size={32} className="md:w-14 md:h-14" style={{ color: 'hsl(var(--primary))' }} />
@@ -118,21 +121,16 @@ function PlatformPage() {
 
             {/* Design tip callout */}
             {platform.tips.length > 0 && (
-              <div className="mb-12 p-5 md:p-6 border rounded-sm flex items-start gap-4 animate-in fade-in slide-in-from-bottom-1 duration-700" style={{ borderColor: `hsla(var(--primary), 0.2)`, backgroundColor: `hsla(var(--primary), 0.03)` }}>
-                <Lightbulb size={16} className="flex-shrink-0 mt-0.5 opacity-60" style={{ color: 'hsl(var(--primary))' }} />
-                <p className="text-[11px] font-bold text-white/60 uppercase tracking-wider leading-relaxed">
-                  {platform.tips[tipIndex]}
-                </p>
-              </div>
+              <TipCallout>{platform.tips[tipIndex]}</TipCallout>
             )}
 
-            <div className="grid md:grid-cols-4 gap-12 mb-16">
+            <section className="platform-guide grid md:grid-cols-4 gap-12 mb-16" aria-labelledby="platform-guide-heading">
               <div className="md:col-span-3">
-                <h2 className="text-[10px] font-black mb-6 uppercase tracking-[0.3em]" style={{ color: 'hsl(var(--primary))' }}>Platform Guide</h2>
+                <h2 id="platform-guide-heading" className="text-[10px] font-black mb-6 uppercase tracking-[0.3em] text-primary-text">Platform Guide</h2>
                 <p className="text-foreground text-3xl leading-tight font-black tracking-tighter uppercase">{platform.intro}</p>
               </div>
-              <div className="bg-card/50 p-8 border border-border/40 rounded">
-                <h3 className="text-[9px] font-black text-muted-foreground mb-6 flex items-center gap-2 uppercase tracking-[0.3em] opacity-40">
+              <aside className="design-tips bg-card/50 p-8 border border-border/40 rounded" aria-labelledby="design-tips-heading">
+                <h3 id="design-tips-heading" className="text-[9px] font-black text-muted-foreground mb-6 flex items-center gap-2 uppercase tracking-[0.3em]">
                   Design Tips
                 </h3>
                 <ul className="space-y-4">
@@ -143,10 +141,10 @@ function PlatformPage() {
                     </li>
                   ))}
                 </ul>
-              </div>
-            </div>
+              </aside>
+            </section>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <section className="template-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" aria-label={`${platform.name} templates`}>
               {platform.templates.map((template) => (
                 <TemplateCard
                   key={`${template.width}x${template.height}-${template.label}`}
@@ -155,11 +153,11 @@ function PlatformPage() {
                   platformId={platform.id}
                 />
               ))}
-            </div>
+            </section>
 
             {platform.geoCopy && (
               <section className="mt-16 pt-12 border-t border-border/20">
-                <h2 className="text-[10px] font-black mb-4 uppercase tracking-[0.3em] text-white/50">{platform.name} Image Sizes & Dimensions</h2>
+                <h2 className="text-[10px] font-black mb-4 uppercase tracking-[0.3em] text-white/60">{platform.name} Image Sizes & Dimensions</h2>
                 <p className="text-white/60 text-sm leading-relaxed max-w-3xl">
                   {platform.geoCopy}
                 </p>
@@ -174,7 +172,7 @@ function PlatformPage() {
                     <details key={i} className="group border border-border/20 rounded-sm bg-card/20 hover:bg-card/30 transition-colors">
                       <summary className="cursor-pointer px-6 py-5 text-[11px] font-black text-white uppercase tracking-wider list-none flex justify-between items-center">
                         {q}
-                        <span className="text-white/40 group-open:rotate-45 transition-transform text-lg font-bold">+</span>
+                        <span className="text-white/60 group-open:rotate-45 transition-transform text-lg font-bold">+</span>
                       </summary>
                       <p className="px-6 pb-5 text-sm text-white/60 leading-relaxed">{a}</p>
                     </details>
@@ -184,13 +182,13 @@ function PlatformPage() {
             )}
 
             <nav className="mt-16 pt-12 border-t border-border/20">
-              <h3 className="text-[10px] font-black text-white/50 uppercase tracking-[0.3em] mb-6">More Platforms</h3>
+              <h3 id="more-platforms-heading" className="text-[10px] font-black text-white/60 uppercase tracking-[0.3em] mb-6">More Platforms</h3>
               <div className="flex flex-wrap gap-3">
                 {PLATFORMS.filter(p => p.id !== platform.id).map(p => (
                   <Link
                     key={p.id}
                     to={`/${p.slug}`}
-                    className="text-[9px] font-black uppercase tracking-[0.2em] text-white/55 hover:text-white px-4 py-2 border border-border/30 hover:border-border/60 rounded-sm transition-colors"
+                    className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60 hover:text-white px-4 py-2 border border-border/30 hover:border-border/60 rounded-sm transition-colors"
                   >
                     {p.name}
                   </Link>
@@ -286,8 +284,8 @@ function MorphingFrame() {
         />
         {/* Centered label inside frame */}
         <div className="z-10 flex flex-col items-center gap-1 transition-opacity duration-300">
-          <span className="text-[11px] font-black uppercase tracking-[0.2em] text-primary">{f.ratio}</span>
-          <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-white/50">{f.name}</span>
+          <span className="text-[11px] font-black uppercase tracking-[0.2em] text-primary-text">{f.ratio}</span>
+          <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-white/60">{f.name}</span>
         </div>
       </div>
     </div>
@@ -301,7 +299,10 @@ function HomePage() {
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
   const makingSectionRef = useRef<HTMLElement>(null);
 
-  const themeHSL = '5 74% 47%';
+  // The homepage uses the brand accent from index.css. A darker variant here
+  // (5 74% 47%) dropped text-primary-text to 4.02:1, under AA for the small labels
+  // that use it on this page, so it now matches the global token.
+  const themeHSL = '5 100% 60%';
 
   usePageMeta({
     title: 'Social Frames | Free SVG Templates for Every Social Media Platform',
@@ -337,6 +338,8 @@ function HomePage() {
       style={{
         '--primary': themeHSL,
         '--color-primary': `hsl(${themeHSL})`,
+        '--primary-text': readableHSL(themeHSL),
+        '--color-primary-text': `hsl(${readableHSL(themeHSL)})`,
         '--color-ring': `hsl(${themeHSL})`,
       } as React.CSSProperties}
     >
@@ -351,16 +354,16 @@ function HomePage() {
             {/* ── Hero with Morphing Frame ── */}
             <header className="flex flex-col-reverse lg:flex-row items-center min-h-0 lg:min-h-[500px] mb-16 lg:mb-20 gap-8 lg:gap-12">
               <div className="flex-1 max-w-full lg:max-w-[540px] text-center lg:text-left">
-                <p className="text-[10px] font-black uppercase tracking-[0.6em] text-white/55 mb-4">Social Frames</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.6em] text-white/60 mb-4">Social Frames</p>
                 <h1 className="text-[clamp(40px,5.5vw,72px)] font-black text-foreground mb-5 tracking-[-0.03em] uppercase leading-[0.88]">
-                  Every social<br />media <span className="text-primary">frame</span><br />you need.
+                  Every social<br />media <span className="text-primary-text">frame</span><br />you need.
                 </h1>
                 <p className="text-sm font-bold uppercase tracking-[0.12em] text-white/65 leading-relaxed mb-8">
                   Pick a format. Copy the SVG. Paste into Figma, Sketch, or any design tool. Sized perfectly for every platform.
                 </p>
                 <button
                   onClick={() => makingSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-transparent border border-white/30 text-foreground text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:border-primary hover:text-primary hover:bg-primary/5 active:scale-95 mx-auto lg:mx-0"
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-transparent border border-white/30 text-foreground text-[10px] font-black uppercase tracking-[0.3em] transition-all hover:border-primary hover:text-primary-text hover:bg-primary/5 active:scale-95 mx-auto lg:mx-0"
                 >
                   Browse Formats <ChevronDown size={14} />
                 </button>
@@ -378,18 +381,18 @@ function HomePage() {
 
               {/* Search input */}
               <div className="relative mb-6 max-w-xl">
-                <Search size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none" />
+                <Search size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-white/60 pointer-events-none" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search formats... (e.g. instagram story, youtube thumbnail)"
-                  className="w-full pl-12 pr-5 py-4 bg-card border border-border/40 text-foreground text-[13px] font-bold tracking-[0.03em] outline-none transition-all focus:border-primary/50 placeholder:text-white/35 placeholder:text-[10px] placeholder:font-extrabold placeholder:uppercase placeholder:tracking-[0.15em]"
+                  className="w-full pl-12 pr-5 py-4 bg-card border border-border/40 text-foreground text-[13px] font-bold tracking-[0.03em] outline-none transition-all focus:border-primary/50 placeholder:text-white/60 placeholder:text-[10px] placeholder:font-extrabold placeholder:uppercase placeholder:tracking-[0.15em]"
                 />
                 {isSearching && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/55 hover:text-white text-xs font-bold uppercase tracking-wider transition-colors bg-transparent border-none cursor-pointer"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white text-xs font-bold uppercase tracking-wider transition-colors bg-transparent border-none cursor-pointer"
                   >
                     Clear
                   </button>
@@ -397,7 +400,7 @@ function HomePage() {
               </div>
 
               {/* Label */}
-              <p className="text-[9px] font-extrabold text-white/45 uppercase tracking-[0.25em] mb-4">
+              <p className="text-[9px] font-extrabold text-white/60 uppercase tracking-[0.25em] mb-4">
                 {isSearching
                   ? searchResults.length > 0
                     ? `${searchResults.length} result${searchResults.length === 1 ? '' : 's'}`
@@ -437,7 +440,7 @@ function HomePage() {
                         </div>
 
                         {/* Platform name */}
-                        <span className="text-[9px] font-black text-white/55 uppercase tracking-[0.15em] w-24 md:w-28 flex-shrink-0">{t.platformName}</span>
+                        <span className="text-[9px] font-black text-white/60 uppercase tracking-[0.15em] w-24 md:w-28 flex-shrink-0">{t.platformName}</span>
 
                         {/* Template label */}
                         <span className="text-[11px] font-black text-white/80 uppercase tracking-[-0.01em] flex-grow group-hover:text-white transition-colors">
@@ -445,20 +448,20 @@ function HomePage() {
                         </span>
 
                         {/* Dimensions */}
-                        <span className="text-[9px] font-bold text-white/45 tracking-[0.1em] flex-shrink-0 hidden sm:block">
+                        <span className="text-[9px] font-bold text-white/60 tracking-[0.1em] flex-shrink-0 hidden sm:block">
                           {t.width}×{t.height}
                         </span>
 
                         {/* Arrow */}
-                        <span className="text-white/35 group-hover:text-primary group-hover:translate-x-0.5 transition-all text-sm flex-shrink-0">→</span>
+                        <span className="text-white/60 group-hover:text-primary-text group-hover:translate-x-0.5 transition-all text-sm flex-shrink-0">→</span>
                       </Link>
                     );
                   })}
                 </div>
               ) : isSearching ? (
                 <div className="border border-border/30 px-6 py-10 text-center">
-                  <p className="text-[11px] font-bold text-white/55 uppercase tracking-wider">No templates match "{searchQuery}"</p>
-                  <p className="text-[10px] text-white/45 mt-2">Try a different term — like a platform name, format, or size</p>
+                  <p className="text-[11px] font-bold text-white/60 uppercase tracking-wider">No templates match "{searchQuery}"</p>
+                  <p className="text-[10px] text-white/60 mt-2">Try a different term — like a platform name, format, or size</p>
                 </div>
               ) : null}
             </section>
@@ -488,10 +491,10 @@ function HomePage() {
                   >
                     <platform.icon
                       size={28}
-                      className="text-white/40 group-hover:text-white transition-all duration-300"
+                      className="text-white/60 group-hover:text-white transition-all duration-300"
                     />
                     <span className="text-[10px] font-black text-white uppercase tracking-[0.3em] opacity-65 group-hover:opacity-100 transition-all">{platform.name}</span>
-                    <span className="text-[9px] font-bold text-white/35 uppercase tracking-[0.15em]">
+                    <span className="text-[9px] font-bold text-white/60 uppercase tracking-[0.15em]">
                       {platform.templates.length} templates
                     </span>
                   </Link>
@@ -504,7 +507,7 @@ function HomePage() {
               <div className="flex items-baseline justify-between mb-8 pb-6 border-b border-border/20">
                 <div>
                   <h2 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter mb-2">Frequently Asked Questions</h2>
-                  <p className="text-[9px] font-black text-white/50 uppercase tracking-[0.3em]">Common questions about sizes & templates</p>
+                  <p className="text-[9px] font-black text-white/60 uppercase tracking-[0.3em]">Common questions about sizes & templates</p>
                 </div>
               </div>
 
@@ -520,11 +523,11 @@ function HomePage() {
                   <details key={i} className="group border border-border/20 bg-white/[0.01] hover:bg-white/[0.02] transition-colors">
                     <summary className="cursor-pointer px-6 py-5 text-[11px] font-black text-white uppercase tracking-[0.05em] list-none flex justify-between items-center">
                       {q}
-                      <span className="text-white/40 group-open:rotate-45 transition-transform text-lg font-bold">+</span>
+                      <span className="text-white/60 group-open:rotate-45 transition-transform text-lg font-bold">+</span>
                     </summary>
                     <p className="px-6 pb-5 text-[13px] text-white/60 leading-[1.7]">
                       {a}
-                      {link && <Link to={link} className="block mt-2 text-primary/80 hover:text-primary text-[10px] font-black uppercase tracking-[0.15em] transition-colors">Browse templates →</Link>}
+                      {link && <Link to={link} className="block mt-2 text-primary-text hover:text-primary-text text-[10px] font-black uppercase tracking-[0.15em] transition-colors">Browse templates →</Link>}
                     </p>
                   </details>
                 ))}
@@ -538,7 +541,7 @@ function HomePage() {
                 className={`w-full flex items-center justify-between px-6 py-5 border border-border/20 transition-all hover:bg-white/[0.02] cursor-pointer bg-transparent text-left ${sizeGuideOpen ? 'border-b-0' : ''}`}
               >
                 <h3 className="text-[11px] font-black text-white uppercase tracking-[0.15em]">Full Size Guide — All Platforms</h3>
-                <span className={`text-white/20 text-lg font-bold transition-transform duration-200 ${sizeGuideOpen ? 'rotate-45' : ''}`}>+</span>
+                <span className={`text-white/60 text-lg font-bold transition-transform duration-200 ${sizeGuideOpen ? 'rotate-45' : ''}`}>+</span>
               </button>
               {sizeGuideOpen && (
                 <div className="border border-border/20 border-t-0 p-6 animate-in fade-in duration-200">
@@ -546,10 +549,10 @@ function HomePage() {
                     <table className="w-full text-left border-collapse">
                       <thead>
                         <tr className="border-b border-border/20">
-                          <th className="pb-3 pr-4 text-[9px] font-black text-white/50 uppercase tracking-[0.3em]">Platform</th>
-                          <th className="pb-3 pr-4 text-[9px] font-black text-white/50 uppercase tracking-[0.3em]">Format</th>
-                          <th className="pb-3 pr-4 text-[9px] font-black text-white/50 uppercase tracking-[0.3em]">Dimensions</th>
-                          <th className="pb-3 text-[9px] font-black text-white/50 uppercase tracking-[0.3em]">Ratio</th>
+                          <th className="pb-3 pr-4 text-[9px] font-black text-white/60 uppercase tracking-[0.3em]">Platform</th>
+                          <th className="pb-3 pr-4 text-[9px] font-black text-white/60 uppercase tracking-[0.3em]">Format</th>
+                          <th className="pb-3 pr-4 text-[9px] font-black text-white/60 uppercase tracking-[0.3em]">Dimensions</th>
+                          <th className="pb-3 text-[9px] font-black text-white/60 uppercase tracking-[0.3em]">Ratio</th>
                         </tr>
                       </thead>
                       <tbody className="text-[10px] font-bold text-white/70">
@@ -573,10 +576,10 @@ function HomePage() {
                           ['Web', 'og-image-templates', 'Open Graph', '1200 × 630', '1.91:1'],
                         ].map(([platform, slug, format, dimensions, ratio], i) => (
                           <tr key={i} className="border-b border-white/[0.07] hover:bg-white/[0.02] transition-colors">
-                            <td className="py-2.5 pr-4"><Link to={`/${slug}`} className="text-white/60 hover:text-primary transition-colors uppercase tracking-wider">{platform}</Link></td>
+                            <td className="py-2.5 pr-4"><Link to={`/${slug}`} className="text-white/60 hover:text-primary-text transition-colors uppercase tracking-wider">{platform}</Link></td>
                             <td className="py-2.5 pr-4 uppercase tracking-wider">{format}</td>
-                            <td className="py-2.5 pr-4 text-primary/80 font-black tracking-[0.05em]">{dimensions}</td>
-                            <td className="py-2.5 uppercase tracking-wider text-white/55">{ratio}</td>
+                            <td className="py-2.5 pr-4 text-primary-text font-black tracking-[0.05em]">{dimensions}</td>
+                            <td className="py-2.5 uppercase tracking-wider text-white/60">{ratio}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -588,13 +591,13 @@ function HomePage() {
 
             {/* ── Footer Nav ── */}
             <nav className="pt-8 border-t border-border/20">
-              <p className="text-[9px] font-black text-white/45 uppercase tracking-[0.2em] mb-4">All Platforms</p>
+              <h2 id="all-platforms-heading" className="text-[9px] font-black text-white/60 uppercase tracking-[0.2em] mb-4">All Platforms</h2>
               <div className="flex flex-wrap gap-2">
                 {PLATFORMS.map(p => (
                   <Link
                     key={p.id}
                     to={`/${p.slug}`}
-                    className="text-[9px] font-black uppercase tracking-[0.15em] text-white/45 hover:text-white px-3.5 py-2 border border-white/[0.12] hover:border-white/30 transition-all"
+                    className="text-[9px] font-black uppercase tracking-[0.15em] text-white/60 hover:text-white px-3.5 py-2 border border-white/[0.12] hover:border-white/30 transition-all"
                   >
                     {p.name}
                   </Link>

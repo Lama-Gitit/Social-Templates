@@ -109,3 +109,56 @@ export function matchesQuery(query: string, haystack: string): boolean {
     const hayWords = tokens(haystack);
     return queryWords.every(qw => hayWords.some(hw => hw.startsWith(qw)));
 }
+
+/**
+ * Return a variant of an "H S% L%" theme colour that is legible as text on the
+ * dark surfaces (background #050506, card #0A0A0B).
+ *
+ * Platform brand colours are chosen for identity, not for contrast, so some
+ * of them (indigo, mid-blue) land just under WCAG AA when used as text. Rather
+ * than hand-tuning each platform, the accent is lifted in lightness until it
+ * passes. Colours that already pass are returned unchanged, so brand fidelity
+ * is preserved wherever possible.
+ *
+ * 4.5:1 is the AA floor for normal text. Against the card surface, the
+ * strictest of the dark surfaces.
+ */
+export function readableHSL(hsl: string, minRatio = 4.5): string {
+    const m = hsl.match(/^([\d.]+)\s+([\d.]+)%\s+([\d.]+)%$/);
+    if (!m) return hsl;
+    const h = parseFloat(m[1]), s = parseFloat(m[2]) / 100;
+    const l = parseFloat(m[3]) / 100;
+
+    const surface: [number, number, number] = [10, 10, 11]; // --card, the lightest dark surface
+    const lum = ([r, g, b]: [number, number, number]) => {
+        const f = (v: number) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+        return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+    };
+    const ratio = (rgb: [number, number, number]) => {
+        const a = lum(rgb), b = lum(surface);
+        const hi = Math.max(a, b), lo = Math.min(a, b);
+        return (hi + 0.05) / (lo + 0.05);
+    };
+    const toRGB = (lightness: number): [number, number, number] => {
+        const q = lightness < 0.5 ? lightness * (1 + s) : lightness + s - lightness * s;
+        const pp = 2 * lightness - q;
+        const chan = (t: number) => {
+            if (t < 0) t += 1; if (t > 1) t -= 1;
+            if (t < 1 / 6) return pp + (q - pp) * 6 * t;
+            if (t < 1 / 2) return q;
+            if (t < 2 / 3) return pp + (q - pp) * (2 / 3 - t) * 6;
+            return pp;
+        };
+        const hn = h / 360;
+        return [chan(hn + 1 / 3) * 255, chan(hn) * 255, chan(hn - 1 / 3) * 255];
+    };
+
+    if (ratio(toRGB(l)) >= minRatio) return hsl;
+    let lo = l, hi = 1;
+    for (let i = 0; i < 40; i++) {
+        const mid = (lo + hi) / 2;
+        if (ratio(toRGB(mid)) < minRatio) lo = mid; else hi = mid;
+    }
+    const newL = Math.ceil(hi * 100);
+    return `${m[1]} ${m[2]}% ${newL}%`;
+}

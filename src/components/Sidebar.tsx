@@ -36,7 +36,7 @@ export function Sidebar({ className, activePlatformId, onOpenRandomGenerator, ai
                 </Link>
 
                 <div className="pt-8 pb-2 px-3">
-                    <p className="text-[9px] font-black text-muted-foreground/30 uppercase tracking-[0.2em]">Platforms</p>
+                    <p className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em]">Platforms</p>
                 </div>
 
                 {PLATFORMS.map((platform) => (
@@ -53,7 +53,7 @@ export function Sidebar({ className, activePlatformId, onOpenRandomGenerator, ai
                         <platform.icon
                             className={cn(
                                 "w-3.5 h-3.5 mr-3 transition-all duration-300",
-                                activePlatformId === platform.id ? "text-primary scale-110" : "text-white/40 group-hover:text-primary"
+                                activePlatformId === platform.id ? "text-primary-text scale-110" : "text-white/60 group-hover:text-primary-text"
                             )}
                         />
                         {platform.name}
@@ -61,7 +61,7 @@ export function Sidebar({ className, activePlatformId, onOpenRandomGenerator, ai
                 ))}
 
                 <div className="pt-8 pb-2 px-3">
-                    <p className="text-[9px] font-black text-muted-foreground/30 uppercase tracking-[0.2em]">Tools</p>
+                    <p className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em]">Tools</p>
                 </div>
 
                 <button
@@ -70,12 +70,12 @@ export function Sidebar({ className, activePlatformId, onOpenRandomGenerator, ai
                         "flex items-center w-full p-2.5 rounded transition-all duration-200 group text-[10px] font-black uppercase tracking-widest",
                         aiEnabled
                             ? "text-muted-foreground hover:text-foreground hover:bg-white/5 cursor-pointer"
-                            : "text-muted-foreground/30 cursor-default"
+                            : "text-muted-foreground cursor-default"
                     )}
                 >
                     <Shuffle className="w-4 h-4 mr-3" />
                     AI Generator
-                    {!aiEnabled && <span className="ml-auto text-[7px] tracking-[0.2em] text-primary/50 border border-primary/20 px-1.5 py-0.5 rounded-sm">SOON</span>}
+                    {!aiEnabled && <span className="ml-auto text-[7px] tracking-[0.2em] text-primary-text border border-primary/20 px-1.5 py-0.5 rounded-sm">SOON</span>}
                 </button>
             </nav>
 

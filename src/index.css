@@ -10,6 +10,7 @@
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
   --color-primary: hsl(var(--primary));
+  --color-primary-text: hsl(var(--primary-text));
   --color-primary-foreground: hsl(var(--primary-foreground));
   --color-secondary: hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
@@ -72,8 +73,15 @@
     --card-foreground: 12 14% 95%;
 
     --primary: 5 100% 60%;
+    --primary-text: 5 100% 60%;
+    /* Same as --primary by default. Platform pages override it with the
+       accent lifted until it passes WCAG AA as text (see readableHSL). */
     /* Boosted saturation/luminance for better contrast: #FF3B2D */
-    --primary-foreground: 0 0% 100%;
+    --primary-foreground: 240 13% 2%;
+    /* Near-black, not white. Measured against the platform colours in
+       PLATFORMS: white text on solid --primary is 3.43:1 (fails AA), near-black
+       is 5.94:1. Across all 11 platform colours the dark value wins, worst case
+       4.56:1 (Web). Anything sitting on bg-primary uses this token. */
 
     --secondary: 255 11% 60%;
     --secondary-foreground: 12 14% 95%;
@@ -89,17 +97,18 @@
 
     /*
      * ── Text Opacity Hierarchy ──────────────────────────────────────────────
-     * Background ≈ hsl(240 13% 2%) = #050506. Contrast ratios below are
-     * approximate effective contrast vs that background.
+     * Background = hsl(240 13% 2%) = rgb(5,5,6). Ratios measured against that
+     * background, with the text colour composited over it.
      *
-     *   Tier 1 — primary   : text-white / text-foreground  ~20:1  headings, key UI
-     *   Tier 2 — body      : text-white/80                 ~16:1  body text, active labels
-     *   Tier 3 — secondary : text-white/60                  ~7.7:1 (AAA)  secondary copy
-     *   Tier 4 — tertiary  : text-white/45                  ~4.8:1 (AA)   meta, captions
-     *   Tier 5 — muted     : text-white/30                  ~2.6:1  decorative/placeholder
+     *   Tier 1 — primary   : text-white / text-foreground  18.2:1  headings, key UI
+     *   Tier 2 — body      : text-white/80                 11.5:1  body text
+     *   Tier 3 — secondary : text-white/60                  6.6:1 (AA+)  secondary copy
+     *   Tier 4 — muted     : text-muted-foreground          6.5:1 (AA+)  meta, captions
      *
-     * RULE: Never use /20 or below for any text a user needs to read.
-     *       /15 and lower are reserved for borders and decorative dividers only.
+     * RULE: /50 is the floor (4.8:1) and only for large or bold text. /45 and
+     *       below fails AA for normal text and is reserved for borders and
+     *       decorative fills. text-muted-foreground carries no opacity
+     *       modifier: at /80 it already drops to 4.4:1 and fails.
      * ────────────────────────────────────────────────────────────────────────
      */
 
@@ -149,7 +158,7 @@
 
   ::selection {
     background-color: hsl(var(--primary));
-    color: white;
+    color: hsl(var(--primary-foreground));
   }
 
   button:focus-visible,

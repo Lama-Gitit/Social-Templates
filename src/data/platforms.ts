@@ -58,7 +58,7 @@ export const PLATFORMS: PlatformData[] = [
         tips: [
             "Place logo/text in the 'Safe Zone' (center 1546x423).",
             "Thumbnails are critical.",
-            "Design thumbnails at 4K — TVs expose soft 720p art."
+            "Design thumbnails at 4K. TVs expose soft 720p art."
         ],
         templates: [
             { label: 'Channel Banner', width: 2560, height: 1440, desc: '16:9 • TV size', category: 'cover' },
@@ -69,7 +69,7 @@ export const PLATFORMS: PlatformData[] = [
             { label: 'Shorts', width: 1080, height: 1920, desc: '9:16 • Vertical', category: 'story' },
             { label: 'Community Post', width: 1000, height: 1000, desc: '1:1 • Channel tab', category: 'post' },
         ],
-        geoCopy: "YouTube requires seven key image sizes: Channel Banners at 2560x1440 pixels (safe area 1546x423 in the center), Video Thumbnails at 3840x2160 pixels (4K, 16:9 — the current recommended size) with 1280x720 pixels as the accepted minimum, Podcast Thumbnails at 1280x1280 pixels (1:1), Profile Pictures at 800x800 pixels, Shorts at 1080x1920 pixels (9:16), and Community Posts at 1000x1000 pixels (1:1). YouTube raised its recommended thumbnail resolution to 4K to serve the growing share of viewing on smart TVs and large displays, where a 1280x720 thumbnail looks noticeably soft. Thumbnail file size caps at 50MB on desktop and 2MB on mobile. Thumbnails are the single most important visual on YouTube because they directly affect click-through rates. Always place logos and text within the banner safe zone since YouTube crops banners differently on TV, desktop, and mobile.",
+        geoCopy: "YouTube requires seven key image sizes: Channel Banners at 2560x1440 pixels (safe area 1546x423 in the center), Video Thumbnails at 3840x2160 pixels (4K, 16:9, the current recommended size) with 1280x720 pixels as the accepted minimum, Podcast Thumbnails at 1280x1280 pixels (1:1), Profile Pictures at 800x800 pixels, Shorts at 1080x1920 pixels (9:16), and Community Posts at 1000x1000 pixels (1:1). YouTube raised its recommended thumbnail resolution to 4K to serve the growing share of viewing on smart TVs and large displays, where a 1280x720 thumbnail looks noticeably soft. Thumbnail file size caps at 50MB on desktop and 2MB on mobile. Thumbnails are the single most important visual on YouTube because they directly affect click-through rates. Always place logos and text within the banner safe zone since YouTube crops banners differently on TV, desktop, and mobile.",
         faqs: [
             { q: 'What size is a YouTube Thumbnail?', a: 'YouTube now recommends 3840 x 2160 pixels (4K, 16:9) for thumbnails. 1280 x 720 pixels remains the accepted minimum and still looks clean on phones and in search, but 4K holds up on smart TVs and large displays. File size caps at 50MB on desktop and 2MB on mobile.' },
             { q: 'What size is a YouTube Channel Banner?', a: 'YouTube Channel Banners are 2560 x 1440 pixels. The safe area for text and logos is 1546 x 423 pixels in the center, since YouTube crops the banner differently on TV, desktop, and mobile.' },
@@ -101,11 +101,11 @@ export const PLATFORMS: PlatformData[] = [
             { label: 'Stories & Reels', width: 1080, height: 1920, desc: '9:16 • Watch UI zones', category: 'story' },
             { label: 'Reel Cover', width: 420, height: 654, desc: '~3:4.65 • Profile-grid frame', category: 'cover' },
         ],
-        geoCopy: "Instagram supports six main image formats: Profile Pictures at 320x320 pixels (displayed as a circle), Tall Portrait Posts at 1080x1440 pixels (3:4 — added natively in 2026 and now the gold standard since the profile grid moved from square to 3:4), Vertical Feed Posts at 1080x1350 pixels (4:5 — still supported but no longer the recommended max), Square Posts at 1080x1080 pixels (1:1), Landscape Posts at 1080x566 pixels (1.91:1), and Stories/Reels at 1080x1920 pixels (9:16). Reel Cover frames are 420x654 pixels. The 3:4 tall portrait format fills both the feed and the new 3:4 profile grid uncropped and currently drives the highest engagement. For Stories and Reels, keep important text centered since the top 15% and bottom 20% of the screen are covered by Instagram's UI elements.",
+        geoCopy: "Instagram supports six main image formats: Profile Pictures at 320x320 pixels (displayed as a circle), Tall Portrait Posts at 1080x1440 pixels (3:4, added natively in 2026 and now the gold standard since the profile grid moved from square to 3:4), Vertical Feed Posts at 1080x1350 pixels (4:5, still supported but no longer the recommended max), Square Posts at 1080x1080 pixels (1:1), Landscape Posts at 1080x566 pixels (1.91:1), and Stories/Reels at 1080x1920 pixels (9:16). Reel Cover frames are 420x654 pixels. The 3:4 tall portrait format fills both the feed and the new 3:4 profile grid uncropped and currently drives the highest engagement. For Stories and Reels, keep important text centered since the top 15% and bottom 20% of the screen are covered by Instagram's UI elements.",
         faqs: [
             { q: 'What size is an Instagram Post in 2026?', a: 'The best Instagram feed post size is now 1080 x 1440 pixels (3:4 tall portrait). Instagram added 3:4 as a native upload size in 2026 after moving the profile grid from square to 3:4 thumbnails. A 1080x1440 image fills both the feed and the grid with no crop. The older 1080x1350 (4:5) format is still supported.' },
             { q: 'What size is an Instagram Story?', a: 'Instagram Stories are 1080 x 1920 pixels (9:16 aspect ratio). The same dimensions apply to Instagram Reels.' },
-            { q: 'What size is a Reel Cover?', a: 'Instagram Reel Covers are 420 x 654 pixels. This is the frame shown on your profile grid for a Reel — design it to read clearly at thumbnail size.' },
+            { q: 'What size is a Reel Cover?', a: 'Instagram Reel Covers are 420 x 654 pixels. This is the frame shown on your profile grid for a Reel. Design it to read clearly at thumbnail size.' },
             { q: 'Are Instagram profile pictures circular?', a: 'Yes. Instagram displays profile pictures as a circle cropped from a 320 x 320 pixel square. Keep important elements centered.' },
         ],
     },
@@ -315,7 +315,7 @@ export const PLATFORMS: PlatformData[] = [
         geoCopy: "Pinterest uses four image formats: Standard Pins at 1000x1500 pixels (2:3), Square Pins at 1000x1000 pixels (1:1), Idea Pins at 1080x1920 pixels (9:16 full-screen vertical), and Board Covers at 1000x1000 pixels (1:1). The 2:3 vertical ratio is the gold standard for the main feed and is unique to Pinterest, while Idea Pins use the same 9:16 canvas as Stories and Reels. Tall images naturally dominate Pinterest's masonry grid layout, and pins with text overlays tend to perform better because they communicate the pin's value at a glance while scrolling.",
         faqs: [
             { q: 'What size is a Pinterest Pin?', a: 'The standard Pinterest Pin size is 1000 x 1500 pixels (2:3 ratio). This vertical format dominates the Pinterest masonry grid and gets the most visibility.' },
-            { q: 'What size is a Pinterest Idea Pin?', a: 'Pinterest Idea Pins are 1080 x 1920 pixels (9:16) — the same full-screen vertical canvas as Instagram Stories and TikTok videos. Keep important elements centered to avoid the Pinterest UI overlays.' },
+            { q: 'What size is a Pinterest Idea Pin?', a: 'Pinterest Idea Pins are 1080 x 1920 pixels (9:16), the same full-screen vertical canvas as Instagram Stories and TikTok videos. Keep important elements centered to avoid the Pinterest UI overlays.' },
             { q: 'What size is a Pinterest Board Cover?', a: 'Pinterest Board Covers are 1000 x 1000 pixels (1:1 square). Pinterest displays the final cover at 222 x 150, but uploading at 1000 x 1000 preserves quality across desktop and mobile.' },
         ],
     },
@@ -343,8 +343,8 @@ export const PLATFORMS: PlatformData[] = [
         geoCopy: "Snapchat uses three main image formats: Profile Pictures at 320x320 pixels (1:1, usually a Bitmoji or photo), Snaps, Stories, and Ads at 1080x1920 pixels (9:16), and Geofilters at 1080x2340 pixels saved as transparent PNG under 300KB. The Geofilter canvas is taller than a standard Snap because it has to cover edge-to-edge on modern tall phone screens, with roughly a 210 pixel buffer at the top and bottom. Snapchat is entirely full-screen vertical. The top 150 pixels are reserved for the profile/UI and the bottom 330 pixels are reserved for the call-to-action button, so always leave generous buffers in those zones and keep critical content centered.",
         faqs: [
             { q: 'What size is a Snapchat Profile Picture?', a: 'Snapchat Profile Pictures are 320 x 320 pixels (1:1). Most people use a Bitmoji, but a photo works at the same spec.' },
-            { q: 'What size is a Snapchat Story?', a: 'Snapchat Stories and Ads are 1080 x 1920 pixels (9:16). Keep critical content centered — the top 150px and bottom 330px are reserved for Snapchat UI.' },
-            { q: 'What size is a Snapchat Geofilter?', a: 'Snapchat Geofilters are 1080 x 2340 pixels and must be saved as a transparent PNG under 300KB. The canvas is taller than a standard Snap so it covers edge-to-edge on tall phone screens — leave roughly 210 pixels clear at the top and bottom.' },
+            { q: 'What size is a Snapchat Story?', a: 'Snapchat Stories and Ads are 1080 x 1920 pixels (9:16). Keep critical content centered. The top 150px and bottom 330px are reserved for Snapchat UI.' },
+            { q: 'What size is a Snapchat Geofilter?', a: 'Snapchat Geofilters are 1080 x 2340 pixels and must be saved as a transparent PNG under 300KB. The canvas is taller than a standard Snap so it covers edge-to-edge on tall phone screens. Leave roughly 210 pixels clear at the top and bottom.' },
         ],
     },
     {
@@ -355,13 +355,13 @@ export const PLATFORMS: PlatformData[] = [
         color: '#6366F1',
         brandColor: '#6366F1',
         bg: 'bg-indigo-50',
-        intro: "Your link's first impression. The Open Graph image is the card that renders when your site is shared on iMessage, Slack, WhatsApp, Discord, LinkedIn, and X — design it once and it works everywhere.",
+        intro: "Your link's first impression. The Open Graph image is the card that renders when your site is shared on iMessage, Slack, WhatsApp, Discord, LinkedIn, and X. Design it once and it works everywhere.",
         metaTitle: "Open Graph Image Templates | Free OG Image, Favicon & Web Frames",
         metaDescription: "Free copy-ready SVG templates for your website's metadata. Perfectly sized frames for Open Graph images (1200x630), X summary cards, favicons (48x48), and Apple touch icons (180x180).",
         tips: [
-            "Open Graph images are 1200x630 — keep text away from the edges, since some apps crop the card to a square.",
+            "Open Graph images are 1200x630. Keep text away from the edges, since some apps crop the card to a square.",
             "One og:image powers the preview on iMessage, Slack, WhatsApp, Discord, Facebook, and LinkedIn.",
-            "Design favicons to read at 16px — simplify to a single shape or letter.",
+            "Design favicons to read at 16px. Simplify to a single shape or letter.",
         ],
         templates: [
             { label: 'Open Graph Image', width: 1200, height: 630, desc: '1.91:1 • Universal share card', category: 'web' },
@@ -372,7 +372,7 @@ export const PLATFORMS: PlatformData[] = [
         geoCopy: "Websites need four key image sizes for sharing and branding: the Open Graph Image at 1200x630 pixels (1.91:1), which renders as the link-preview card across iMessage, Slack, WhatsApp, Discord, Facebook, and LinkedIn from a single og:image meta tag; the X Summary Card at 1200x628 pixels (1.91:1) for Twitter's summary_large_image; the Favicon at 48x48 pixels (1:1), which browsers scale down to 16 and 32 pixels in tabs and bookmarks; and the Apple Touch Icon at 180x180 pixels (1:1), shown when a site is saved to an iOS home screen. Keep important text and logos away from the edges of the Open Graph image because some apps crop it to a square, and simplify favicons to a single shape or letter so they stay legible at 16 pixels.",
         faqs: [
             { q: 'What size is an Open Graph (OG) image?', a: 'The standard Open Graph image is 1200 x 630 pixels (1.91:1 aspect ratio). This is the card shown when your link is shared on Facebook, LinkedIn, iMessage, Slack, WhatsApp, and Discord. Reference it with the og:image meta tag.' },
-            { q: 'What size is a Twitter/X card image?', a: 'The X (Twitter) summary_large_image card is 1200 x 628 pixels (1.91:1) — effectively the same as a standard Open Graph image, so one 1200x630 graphic works for both.' },
+            { q: 'What size is a Twitter/X card image?', a: 'The X (Twitter) summary_large_image card is 1200 x 628 pixels (1.91:1), effectively the same as a standard Open Graph image, so one 1200x630 graphic works for both.' },
             { q: 'What size should a favicon be?', a: 'Provide a favicon at 48 x 48 pixels and browsers will scale it down to 16 and 32 pixels for tabs and bookmarks. Keep the design to a single shape or letter so it stays clear at the smallest size.' },
             { q: 'What size is an Apple touch icon?', a: 'The Apple touch icon is 180 x 180 pixels (1:1). iOS uses it when someone saves your site to their home screen, applying rounded corners automatically.' },
         ],

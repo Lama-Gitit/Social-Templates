@@ -26,4 +26,4 @@ if (!template.includes(marker)) {
 const out = template.replace(marker, JSON.stringify(catalog));
 
 writeFileSync(join(root, 'figma-plugin/ui.html'), out);
-console.log(`figma-plugin/ui.html written — ${catalog.length} platforms, ${catalog.reduce((n, p) => n + p.templates.length, 0)} formats.`);
+console.log(`figma-plugin/ui.html written: ${catalog.length} platforms, ${catalog.reduce((n, p) => n + p.templates.length, 0)} formats.`);

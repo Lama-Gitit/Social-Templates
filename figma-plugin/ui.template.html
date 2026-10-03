@@ -1,4 +1,4 @@
-<!-- Template for the plugin UI. Do not edit figma-plugin/ui.html directly —
+<!-- Template for the plugin UI. Do not edit figma-plugin/ui.html directly:
      run `npm run build:figma` to regenerate it from this file with the
      catalog injected from src/data/platforms.ts. -->
 <style>
@@ -88,7 +88,7 @@
 <div id="list"></div>
 
 <script>
-  // Injected at build time from src/data/platforms.ts — single source of truth.
+  // Injected at build time from src/data/platforms.ts, the single source of truth.
   const CATALOG = /*__CATALOG__*/[];
 
   const list = document.getElementById('list');

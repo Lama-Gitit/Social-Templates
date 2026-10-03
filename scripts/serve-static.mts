@@ -85,6 +85,6 @@ const server = createServer(async (req, res) => {
   return send(404, 'not found', 'text/plain');
 });
 
-server.listen(port, '127.0.0.1', () => {
-  console.log(`serving ${root} on http://127.0.0.1:${port}`);
+server.listen(port, process.env.BIND_HOST || '0.0.0.0', () => {
+  console.log(`serving ${root} on http://${process.env.BIND_HOST || '0.0.0.0'}:${port}`);
 });

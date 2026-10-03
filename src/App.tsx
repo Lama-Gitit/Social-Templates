@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { BrowserRouter, Routes, Route, useParams, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useParams, Link } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { TemplateCard } from './components/TemplateCard';
+import { NotFoundPage } from './components/NotFoundPage';
 import { AIAssistant } from './components/AIAssistant';
 import { RandomGeneratorModal } from './components/RandomGeneratorModalV2'; // v2
 import { PLATFORMS } from './data/platforms';
@@ -43,13 +44,13 @@ const POPULAR_TEMPLATE_KEYS = [
   'tiktok:Video / Story',
 ];
 
-const aiParams = new URLSearchParams(window.location.search);
-const aiToken = aiParams.get('ai') || '';
-const aiEnabled = aiToken.length > 0;
+const AI_TOKEN = typeof window === 'undefined'
+  ? ''
+  : new URLSearchParams(window.location.search).get('ai') || '';
 
 // Register the token so all API calls include it
-if (aiToken) {
-  setAIToken(aiToken);
+if (AI_TOKEN) {
+  setAIToken(AI_TOKEN);
 }
 
 // --- Platform Page ---
@@ -59,10 +60,23 @@ function PlatformPage() {
   const [isRandomGeneratorOpen, setIsRandomGeneratorOpen] = useState(false);
 
   const platform = PLATFORMS.find(p => p.slug === slug);
+
   const themeHSL = useMemo(
     () => platform ? hexToHSL(platform.brandColor || platform.color) : '5 74% 47%',
     [platform]
   );
+
+  // Stable tip per platform. A Math.random() pick would differ between the
+  // prerendered HTML and the client render, which breaks hydration. Hashing
+  // the slug gives the same index on both sides and stays varied per platform.
+  const tipIndex = useMemo(() => {
+    if (!platform || platform.tips.length === 0) return 0;
+    let h = 0;
+    for (let i = 0; i < platform.slug.length; i++) {
+      h = (h * 31 + platform.slug.charCodeAt(i)) >>> 0;
+    }
+    return h % platform.tips.length;
+  }, [platform]);
 
   usePageMeta({
     title: platform?.metaTitle || 'Social Frames',
@@ -70,8 +84,9 @@ function PlatformPage() {
     canonicalPath: platform ? `/${platform.slug}` : '/',
   });
 
+  // A slug outside the sitemap is a 404, not a silent redirect to home.
   if (!platform) {
-    return <Navigate to="/" replace />;
+    return <NotFoundPage />;
   }
 
   return (
@@ -85,7 +100,7 @@ function PlatformPage() {
       <Layout
         activePlatformId={platform.id}
         onOpenRandomGenerator={() => setIsRandomGeneratorOpen(true)}
-        aiEnabled={aiEnabled}
+        aiEnabled={Boolean(AI_TOKEN)}
       >
         <div className="flex flex-col gap-12">
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
@@ -106,7 +121,7 @@ function PlatformPage() {
               <div className="mb-12 p-5 md:p-6 border rounded-sm flex items-start gap-4 animate-in fade-in slide-in-from-bottom-1 duration-700" style={{ borderColor: `hsla(var(--primary), 0.2)`, backgroundColor: `hsla(var(--primary), 0.03)` }}>
                 <Lightbulb size={16} className="flex-shrink-0 mt-0.5 opacity-60" style={{ color: 'hsl(var(--primary))' }} />
                 <p className="text-[11px] font-bold text-white/60 uppercase tracking-wider leading-relaxed">
-                  {platform.tips[Math.floor(Math.random() * platform.tips.length)]}
+                  {platform.tips[tipIndex]}
                 </p>
               </div>
             )}
@@ -223,8 +238,18 @@ function MorphingFrame() {
   const g1 = MORPH_FORMATS[prevIdx];
   const g2 = MORPH_FORMATS[prev2Idx];
 
-  // Scale up on desktop
-  const scale = typeof window !== 'undefined' && window.innerWidth >= 1024 ? 1.35 : 1;
+  // Desktop gets a larger frame. Read the width in an effect rather than
+  // during render: the prerendered HTML always uses the desktop scale, and
+  // reading window during render would make the client disagree with it on
+  // phones, which trips hydration.
+  const [scale, setScale] = useState(1.35);
+  useEffect(() => {
+    const apply = () => setScale(window.innerWidth >= 1024 ? 1.35 : 1);
+    apply();
+    window.addEventListener('resize', apply);
+    return () => window.removeEventListener('resize', apply);
+  }, []);
+
   const fw = Math.round(f.w * scale);
   const fh = Math.round(f.h * scale);
   const g1w = Math.round(g1.w * scale);
@@ -318,7 +343,7 @@ function HomePage() {
       <Layout
         activePlatformId={null}
         onOpenRandomGenerator={() => setIsRandomGeneratorOpen(true)}
-        aiEnabled={aiEnabled}
+        aiEnabled={Boolean(AI_TOKEN)}
       >
         <div className="flex flex-col gap-12">
           <div className="animate-in fade-in duration-1000">
@@ -589,13 +614,23 @@ function HomePage() {
   );
 }
 
+// Route table, exported separately so the prerender step can render a
+// specific route in Node by wrapping this in a StaticRouter. App (below)
+// wraps the same table in a BrowserRouter for the client.
+export function AppRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/:slug" element={<PlatformPage />} />
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
+  );
+}
+
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/:slug" element={<PlatformPage />} />
-      </Routes>
+      <AppRoutes />
     </BrowserRouter>
   );
 }

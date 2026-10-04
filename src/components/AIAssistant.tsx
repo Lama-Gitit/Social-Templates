@@ -130,7 +130,7 @@ export function AIAssistant({ isOpen, onClose, platformName }: AIAssistantProps)
                                     </button>
                                 </div>
                             </div>
-                            <div className="prose prose-invert prose-sm max-w-none text-primary-foreground/80 text-[11px] font-medium whitespace-pre-wrap leading-relaxed selection:bg-primary selection:text-primary-foreground">
+                            <div className="prose prose-invert prose-sm max-w-none text-primary-foreground/80 text-[11px] font-normal whitespace-pre-wrap leading-relaxed selection:bg-primary selection:text-primary-foreground">
                                 {response}
                             </div>
                         </div>

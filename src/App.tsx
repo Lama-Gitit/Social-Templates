@@ -1,10 +1,18 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, useParams, Link } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { TemplateCard } from './components/TemplateCard';
 import { NotFoundPage } from './components/NotFoundPage';
-import { AIAssistant } from './components/AIAssistant';
-import { RandomGeneratorModal } from './components/RandomGeneratorModalV2'; // v2
+
+// The two modals are the heaviest components and neither is needed for first
+// paint. They render null while closed, so they are only ever mounted (and
+// fetched) when opened. Nothing here is reachable during prerender.
+const AIAssistant = lazy(() =>
+  import('./components/AIAssistant').then(m => ({ default: m.AIAssistant }))
+);
+const RandomGeneratorModal = lazy(() =>
+  import('./components/RandomGeneratorModalV2').then(m => ({ default: m.RandomGeneratorModal }))
+);
 import { PLATFORMS } from './data/platforms';
 import { HOME_FAQ } from './data/faq';
 import { HOME_META, SIZE_GUIDE } from './data/copy';
@@ -183,16 +191,24 @@ function PlatformPage() {
           </div>
         </div>
 
-        <AIAssistant
-          isOpen={isAIOpen}
-          onClose={() => setIsAIOpen(false)}
-          platformName={platform.name}
-        />
+        {isAIOpen && (
+          <Suspense fallback={null}>
+            <AIAssistant
+              isOpen={isAIOpen}
+              onClose={() => setIsAIOpen(false)}
+              platformName={platform.name}
+            />
+          </Suspense>
+        )}
 
-        <RandomGeneratorModal
-          isOpen={isRandomGeneratorOpen}
-          onClose={() => setIsRandomGeneratorOpen(false)}
-        />
+        {isRandomGeneratorOpen && (
+          <Suspense fallback={null}>
+            <RandomGeneratorModal
+              isOpen={isRandomGeneratorOpen}
+              onClose={() => setIsRandomGeneratorOpen(false)}
+            />
+          </Suspense>
+        )}
       </Layout>
     </div>
   );
@@ -568,10 +584,14 @@ function HomePage() {
           </div>
         </div>
 
-        <RandomGeneratorModal
-          isOpen={isRandomGeneratorOpen}
-          onClose={() => setIsRandomGeneratorOpen(false)}
-        />
+        {isRandomGeneratorOpen && (
+          <Suspense fallback={null}>
+            <RandomGeneratorModal
+              isOpen={isRandomGeneratorOpen}
+              onClose={() => setIsRandomGeneratorOpen(false)}
+            />
+          </Suspense>
+        )}
       </Layout>
     </div>
   );
